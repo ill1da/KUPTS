@@ -62,9 +62,18 @@ body{
     width: 100%;
     height: max-content;
     display: flex;
-    justify-content: center;
+    align-items: center;
+    flex-direction: column;
 }
 #canvas{
     width: 1000px; height: 1000px;
     border: 3px solid rgba(0, 83, 211, 1);
+}
+.note{
+    width: 1000px; height: 20px;
+    background-color: rgba(0, 83, 211, 1);
+    border: 3px solid rgba(0, 83, 211, 1);
+    color: rgba(255, 255, 255, 1);
+    font-size: 8px;
+    text-align: center;
 }
