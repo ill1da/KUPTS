@@ -51,8 +51,12 @@ body{
     font-weight: 700;
     line-height: 100%;
 }
-.logo-text:hover{
-    cursor: default;
+.blue-logo{
+    font-family: Silkscreen;
+    font-size: 64px;
+    font-weight: 700;
+    line-height: 100%;
+    color: rgba(0, 53, 226, 1);
 }
 /* - - - - - Подзаголовок - - - - - */
 .kupt-me-title{
