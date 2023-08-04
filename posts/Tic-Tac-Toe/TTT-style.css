@@ -12,15 +12,15 @@
 *{
     margin: 0; padding: 0;
     font-family: Muller;
-    font-size: 20px;
+    font-size: 24px;
     line-height: 20px;
     font-weight: 500;
-    color: rgba(242, 100, 68, 1);
+    color: rgba(43, 48, 140, 1);
 }
 body{
     box-sizing: border-box;
     width: 100%; height: auto;
-    background-color: rgba(217, 217, 217, 1);
+    background-color: rgba(255, 255, 255, 1);
 }
 
 /* - - - - - Хедер - - - - - */
@@ -56,3 +56,49 @@ body{
 .inform{
     color: rgba(255, 255, 255, 1);
 }
+
+/* - - - - - Контейнер - - - - - */
+.content{
+    width: 100%; height: 100vh;
+    background-color: rgba(255, 255, 255, 1);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+#canvas{
+    width: 305px;
+    margin: 0 auto;
+    font-size: 0;
+}
+.cell{
+    width: 100px; height: 100px;
+    line-height: 100px;
+    text-align: center;
+    vertical-align: middle;
+    display: inline-block;
+    font-family: Silkscreen;
+    font-size: 96px;
+    border: 1px solid rgba(37, 37, 37, 1);
+    cursor: pointer;
+}
+.cell_hover{
+    background-color: rgba(136, 191, 15, 0.2);
+    transition: background .1s;
+}
+.cell_hover_occupied{
+    background-color: rgba(242, 100, 68, 0.2);
+    transition: background .1s;
+}
+
+/* - - - - - Сообщение о победе игрока - - - - - */
+#message {
+    width: 500px; height: 64px;
+    margin-top: 50px;
+    padding: 10px;
+    font-family: Muller;
+    text-align: center;
+    vertical-align: middle;
+    color: rgba(37, 37, 37, 1);
+  }
