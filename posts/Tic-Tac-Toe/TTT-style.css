@@ -100,7 +100,9 @@ html,body{
     background-color: rgba(242, 100, 68, 0.2);
     transition: background .1s;
 }
-
+.cell_win_highlight{
+    background-color: rgba(136, 191, 15, 1);
+}
 /* - - - - - Сообщение о победе игрока - - - - - */
 #message {
     box-sizing: border-box;

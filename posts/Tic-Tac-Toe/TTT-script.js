@@ -1,5 +1,7 @@
 let canvas = document.getElementById("canvas");
 let cell = document.getElementsByClassName("cell");
+const restartBtn = document.getElementById('restart');
+restartBtn.addEventListener('click', restartGame);
 
 let player = "x";
 var winIndex = [
@@ -43,7 +45,6 @@ function cellClick(){
     //проверка на выигрушную комбинацию
     if(checkWin(data)){
         document.getElementById('message').textContent = `Выиграл: ${player}!`;
-        //restart(`Выиграл: ${player}!`);
     }else{
         let draw = true;
         for (var i in cell){
@@ -89,11 +90,10 @@ function checkWin(data){
     return false;
 }
 
-
-
-function restart(text){
-    alert(text);
+function restartGame(){
     for(let i = 0; i < cell.length; i++){
         cell[i].innerHTML = "";
     }
+    this.classList.remove("cell_hover");
+    this.classList.remove("cell_hover_occupied");
 }
