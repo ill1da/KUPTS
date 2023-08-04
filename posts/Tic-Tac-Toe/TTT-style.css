@@ -77,7 +77,7 @@ html,body{
     flex-direction: column;
 }
 #canvas{
-    width: 275px;
+    width: 276px;
     font-size: 0;
 }
 .cell{
