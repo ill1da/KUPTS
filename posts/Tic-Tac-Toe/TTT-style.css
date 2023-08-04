@@ -114,3 +114,19 @@ html,body{
     vertical-align: middle;
     color: rgba(37, 37, 37, 1);
   }
+
+#restart{
+    width: 275px; height: 40px;
+    color: rgba(37, 37, 37, 1);
+    background-color:  rgba(242, 193, 46, 1);
+    box-shadow: 3px 3px 0 0 rgba(37, 37, 37, 1);
+    border: 0px;
+    transition: 0.2s;
+}
+#restart:hover{
+    padding: 0 8px 0px 4px;
+    color: rgba(37, 37, 37, 1);
+    background-color:  rgba(242, 193, 46, 1);
+    box-shadow: 5px 5px 0 0 rgba(37, 37, 37, 1);
+    transition: 0.2s;
+}
