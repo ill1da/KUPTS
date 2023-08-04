@@ -17,9 +17,8 @@
     font-weight: 500;
     color: rgba(43, 48, 140, 1);
 }
-body{
-    box-sizing: border-box;
-    width: 100%; height: auto;
+html,body{
+    width: 100vw; height: 100vh;
     background-color: rgba(255, 255, 255, 1);
 }
 
@@ -59,6 +58,7 @@ body{
 
 /* - - - - - Контейнер - - - - - */
 .content{
+    box-sizing: border-box;
     width: 100%; height: 100vh;
     background-color: rgba(255, 255, 255, 1);
 
@@ -68,8 +68,7 @@ body{
     flex-direction: column;
 }
 #canvas{
-    width: 305px; height: 305px;
-    margin: 0 auto;
+    width: 305px;
     font-size: 0;
 }
 .cell{
@@ -94,7 +93,8 @@ body{
 
 /* - - - - - Сообщение о победе игрока - - - - - */
 #message {
-    width: 500px; height: 64px;
+    box-sizing: border-box;
+    width: 100%; height: 64px;
     margin-top: 50px;
     padding: 10px;
     font-family: Muller;
