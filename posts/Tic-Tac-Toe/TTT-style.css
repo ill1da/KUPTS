@@ -17,6 +17,14 @@
     font-weight: 500;
     color: rgba(43, 48, 140, 1);
 }
+::selection{
+    background: rgba(242, 193, 46, 1);
+    color: rgba(37, 37, 37, 1);
+}
+::-moz-selection{
+    background: rgba(242, 193, 46, 1);
+    color: rgba(37, 37, 37, 1);
+}
 html,body{
     width: 100vw; height: 100vh;
     background-color: rgba(255, 255, 255, 1);
