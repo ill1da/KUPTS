@@ -4,14 +4,14 @@
     src: url(./source/font/Silkscreen-Regular.ttf);
 }
 @font-face {
-    font-family: Muller;
-    src: url(./source/font/MullerRegular.ttf);
+    font-family: Roboto;
+    src: url(./source/font/Roboto-Regular.ttf);
 }
 
 /* - - - - - Главная страница - - - - - */
 *{
     margin: 0; padding: 0;
-    font-family: Muller;
+    font-family: Roboto;
     font-size: 20px;
     line-height: 24px;
     font-weight: 500;
