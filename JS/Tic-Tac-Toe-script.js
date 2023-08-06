@@ -71,7 +71,7 @@ class TicTacToe {
                 moveIndex = this.hardAiMove(emptyFields);
                 break;
             default:
-                moveIndex = this.hardAiMove(emptyFields);
+                moveIndex = Math.floor(Math.random() * emptyFields.length);
         }
 
         if (emptyFields.length > 0) {
