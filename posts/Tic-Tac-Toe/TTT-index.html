@@ -8,18 +8,54 @@
     <link rel="icon" href="./source/img/Tic-Tac-Toe.svg">
 </head>
 <body>
-    <div class="content">
-        <div class="header">
-            <a class="logo-text" href="../../index.html">ILL1DA.SPACE</a>
-        </div>
-        <div id="canvas">
-            <!--поле игры-->
-        </div>
-        <div id="message" class="win-message">
-            <!--сообщение результата-->
-        </div>
-        <button id="restart">Новая игра</button>
+    <div class="logotype">
+        <a class="logo-text" href="../../index.html">ILL1DA.SPACE</a>
     </div>
+    <div class="container">
+    <div class="game-content">
+        <div class="game-settings">
+            <label for="player-mode">Режим игры:</label>
+            <select class="player-mode" id="player-mode">
+                <option value="vs-player">Игрок против Игрока</option>
+                <option value="vs-ai">Игрок против Компьютера</option>
+            </select>
+            <div class="difficulty-setings" style="display: none;" id="difficulty">
+                <span class="title">Сложность:</span>
+                <div class="difficulty">
+                    <label>
+                        <input type="radio" class="difficulty-value" value="easy" name="difficulty-radio" checked>
+                        <span class="radio-text">Легко</span>
+                    </label>
+                    <label>
+                        <input type="radio" class="difficulty-value" value="medium" name="difficulty-radio">
+                        <span class="radio-text">Средне</span>
+                    </label>
+                    <label>
+                        <input type="radio" class="difficulty-value" value="hard" name="difficulty-radio">
+                        <span class="radio-text">Сложно</span>
+                    </label>
+                </div>
+            </div>
+            <div class="btnGame">
+                <button class="new-game">Новая игра</button>
+            </div>
+        </div>
+        <div class="game-container">
+            <div class="game">
+                <div class="field"></div>
+                <div class="field"></div>
+                <div class="field"></div>
+                <div class="field"></div>
+                <div class="field"></div>
+                <div class="field"></div>
+                <div class="field"></div>
+                <div class="field"></div>
+                <div class="field"></div>
+            </div>
+        </div>
+        <div class="res"></div>
+    </div>
+</div>
 </body>
 <script src="./TTT-script.js"></script>
 </html>

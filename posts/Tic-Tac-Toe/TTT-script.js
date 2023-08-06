@@ -1,102 +1,287 @@
-let canvas = document.getElementById("canvas");
-let cell = document.getElementsByClassName("cell");
-let restartBtn = document.getElementById("restart");
-let messageValue = document.getElementById("message");
-restartBtn.addEventListener('click', restartGame);
-
-let player = "x";
-var winIndex = [
-    [1, 2, 3],
-    [4, 5, 6],
-    [7, 8, 9],
-    [1, 4, 7],
-    [2, 5, 8],
-    [3, 6, 9],
-    [1, 5, 9],
-    [3, 5, 7]
-];
-
-for (let i = 1; i <= 9; i++){
-    canvas.innerHTML += "<div class='cell' pos=" + i + "></div>"; 
-}
-
-for (let i = 0; i < cell.length; i++){
-    cell[i].addEventListener("click", cellClick, false);
-
-    cell[i].addEventListener('mouseover', onMouseOver);
-    cell[i].addEventListener('mouseout', onMouseOut);
-}
-
-//занята ли ячейка - проверка
-function cellClick(){
-    let data = [];
-    if(!this.innerHTML){
-        this.innerHTML = player;
-    }else{
-        alert("Ячейка занята!");
-        return;
+class TicTacToe {
+    constructor() {
+        this.startGameBtn = document.querySelector('.start-game');
+        this.gameContainer = document.getElementById('game-container');
+        this.game = document.querySelector(".game");
+        this.res = document.querySelector(".res");
+        this.btnGame = document.querySelector(".new-game");
+        this.playerMode = document.querySelector(".player-mode");
+        this.difficulty = document.querySelector(".difficulty");
+        this.fields = document.querySelectorAll(".field");
+        this.step = false;
+        //игроки
+        this.cross = new Cross();
+        this.circle = new Circle();
+        this.initBound = this.init.bind(this);
+        this.comb = [
+            [0, 1, 2],
+            [3, 4, 5],
+            [6, 7, 8],
+            [0, 3, 6],
+            [1, 4, 7],
+            [2, 5, 8],
+            [0, 4, 8],
+            [2, 4, 6],
+        ];
     }
-    //проверка на текущего игрока
-    for(var i in cell){
-        if (cell[i].innerHTML == player){
-            data.push(parseInt(cell[i].getAttribute("pos")));
+
+    init(e) {
+		if (e.target.innerHTML === '') {
+			if (!this.step) {
+				new Cross().stepCross(e.target);
+				this.step = !this.step;
+				if (!this.win()) {
+					if (this.playerMode.value == "vs-ai") {
+						this.aiMove();
+					}
+				}
+			} else { 
+				if (this.playerMode.value == "vs-player") {
+					new Circle().stepZero(e.target);
+					this.step = !this.step;
+					this.win(); 
+				}
+			}
+		}
+	}
+
+    aiMove() {
+        const emptyFields = this.getEmptyFields();
+
+        let moveIndex;
+        switch (this.difficulty.value) {
+            case "easy":
+                moveIndex = Math.floor(Math.random() * emptyFields.length);
+                break;
+            case "medium":
+                moveIndex = this.mediumAiMove(emptyFields);
+                break;
+            case "hard":
+                moveIndex = this.hardAiMove(emptyFields);
+                break;
+            default:
+                moveIndex = Math.floor(Math.random() * emptyFields.length);
+        }
+
+        if (emptyFields.length > 0) {
+            const targetField = this.fields[emptyFields[moveIndex]];
+            new Circle().stepZero(targetField);
+            this.step = !this.step;
+            this.win();
         }
     }
 
-    //проверка на выигрушную комбинацию
-    if(checkWin(data)){
-        document.getElementById("message").textContent = `Выиграл: ${player}!`;
-        gameField.classList.add("disabled");
-    }else{
-        let draw = true;
-        for (var i in cell){
-            if(cell[i].innerHTML == "")
-                draw = false;
-        }
-        if(draw){
-            document.getElementById("message").textContent = "Ничья";
-            //restart("Ничья");
-        }
-    }
-
-    player = player == "x" ? "o" : "x";
-    console.log(data);
-}
-
-function onMouseOver() {
-    if (this.innerHTML == "") {
-        this.classList.add("cell_hover");
-    } else {
-        this.classList.add("cell_hover_occupied");
-    }
-}
-function onMouseOut() {
-    this.classList.remove("cell_hover");
-    this.classList.remove("cell_hover_occupied");
-}
-
-function checkWin(data){
-    for (let i in winIndex){
-        let win = true;
-        for (let j in winIndex[i]){
-            let id = winIndex[i][j];
-            let ind = data.indexOf(id);
-
-            if(ind == -1){
-                win = false;
+    mediumAiMove(emptyFields) {
+        for (const index of emptyFields) {
+            const boardCopy = [...this.getBoardState()];
+            boardCopy[index] = "o";
+            if (this.checkWin(boardCopy, "o")) {
+                return emptyFields.indexOf(index);
+            }
+            boardCopy[index] = "x";
+            if (this.checkWin(boardCopy, "x")) {
+                return emptyFields.indexOf(index);
             }
         }
-        if(win)
-            return true;
+        return Math.floor(Math.random() * emptyFields.length);
     }
-    return false;
+
+    hardAiMove(emptyFields) {
+        for (const index of emptyFields) {
+            const boardCopy = [...this.getBoardState()];
+            boardCopy[index] = "o";
+            if (this.checkWin(boardCopy, "o")) {
+                return emptyFields.indexOf(index);
+            }
+        }
+
+        for (const index of emptyFields) {
+            const boardCopy = [...this.getBoardState()];
+            boardCopy[index] = "x";
+            if (this.checkWin(boardCopy, "x")) {
+                return emptyFields.indexOf(index);
+            }
+        }
+
+        return Math.floor(Math.random() * emptyFields.length);
+    }
+	
+	getEmptyFields() {
+        const emptyFields = [];
+        this.fields.forEach((field, index) => {
+            if (field.innerHTML === '') {
+                emptyFields.push(index);
+            }
+        });
+        return emptyFields;
+    }
+
+    getBoardState() {
+        const board = [];
+        this.fields.forEach((field) => {
+            if (field.classList.contains("x")) {
+                board.push("x");
+            } else if (field.classList.contains("o")) {
+                board.push("o");
+            } else {
+                board.push("");
+            }
+        });
+        return board;
+    }
+
+    minimax(newBoard, player, depth, alpha, beta) {
+		const availSpots = this.getEmptyFields();
+	
+		if (this.checkWin(newBoard, "x")) {
+			return { score: -10 + depth };
+		} else if (this.checkWin(newBoard, "o")) {
+			return { score: 10 - depth };
+		} else if (availSpots.length === 0) {
+			return { score: 0 };
+		}
+	
+		if (player === "o") {
+			let bestScore = -Infinity;
+			let bestMove = null;
+			for (const index of availSpots) {
+				newBoard[index] = player;
+				const score = this.minimax(newBoard, "x", depth + 1, alpha, beta).score;
+				newBoard[index] = '';
+				if (score > bestScore) {
+					bestScore = score;
+					bestMove = index;
+				}
+				alpha = Math.max(alpha, bestScore);
+				if (alpha >= beta) {
+					break;
+				}
+			}
+			return { score: bestScore, index: bestMove };
+		} else {
+			let bestScore = Infinity;
+			let bestMove = null;
+			for (const index of availSpots) {
+				newBoard[index] = player;
+				const score = this.minimax(newBoard, "o", depth + 1, alpha, beta).score;
+				newBoard[index] = '';
+				if (score < bestScore) {
+					bestScore = score;
+					bestMove = index;
+				}
+				beta = Math.min(beta, bestScore);
+				if (alpha >= beta) {
+					break;
+				}
+			}
+			return { score: bestScore, index: bestMove };
+		}
+	}	
+
+    newGame() {
+        this.step = false;
+        this.res.innerText = "";
+        this.fields.forEach((item) => {
+            item.innerHTML = "";
+            item.classList.remove("x", "o", "active");
+        });
+        this.game.addEventListener("click", this.init.bind(this));
+        this.game.addEventListener("click", this.initBound);
+    }
+
+    win() {
+		let gameOver = false;
+		for (let i = 0; i < this.comb.length; i++) {
+			if (
+				this.fields[this.comb[i][0]].classList.contains("x") &&
+				this.fields[this.comb[i][1]].classList.contains("x") &&
+				this.fields[this.comb[i][2]].classList.contains("x")
+			) {
+				gameOver = true;
+				this.fields[this.comb[i][0]].classList.add("active");
+				this.fields[this.comb[i][1]].classList.add("active");
+				this.fields[this.comb[i][2]].classList.add("active");
+				this.res.innerText = "Выиграл X";
+				this.game.removeEventListener("click", this.initBound);
+				break;
+			} else if (
+				this.fields[this.comb[i][0]].classList.contains("o") &&
+				this.fields[this.comb[i][1]].classList.contains("o") &&
+				this.fields[this.comb[i][2]].classList.contains("o")
+			) {
+				gameOver = true;
+                this.fields[this.comb[i][0]].classList.add("active");
+                this.fields[this.comb[i][1]].classList.add("active");
+                this.fields[this.comb[i][2]].classList.add("active");
+                this.res.innerText = "Выиграл O";
+				this.game.removeEventListener("click", this.initBound);
+				break;
+			}
+		}
+	
+		if (!gameOver && this.getEmptyFields().length === 0) {
+			this.res.innerText = "Ничья";
+			gameOver = true;
+		}
+	
+		return gameOver;
+	}
+
+    checkWin(board, player) {
+		for (let i = 0; i < this.comb.length; i++) {
+			if (
+				board[this.comb[i][0]] === player &&
+				board[this.comb[i][1]] === player &&
+				board[this.comb[i][2]] === player
+			) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 }
 
-function restartGame(){
-    for(let i = 0; i < cell.length; i++){
-        cell[i].innerHTML = "";
-    }
-    this.classList.remove("cell_hover");
-    this.classList.remove("cell_hover_occupied");
-    messageValue.textContent = "";
+class Cross {
+    constructor() {
+		this.cross = `<svg class="cross">
+			<line class="first" x1="15" y1="15" x2="80" y2="80" stroke="rgba(255, 136, 0, 1)" stroke-width="10" stroke-linecap="round" />
+			<line class="second" x1="80" y1="15" x2="15" y2="80" stroke="rgba(255, 136, 0, 1)" stroke-width="10" stroke-linecap="round" />
+		  	</svg>`;
+	}
+
+	stepCross(target) {
+		if (target.innerHTML === '') {
+			target.innerHTML = this.cross;
+			target.classList.add("x");
+		}
+	}
 }
+
+class Circle {
+    constructor() {
+		this.circle = `<svg class="circle">
+			<circle r="35" cx="48" cy="48" stroke="rgba(134, 81, 162, 1)" stroke-width="10" fill="none" stroke-linecap="round" />
+		</svg>`;
+	}
+
+	stepZero(target) {
+		if (target.innerHTML === '') {
+			target.innerHTML = this.circle;
+			target.classList.add("o");
+		}
+	}
+}
+
+const ticTacToe = new TicTacToe();
+ticTacToe.btnGame.addEventListener("click", ticTacToe.newGame.bind(ticTacToe));
+ticTacToe.game.addEventListener("click", ticTacToe.initBound);
+
+document.getElementById("player-mode").addEventListener("change", function() {
+    const difficultySelect = document.getElementById("difficulty");
+    if (this.value === "vs-ai") {
+        difficultySelect.style.display = "block";
+    } else {
+        difficultySelect.style.display = "none";
+    }
+});

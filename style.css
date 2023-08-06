@@ -30,6 +30,7 @@ body{
     box-sizing: border-box;
     width: 100%; height: auto;
     background-color: rgba(179, 227, 1, 1);
+    transition: background 1s;
 }
 
 .container{
