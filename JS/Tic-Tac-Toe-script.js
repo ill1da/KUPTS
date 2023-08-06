@@ -47,21 +47,30 @@ class TicTacToe {
 
     aiMove() {
         const emptyFields = this.getEmptyFields();
+        const radios = document.querySelectorAll('input[name="difficulty"]');
+        let checkedRadio;
+
+        radios.forEach(radio => {
+            if (radio.checked) {
+                checkedRadio = radio;
+            }
+        });
+
+        const difficulty = checkedRadio.value;
 
         let moveIndex;
-        console.log(this.difficulty.value);
-        switch (this.difficulty.value) {
-            // case "easy":
-            //     moveIndex = Math.floor(Math.random() * emptyFields.length);
-            //     break;
-            // case "medium":
-            //     moveIndex = this.mediumAiMove(emptyFields);
-            //     break;
-            // case "hard":
-            //     moveIndex = this.hardAiMove(emptyFields);
-            //     break;
+        console.log(difficulty);
+        switch (difficulty) {
+            case "easy":
+                moveIndex = Math.floor(Math.random() * emptyFields.length);
+                break;
+            case "medium":
+                moveIndex = this.mediumAiMove(emptyFields);
+                break;
+            case "hard":
+                moveIndex = this.hardAiMove(emptyFields);
+                break;
             default:
-                // moveIndex = Math.floor(Math.random() * emptyFields.length);
                 moveIndex = this.hardAiMove(emptyFields);
         }
 

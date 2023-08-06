@@ -135,13 +135,13 @@ body{
     border: 0px;
     transition: 0.2s;
 }
-.difficulty-value{
+/* .difficulty-value{
     position: absolute;
     clip: rect(1px);
     height: 1px;
     width: 1px;
-}
-.difficulty-value:checked ~ .radio-text{
+} */
+.difficulty-value:checked + .radio-text{
     background-color: rgba(38, 184, 181, 0.5);
     color: rgba(37, 37, 37, 1);
     box-shadow: 3px 3px 0 0 rgba(37, 37, 37, 1);

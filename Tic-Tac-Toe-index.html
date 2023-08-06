@@ -20,20 +20,16 @@
                 <option value="vs-ai">Игрок против Компьютера</option>
             </select>
             <div class="difficulty-setings" style="display: none;" id="difficulty">
-                <span class="title" style="display: none;">Сложность:</span>
-                <div class="difficulty" style="display: none;">
-                    <!-- <label>
-                        <input type="radio" class="difficulty-value" value="easy" name="difficulty-radio">
-                        <span class="radio-text">Легко</span>
-                    </label>
-                    <label>
-                        <input type="radio" class="difficulty-value" value="medium" name="difficulty-radio">
-                        <span class="radio-text">Средне</span>
-                    </label> -->
-                    <label>
-                        <input type="radio" class="difficulty-value" value="hard" name="difficulty-radio">
-                        <span class="radio-text">Сложно</span>
-                    </label>
+                <label class="difficulty-label">Сложность:</label>
+                <div class="difficulty">
+                    <input type="radio" class="difficulty-value" value="easy" name="difficulty" id="easy">
+                    <label for="easy" class="radio-text">Легко</label>
+
+                    <input type="radio" class="difficulty-value" value="medium" name="difficulty" id="medium">
+                    <label for="medium" class="radio-text">Средне</label>
+                    
+                    <input type="radio" class="difficulty-value" value="hard" name="difficulty" id="hard">
+                    <label for="hard" class="radio-text">Сложно</label>
                 </div>
             </div>
             <div class="btnGame">
