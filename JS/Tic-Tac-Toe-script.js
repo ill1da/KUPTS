@@ -49,18 +49,20 @@ class TicTacToe {
         const emptyFields = this.getEmptyFields();
 
         let moveIndex;
+        console.log(this.difficulty.value);
         switch (this.difficulty.value) {
-            case "easy":
-                moveIndex = Math.floor(Math.random() * emptyFields.length);
-                break;
-            case "medium":
-                moveIndex = this.mediumAiMove(emptyFields);
-                break;
-            case "hard":
-                moveIndex = this.hardAiMove(emptyFields);
-                break;
+            // case "easy":
+            //     moveIndex = Math.floor(Math.random() * emptyFields.length);
+            //     break;
+            // case "medium":
+            //     moveIndex = this.mediumAiMove(emptyFields);
+            //     break;
+            // case "hard":
+            //     moveIndex = this.hardAiMove(emptyFields);
+            //     break;
             default:
-                moveIndex = Math.floor(Math.random() * emptyFields.length);
+                // moveIndex = Math.floor(Math.random() * emptyFields.length);
+                moveIndex = this.hardAiMove(emptyFields);
         }
 
         if (emptyFields.length > 0) {
