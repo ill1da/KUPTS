@@ -1,11 +1,11 @@
 /* - - - - - Шрифты - - - - - */
 @font-face {
     font-family: Silkscreen;
-    src: url(../../source/font/Silkscreen-Regular.ttf);
+    src: url(./SOURCE/Tic-Tac-Toe-source/font/Silkscreen-Regular.ttf);
 }
 @font-face {
     font-family: Roboto;
-    src: url(../../source/font/Roboto-Regular.ttf);
+    src: url(./SOURCE/Tic-Tac-Toe-source/font/Roboto-Regular.ttf);
 }
 
 /* - - - - - Крестики-Нолики - - - - - */
@@ -16,6 +16,7 @@
     font-weight: 700;
 }
 body{
+    background-image: url();
     width: 100%; max-height: 100vh;
     background-color: rgba(38, 184, 181, 1);
 }
@@ -83,7 +84,7 @@ body{
     background-color: rgba(240, 240, 240, 1);
     box-shadow: 3px 3px 0 0 rgba(37, 37, 37, 1);
     -webkit-appearance: none;
-    background-image: url(./source/img/appearance.svg);
+    background-image: url(./SOURCE/Tic-Tac-Toe-source/img/appearance_down.svg);
     background-repeat: no-repeat;
     background-position: 248px 19px;
     border: 1px solid rgba(37, 37, 37, 1);

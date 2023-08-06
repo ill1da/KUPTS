@@ -1,11 +1,11 @@
 /* - - - - - Шрифты - - - - - */
 @font-face {
     font-family: Silkscreen;
-    src: url(./source/font/Silkscreen-Regular.ttf);
+    src: url(./SOURCE/MAIN-source/font/Silkscreen-Regular.ttf);
 }
 @font-face {
     font-family: Roboto;
-    src: url(./source/font/Roboto-Regular.ttf);
+    src: url(./SOURCE/MAIN-source/font/Roboto-Regular.ttf);
 }
 
 /* - - - - - Главная страница - - - - - */
