@@ -57,7 +57,9 @@ class TicTacToe {
         });
 
         const difficulty = checkedRadio.value;
+        setTimeout(() =>{
 
+        
         let moveIndex;
         console.log(difficulty);
         switch (difficulty) {
@@ -80,7 +82,9 @@ class TicTacToe {
             this.step = !this.step;
             this.win();
         }
+        }, 1000);
     }
+
 
     mediumAiMove(emptyFields) {
         for (const index of emptyFields) {

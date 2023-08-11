@@ -3,20 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Миллионный писксель</title>
-    <link rel="stylesheet" href="./Life-checklist-style.css">
-    <link rel="icon" href="./source/img/Life-checklist.svg">
+    <title>Чек-лист жизни</title>
+    <link rel="stylesheet" href="./CSS/Life-Checklist-style.css">
+    <link rel="icon" href="./CSS/SOURCE/Life-Checklist-source/img/Life-checklist-logo.svg">
 </head>
 <body>
-    <div class="header">
-       <a class="logo-text" href="../../index.html">ILL1DA.SPACE</a>
+<div class="container">
+    <div class="logotype">
+       <a class="logo-text" href="https://ill1da.space">ILL1DA.SPACE</a>
     </div>
-    <!-- <div class="container">
-        <div id="canvas">
 
+    <div class="progress-bar">
+        <span class="progress-title">Ты выполнил <span class="progress-title-value">0</span> / 128</span>
+        <progress class="progress" max="128" value="0"></progress>
+    </div>
+
+    <div class="check-list-content">
+        <h1></h1>
+        <div class="labels" id="check-container">
         </div>
-        <div class="note">Cтраница "чеклист жизни" © 2023 Павел Купцов. Все права защищены.</div>
-    </div> -->
+    </div>
+</div>
 </body>
-<script src="./Millionth-pixel-script.js"></script>
+<script src="./JS/Life-Checklist-script.js" type="module"></script>
 </html>
