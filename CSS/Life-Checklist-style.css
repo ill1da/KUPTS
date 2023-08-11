@@ -138,6 +138,11 @@ label:hover{
     box-shadow: -3px -3px 0 0 rgba(239, 178, 255, 1), 3px 3px 0 0 rgba(206, 195, 252, 1);
     transition: 0.2s;
 }
+label:active{
+    box-shadow: 0px 0px 0 0 rgba(239, 178, 255, 1), 0px 0px 0 0 rgba(206, 195, 252, 1);
+    transition: 0.2s;
+
+}
 
 .active {
     background-color: rgba(195, 255, 192, 1);
