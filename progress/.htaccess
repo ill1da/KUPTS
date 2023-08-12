@@ -1,0 +1,3 @@
+RewriteEngine On
+RewriteCond %{THE_REQUEST} ^[A-Z]{3,9}\ /Progress-index\.html\ HTTPS/
+RewriteRule ^index\.html$ https://ill1da.space/progress/ [R=301,L]
