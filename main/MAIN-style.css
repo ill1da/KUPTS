@@ -1,0 +1,203 @@
+/* - - - - - Шрифты - - - - - */
+@font-face {
+    font-family: PressStart2P;
+    src: url(./MAIN-source/font/PressStart2P-Regular.ttf);
+}
+@font-face {
+    font-family: Roboto;
+    src: url(./MAIN-source/font/Roboto-Regular.ttf);
+}
+
+/* - - - - - Главная страница - - - - - */
+*{
+    margin: 0; padding: 0;
+    font-family: Roboto;
+    font-size: 20px;
+    line-height: 24px;
+    font-weight: 500;
+    color: rgba(37, 37, 37, 1);
+}
+::selection{
+    background: rgba(251, 4, 255, 1);
+    color: rgba(255, 255, 255, 1);
+}
+::-moz-selection{
+    background: rgba(251, 4, 255, 1);
+    color: rgba(255, 255, 255, 1);
+}
+
+body{
+    box-sizing: border-box;
+    width: 100%; height: auto;
+    background-color: rgba(179, 227, 1, 1);
+    transition: background 1s;
+}
+
+.container{
+    width: auto; height: auto;
+    margin: 0 auto;
+}
+
+/* - - - - - Логотип - - - - - */
+.kupt-me-logo{
+    width: 100%; height: auto;
+    display: flex;
+    margin-top: 60px;
+    justify-content: center;
+    transition: 0.2s;
+}
+.logo-text{
+    font-family: PressStart2P;
+    font-size: 40px;
+    font-weight: 700;
+    line-height: 100%;
+}
+.blue-logo{
+    font-family: PressStart2P;
+    font-size: 40px;
+    font-weight: 700;
+    line-height: 100%;
+    color: rgba(0, 53, 226, 1);
+}
+/* - - - - - Подзаголовок - - - - - */
+.kupt-me-title{
+    display: flex;
+    justify-content: center;
+    margin: 10px auto 50px auto;
+    color: rgba(37, 37, 37, 0.6);
+}
+.kupt-me-title:hover{
+    cursor: default;
+}
+/* - - - - - Кнопки игр - - - - - */
+.posts{
+    box-sizing: border-box;
+    display: grid;
+    grid-template-columns: repeat(5,1fr);
+    grid-template-rows: auto;
+    grid-gap: 20px 22px;
+    padding: 0 25px;
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    justify-content: center;
+}
+@media only screen and (max-width: 1400px){
+    .posts{
+        grid-template-columns: repeat(4,1fr);
+        max-width: 1120px;
+        grid-gap: 20px 22px;
+    }
+}
+@media only screen and (max-width: 1120px){
+    .posts{
+        grid-template-columns: repeat(3,1fr);
+        max-width: 840px;
+        grid-gap: 15px 18px;
+    }
+}
+@media only screen and (max-width: 840px){
+    .posts{
+        grid-template-columns: repeat(2,1fr);
+        max-width: 560px;
+        grid-gap: 15px 18px;
+    }
+}
+@media only screen and (max-width: 560px){
+    .posts{
+        grid-template-columns: repeat(1,1fr);
+        max-width: 300px;
+        grid-gap: 15px 18px;
+    }
+    .logo-text{
+        font-size: 7vw;
+    }
+    .blue-logo{
+        font-size: 7vw;
+    }
+}
+
+.posts a{
+    width: 260px; height: 346.66px;
+    background-color: rgba(255, 255, 255, 1);
+    box-shadow: 3px 3px 0 0 rgba(37, 37, 37, 1);
+    border: 1px solid rgba(37, 37, 37, 1);
+    transition: 0.2s;
+
+    display: flex;
+    justify-content: center;
+    justify-self: center;
+    align-items: center;
+    text-decoration: none;
+}
+.posts a:hover{
+    width: 260px; height: 346.66px;
+    background-color: rgba(255, 255, 255, 1);
+    box-shadow: 5px 5px 0 0 rgba(37, 37, 37, 1);
+    transition: 0.2s;
+    background-color: rgba(255, 230, 255, 1);
+}
+.posts a:active{
+    transition: 0.3s;
+    box-shadow: 0px 0px 0 0 rgba(37, 37, 37, 1);
+}
+
+/* - - - - - Подвал - - - - - */
+.padding{
+    box-sizing: border-box;
+    margin: 10px auto 40px auto;
+    padding: 25px 20px 20px;
+    text-align: center;
+}
+.padding-text{
+    display: block;
+    line-height: 160%;
+}
+.padding-buttons{
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin: 12px auto 0 auto;
+    justify-content: center;
+}
+.padding-buttons a{
+   width: max-content; height: 48px; 
+   padding: 0 24px 0 16px;
+   display: flex;
+   text-decoration: none;
+   color: rgba(37, 37, 37, 1);
+   justify-items: center;
+   align-items: center;
+   gap: 12px;
+   transition: 0.2s;
+}
+.padding-buttons a:hover{
+    background-color: rgba(255, 255, 255, 1);
+    box-shadow: 3px 3px 0 0 rgba(37, 37, 37, 1);
+    transition: 0.2s;
+ }
+.padding-buttons a:active{
+    transition: 0.2s;
+    box-shadow: 0px 0px 0 0 rgba(37, 37, 37, 1);
+}
+
+/* - - - - - Карточки - - - - -*/
+.Tic-Tac-Toe{
+    background-image: url(./MAIN-source/card/Tic-Tac-Toe-card.svg);
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.Life-checklist{
+    background-image: url(./MAIN-source/card/Life-checklist-card.svg);
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.Chronometer{
+    background-image: url(./MAIN-source/card/Chronometer-card.svg);
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}

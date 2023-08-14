@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ХроноМетр</title>
+    <link rel="stylesheet" href="./Chronometer-style.css">
+    <link rel="icon" href="./Chronometer-source/img/Chronometer-logo.svg">
+</head>
+<body>
+<div class="container">
+    <div class="logotype">
+       <a class="logo-text" href="https://ill1da.space">ILL1DA.SPACE</a>
+    </div>
+    <div class="chronometer-content">
+        <div class="chronometer-holiday-content">
+            <div class="seconds-to">
+                <div class="progress-title">
+                    <span class="left-title">🕔 Следующая минута</span>
+                    <span class="right-title">осталось <span id="seconds" class="time">0</span> секунд</span>
+                </div>
+                <progress id="secondsBar" max="60"></progress>    
+            </div>
+            <div class="minutes-to">
+                <div class="progress-title">
+                    <span class="left-title">⏰ Следующий час</span>
+                    <span class="right-title">осталось <span id="minutes" class="time">0</span> минут</span>
+                </div>
+                <progress id="minutesBar" max="60"></progress>    
+            </div>
+            <div class="hours-to">
+                <div class="progress-title">
+                    <span class="left-title">🌞 Следующий день</span>
+                    <span class="right-title">осталось <span id="hours" class="time">0</span> часов</span>
+                </div>
+                <progress id="hoursBar" max="24"></progress>    
+            </div>
+            <div class="days-to-week">
+                <div class="progress-title">
+                    <span class="left-title">📅 Следующая неделя</span>
+                    <span class="right-title">осталось <span id="dayWeek" class="time">0</span> дней</span>
+                </div>
+                <progress id="dayWeekBar" max="7"></progress>    
+            </div>
+            <div class="days-to-month">
+                <div class="progress-title">
+                    <span class="left-title">📆 Следующий месяц</span>
+                    <span class="right-title">осталось <span id="dayMonth" class="time">0</span> дней</span>
+                </div>
+                <progress id="dayMonthBar" max=""></progress>    
+            </div>
+            <hr style="margin: 10px 0px;">
+            <div class="days-to-month">
+                <div class="progress-title">
+                    <span class="left-title">🎄 Новый год</span>
+                    <span class="right-title">осталось <span id="dayNewYear" class="time">0</span> дней</span>
+                </div>
+                <progress id="dayNewYearBar" max=""></progress>    
+            </div>
+            <div class="days-to-month">
+                <div class="progress-title">
+                    <span class="left-title">👼 Рождество</span>
+                    <span class="right-title">осталось <span id="dayChristmas" class="time">0</span> дней</span>
+                </div>
+                <progress id="dayChristmasBar" max=""></progress>    
+            </div>
+            <div class="days-to-month">
+                <div class="progress-title">
+                    <span class="left-title">💕 День святого Валентина</span>
+                    <span class="right-title">осталось <span id="dayLove" class="time">0</span> дней</span>
+                </div>
+                <progress id="dayLoveBar" max=""></progress>    
+            </div>
+            <div class="days-to-month">
+                <div class="progress-title">
+                    <span class="left-title">🎖️ День защитника Отечества</span>
+                    <span class="right-title">осталось <span id="dayDefender" class="time">0</span> дней</span>
+                </div>
+                <progress id="dayDefenderBar" max=""></progress>    
+            </div>
+            <div class="days-to-month">
+                <div class="progress-title">
+                    <span class="left-title">👩 Международный женский день</span>
+                    <span class="right-title">осталось <span id="dayWoman" class="time">0</span> дней</span>
+                </div>
+                <progress id="dayWomanBar" max=""></progress>    
+            </div>
+            <div class="days-to-month">
+                <div class="progress-title">
+                    <span class="left-title">🌼 Праздник Весны и Труда</span>
+                    <span class="right-title">осталось <span id="dayMay" class="time">0</span> дней</span>
+                </div>
+                <progress id="dayMayBar" max=""></progress>    
+            </div>
+            <div class="days-to-month">
+                <div class="progress-title">
+                    <span class="left-title">🔥 День Победы</span>
+                    <span class="right-title">осталось <span id="dayVictory" class="time">0</span> дней</span>
+                </div>
+                <progress id="dayVictoryBar" max=""></progress>    
+            </div>
+            <div class="days-to-month">
+                <div class="progress-title">
+                    <span class="left-title">🇷🇺 День России</span>
+                    <span class="right-title">осталось <span id="dayRussia" class="time">0</span> дней</span>
+                </div>
+                <progress id="dayRussiaBar" max=""></progress>    
+            </div>
+            <div class="days-to-month">
+                <div class="progress-title">
+                    <span class="left-title">🎈 День народного единства</span>
+                    <span class="right-title">осталось <span id="dayUnity" class="time">0</span> дней</span>
+                </div>
+                <progress id="dayUnityBar" max=""></progress>    
+            </div>
+        </div>
+        <div class="chronometer-user-content">
+            <div class="user-date">
+
+            </div>
+            <div class="date-calculator">
+                <div class="dateInput-ueser">
+                    <label for="dateInput1">
+                        Начальная дата
+                        <input type="date" id="dateInput1">
+                    </label>
+                    <label for="dateInput2">
+                        Конечная дата
+                        <input type="date" id="dateInput2">
+                    </label>
+                </div>
+                    <div class="date-output">
+                        <label for="secondsInput">
+                            Секунд
+                            <input type="text" id="secondsInput">
+                        </label>
+                        <label for="minutesInput">
+                            Минут
+                            <input type="text" id="minutesInput">
+                        </label>
+                        <label for="hoursInput">
+                            Часов
+                            <input type="text" id="hoursInput">
+                        </label>
+                        <label>
+                            Дней
+                            <input type="text" id="daysInput">
+                        </label>
+                        <label for="weeksInput">
+                            Недель
+                            <input type="text" id="weeksInput">
+                        </label>
+                        <label for="monthsInput">
+                            Месяца
+                            <input type="text" id="monthsInput">
+                        </label>
+                        <label for="yearsInput">
+                            Лет
+                            <input type="text" id="yearsInput">
+                        </label>
+                        <label for="workDaysInput">
+                            Рабочих дней
+                            <input type="text" id="workDaysInput">
+                        </label>
+                </div>
+                
+            </div>
+        </div>
+
+    </div>
+</div>
+</body>
+<script src="./Chronometer-script.js"></script>
+</html>
