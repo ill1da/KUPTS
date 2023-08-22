@@ -7,11 +7,17 @@
     font-family: Roboto;
     src: url(./Chronometer-source/font/Roboto-Regular.ttf);
 }
+@font-face {
+    font-family: RoBold;
+    src: url(./Chronometer-source/font/Roboto-Bold.ttf);
+}
+
 
 /* - - - - - ХроноМетр - - - - - */
 *{
     margin: 0; padding: 0;
     font-family: Roboto;
+    font-size: 18px;
     font-weight: 700;
     color: rgba(37, 37, 37, 1);
 }
@@ -85,6 +91,13 @@ progress::-webkit-progress-bar {
     display: flex;
     gap: 20px;
 }
+h3{
+    font-family: RoBold;
+    color: rgba(0, 185, 75, 1);
+    font-size: 32px;
+    font-weight: 900;
+    text-align: center;
+}
 .chronometer-holiday-content{
     box-sizing: border-box;
     width: 432px; height: auto;
@@ -95,53 +108,145 @@ progress::-webkit-progress-bar {
 
 .chronometer-user-content{
     box-sizing: border-box;
-    width: 924px; max-height: 1152px;
+    width: 924px; height: auto;
     display: flex;
     flex-direction: column;
     gap: 20px;
 }
+
 .user-date{
     box-sizing: border-box;
     width: 100%; height: 100%;
     background-color: rgba(255, 255, 255, 1);
     padding: 30px 45px;
     box-shadow: 3px 3px 0 0 rgba(37, 37, 37, 1);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
+.user-data-progress{
+    box-sizing: border-box;
+    overflow-y: auto;
+    width: 100%; height: 100%; max-height: 640px;
+    background-color: rgba(240, 240, 240, 1);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px 20px;
+}
+.user-data-input{
+    box-sizing: border-box;
+    width: 100%; height: auto;
+    padding: 10px 20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+#userText, #userDate, #addBtn{
+    box-sizing: border-box;
+    width: 250px; height: 35px;
+    padding: 0px 10px;
+}
+
+.counter{
+    box-sizing: border-box;
+    width: 100%; height: 80px;
+    background-color: rgba(255, 255, 255, 1);
+    border-left: 5px solid rgba(0, 185, 75, 1);
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+}
+.counter-title{
+    width: auto; height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: start;
+}
+.counter-title h4{
+    font-family: RoBold;
+    color: rgba(37, 37, 37, 1);
+    font-size: 24px;
+    font-weight: 700;
+}
+.delete-btn{
+    width: 32px; height: 32px;
+    border: 0px;
+    background-image: url(./Chronometer-source/img/bin\ 0.svg);
+    background-color: rgba(255, 255, 255, 1);
+    background-position: center center;
+    background-repeat: no-repeat;
+    transition: 0.2s;
+}
+.delete-btn:hover{
+    background-image: url(./Chronometer-source/img/bin\ 1.svg);
+    cursor: pointer;
+}
+.counter-items{
+    width: max-content; height: auto;
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    align-items: center;
+}
+
 .date-calculator{
     box-sizing: border-box;
-    width: 100%; height: 365px;
+    width: 100%; height: auto;
     background-color: rgba(255, 255, 255, 1);
     padding: 30px 45px;
     box-shadow: 3px 3px 0 0 rgba(37, 37, 37, 1);
     display: flex;
-    flex-direction: row;
-    align-items: center;
+    flex-direction: column;
 }
 .dateInput-ueser{
-    width: auto; height: 100%;
+    width: auto; height: auto;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     justify-content: center;
     gap: 60px;
+    padding-bottom: 30px;
 }
+.dateInput-ueser label{
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+}
+.dateInput{
+    box-sizing: border-box;
+    width: 363px; height: 32px;
+    padding: 0px 20px;
+    margin-top: 10px;
+    outline: 1px solid rgba(37, 37, 37, 1);
+}
+
 .date-output{
     width: 100%; height: 100%;
     display: grid;
-    grid-template-columns: repeat(2,1fr);
+    grid-template-columns: repeat(4,1fr);
+    grid-template-rows: repeat(2,1fr);
+    gap: 10px 10px;
     justify-content: center;
     align-items: center;
-
+    text-align: center;
 }
 .date-output label{
     display: flex;
     flex-direction: column;
     padding: 0px 30px;
 }
-
+.dateOut{
+    width: max-content; height: auto;
+    color: rgba(0, 185, 75, 1);
+    font-size: 24px;
+}
 .progress-title{
     width: 100%; height: auto;
     display: flex;
-    font-size: 18px;
     justify-content: space-between;
     align-items: end;
     gap: 20px
@@ -155,30 +260,96 @@ progress::-webkit-progress-bar {
 /* - - - - - Медиа запросы - - - - -*/
 @media only screen and (max-width: 1380px) {
     .chronometer-content{
-        width: 1034px;
+        width: max-content;
+        flex-direction: column;
+    }
+    .date-calculator{
+        order: 2;
+    }
+    .chronometer-holiday-content{
+        width: 100%;
+        order: 3;
     }
 }
-@media only screen and (max-width: 1100px) {
-    .chronometer-content{
+@media only screen and (max-width: 950px) {
+    .user-date{
+        width: 712px;
+    }
+    .user-data-progress{
+        height: 320px;
+    }
+    .date-calculator{
+        width: 712px;
+    }
+    .dateInput{
+        width: 100%;
+    }
+    .chronometer-holiday-content{
+        width: 712px;
+    }
+    .chronometer-user-content{
         width: 712px;
     }
 }
+
 @media only screen and (max-width: 760px) {
-    .chronometer-content{
+    .chronometer-user-content{
         width: 390px;
-        padding: 20px  20px;
     }
-    .left-title{
-        font-size: 16px;
+    .user-date{
+        width: 390px;
     }
-    .right-title{
-        font-size: 12px;
+    .date-calculator{
+        width: 390px;
     }
-    .time{
-        font-size: 12px;
+    .chronometer-holiday-content{
+        width: 390px;
     }
+    .dateInput-ueser{
+        flex-direction: column;
+        gap: 20px;
+    }
+    .date-output{
+        grid-template-columns: repeat(2,1fr);
+        grid-template-rows: repeat(2,1fr);
+    }
+    .counter{
+        flex-direction: column;
+        height: auto;
+    }
+    .user-data-input{
+        flex-direction: column;
+        gap: 5px;
+    }
+    #userText, #userDate, #addBtn{
+        width: 100%;
+    }
+    .counter-items{
+        width: 100%;
+        justify-content: space-between;
+    }
+
 }
 @media only screen and (max-width:430px){
+    .container{
+        width: 100%;
+    }
+    .chronometer-user-content{
+        width: 100%;
+    }
+    .user-date{
+        width: 100%;
+        padding: 15px 10px;
+    }
+    .date-calculator{
+        width: 100%;
+    }
+    .chronometer-holiday-content{
+        width: 100%;
+    }
+    .counter-title{
+        align-self: flex-start;
+    }
     .chronometer-content{
         width: 100%;
     }

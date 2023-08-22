@@ -115,53 +115,49 @@
             </div>
         </div>
         <div class="chronometer-user-content">
+            <!--🎎🎎🎎🎎🎎🎎🎎🎎🎎🎎🎎🎎🎎🎎🎎-->
             <div class="user-date">
-
+                <div class="user-title">
+                    <h3>ХРОНОГРАФЫ</h3>
+                    <hr style="margin: 20px 0;">
+                </div>
+                <div class="user-data-progress" id="userList"></div>
+                <div class="user-data-input">
+                    <input type="text" id="userText" placeholder="Заголовок события" required min="1" max="32">
+                    <input type="date" id="userDate" required>
+                    <button id="addBtn">Добавить</button>
+                </div>
+                
             </div>
+            <!--🎎🎎🎎🎎🎎🎎🎎🎎🎎🎎🎎🎎🎎🎎🎎-->
+
             <div class="date-calculator">
+                <h3>ХРОНОМЕТРАЖ</h3>
+                <hr style="margin: 20px 0;">
                 <div class="dateInput-ueser">
                     <label for="dateInput1">
                         Начальная дата
-                        <input type="date" id="dateInput1">
+                        <input type="date" id="dateInput1" class="dateInput">
                     </label>
                     <label for="dateInput2">
                         Конечная дата
-                        <input type="date" id="dateInput2">
+                        <input type="date" id="dateInput2" class="dateInput">
                     </label>
                 </div>
                     <div class="date-output">
-                        <label for="secondsInput">
-                            Секунд
-                            <input type="text" id="secondsInput">
-                        </label>
-                        <label for="minutesInput">
-                            Минут
-                            <input type="text" id="minutesInput">
-                        </label>
-                        <label for="hoursInput">
-                            Часов
-                            <input type="text" id="hoursInput">
-                        </label>
-                        <label>
-                            Дней
-                            <input type="text" id="daysInput">
-                        </label>
-                        <label for="weeksInput">
-                            Недель
-                            <input type="text" id="weeksInput">
-                        </label>
-                        <label for="monthsInput">
-                            Месяца
-                            <input type="text" id="monthsInput">
-                        </label>
-                        <label for="yearsInput">
-                            Лет
-                            <input type="text" id="yearsInput">
-                        </label>
-                        <label for="workDaysInput">
-                            Рабочих дней
-                            <input type="text" id="workDaysInput">
-                        </label>
+                        <div class="seconds"><span class="dateOut" id="secondsSpan">- - </span><span class="dateOutText" id="secondsText">секунда</span></div>
+                        
+                        <div class="minutes"><span class="dateOut" id="minutesSpan">- - </span><span class="dateOutText" id="minutesText">минута</span></div>
+
+                        <div class="hours"><span class="dateOut" id="hoursSpan">- - </span><span class="dateOutText" id="hoursText">час</span></div>
+
+                        <div class="days"><span class="dateOut" id="daysSpan">- - </span><span class="dateOutText" id="daysText">день</span></div>
+
+                        <div class="weeks"><span class="dateOut" id="weeksSpan">- - </span><span class="dateOutText" id="weeksText">неделя</span></div>
+
+                        <div class="month"><span class="dateOut" id="monthsSpan">- - </span><span class="dateOutText" id="monthsText">месяц</span></div>
+                        
+                        <div class="year"><span class="dateOut" id="yearsSpan">- - </span> <span class="dateOutText" id="yearsText">год</span></div>
                 </div>
                 
             </div>
@@ -170,5 +166,8 @@
     </div>
 </div>
 </body>
-<script src="./Chronometer-script.js"></script>
+<script src="./Chronometer-holiday-script.js"></script>
+<script src="./Chronometer-calculator-script.js"></script>
+<script src="./Chronometer-user-сountdown.js"></script>
+
 </html>

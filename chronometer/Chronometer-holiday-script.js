@@ -15,6 +15,11 @@ const dayVictoryBar = document.getElementById("dayVictoryBar"); const dayVictory
 const dayRussiaBar = document.getElementById("dayRussiaBar"); const dayRussia = document.getElementById("dayRussia"); const RussiaDate = new Date(null, 5, 12);
 const dayUnityBar = document.getElementById("dayUnityBar"); const dayUnity = document.getElementById("dayUnity"); const UnityDate = new Date(null, 10, 4);
 
+const eventName = document.getElementById("eventName");
+const eventDay = document.getElementById("eventDay");
+const eventMonth = document.getElementById("eventMonth");
+
+
 // Функция обновления прогресс-баров
 function updateProgressBars() {
     //Получаем текущее время
@@ -31,13 +36,10 @@ function updateProgressBars() {
     hoursBar.value = now.getHours();
     hours.textContent = 24-hoursBar.value;
 //Дней до конца недели
-    let dayOfWeek = now.getDay();
-    let daysToWeekend = 7 - dayOfWeek;
-    if (dayOfWeek === 7){
-        daysToWeekend = 1;
-    }
+    let dayOfWeek = now.getDay() || 7;
+
     dayWeekBar.max = 7;
-    dayWeekBar.value = daysToWeekend;
+    dayWeekBar.value = dayOfWeek;
     dayWeek.textContent = 7 - dayWeekBar.value;
 //Дней до конца месяца
     //Получаем текущий год и месяц
@@ -178,7 +180,3 @@ function updateProgressBars() {
 }
 
 updateProgressBars();
-
-
-
-// 📅 📅 📅 КАЛЕНДАРЬ 📅 📅 📅
