@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Чек-лист жизни</title>
-    <link rel="stylesheet" href="./Life-Checklist-style.css">
-    <link rel="icon" href="./Life-Checklist-source/img/Life-checklist-logo.svg">
+    <title>Жми на кнопку</title>
+    <link rel="stylesheet" href="./Press-The-Button-style.css">
+    <link rel="icon" href="./press-the-button-source/img/press-the-button-logo.svg">
 </head>
 <body>
 <div class="container">
@@ -13,17 +13,24 @@
        <a class="logo-text" href="https://ill1da.space">ILL1DA.SPACE</a>
     </div>
 
-    <div class="progress-bar">
-        <span class="progress-title">Ты выполнил <span class="progress-title-value">0</span> / 100</span>
-        <progress class="progress" max="100" value="0"></progress>
-    </div>
+    <h1><span class="push">ЖМИ</span> НА КНОПКУ!</h1>
 
-    <div class="check-list-content">
-        <h1></h1>
-        <div class="labels" id="check-container">
+    <button class="button" id="red-button"></button>
+
+    <form method="post" enctype="multipart/form-data">
+        <div class="input-file-row">
+            <label class="input-file">
+                <input type="file" id="change-sound" name="file[]" multiple>
+                <span>ВЫБЕРИТЕ ФАЙЛ</span>
+            </label>
+            <div class="input-file-list">Стандартный файл</div> 
         </div>
-    </div>
+    </form>
+
+    
+
+    <button id="reset-btn">Сброс</button>
 </div>
 </body>
-<script src="./Life-Checklist-script.js" type="module"></script>
+<script src="./Press-The-Button-script.js" type="module"></script>
 </html>
