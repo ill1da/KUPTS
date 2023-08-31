@@ -183,26 +183,32 @@ body{
 }
 
 /* - - - - - Карточки - - - - -*/
-.Tic-Tac-Toe{
+#Tic-Tac-Toe{
     background-image: url(./MAIN-source/card/Tic-Tac-Toe-card.svg);
     background-position: center center;
     background-repeat: no-repeat;
     background-size: cover;
 }
-.Life-checklist{
+#Life-checklist{
     background-image: url(./MAIN-source/card/Life-checklist-card.svg);
     background-position: center center;
     background-repeat: no-repeat;
     background-size: cover;
 }
-.Chronometer{
+#Chronometer{
     background-image: url(./MAIN-source/card/Chronometer-card.svg);
     background-position: center center;
     background-repeat: no-repeat;
     background-size: cover;
 }
-.Press-the-button{
+#Press-the-button{
     background-image: url(./MAIN-source/card/Press-the-button-card.svg);
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+#Fun-facts{
+    background-image: url(./MAIN-source/card/Fun-facts-card.svg);
     background-position: center center;
     background-repeat: no-repeat;
     background-size: cover;
