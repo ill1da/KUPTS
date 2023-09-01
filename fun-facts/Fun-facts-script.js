@@ -2,8 +2,7 @@ const card = document.querySelector('.card');
 const cardImage = document.querySelector('.card-image');
 const cardText = document.querySelector('.card-text');
 const cardTitle = document.querySelector('.card-text');
-con
-
+const startButton = document.getElementById('start-button');
 
 const cardData = [
   {

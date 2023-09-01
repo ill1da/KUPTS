@@ -8,13 +8,41 @@
 </head>
 <body>
 <div class="container">
-  <div class="card">
-    <img class="card-image" src="" alt="Card Image">
-    <div class="card-title"></div>
-    <div class="card-text"></div>
+  <div class="logotype">
+    <a class="logo-text" href="https://ill1da.space">ILL1DA.SPACE</a>
   </div>
-  <div class="i-dont-know"></div>
-  <div class="i-know"></div>
+
+  <div class="start-container">
+    <div class="start-container-card">
+      <h1>ФАН ФАКТС</h1>
+      <h3>Коллективно или в одиночку, наберите 10 свайпов, свайпая вправо, если "это знаю", и влево, если "это незнаю".</h3>
+      <button id="start-button">Начать</button>
+    </div>
+  </div>
+
+  <div class="game-container" style="display: none;">
+    <div class="card">
+      <img class="card-image" src="" alt="Card Image">
+      <div class="card-title"></div>
+      <div class="card-text"></div>
+    </div>
+
+    <div id="know-container">
+      <div class="counter" id="i-dont-know">
+        Это незнаю
+        <p  id="dont-know-counter">0</p>
+      </div>
+      <div class="counter" id="i-know">
+        Это знаю
+        <p id="know-counter">0</p>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="end-container" style="display: none;">
+
+  </div>
 </div>
 </body>
 <script src="./Fun-facts-script.js"></script>
