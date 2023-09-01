@@ -86,11 +86,14 @@ function handleCardSwipeEnd() {
 
     card.style.transform = `translateX(${direction * 300}px) rotate(${direction * 15}deg)`;
 
+    swipeCount++;
+    document.getElementById('count-up').textContent = swipeCount;
     if (direction === 1) {
       swipeRightCount++;
-
+      document.getElementById('know-counter').textContent = swipeRightCount;
     } else {
       swipeLeftCount++;
+      document.getElementById('dont-know-counter').textContent = swipeLeftCount;
     }
 
     console.log(`Swipe Right: ${swipeRightCount}, Swipe Left: ${swipeLeftCount}`);
