@@ -42,17 +42,6 @@ body {
 .card:hover{
   cursor: pointer;
 }
-  
-.card-image {
-  width: 100%;
-  height: 60%;
-  object-fit: cover;
-}
-  
-.card-text {
-  padding: 15px;
-  font-size: 16px;
-}
 
 /* - - - - - Логотип - - - - -*/
 .logotype{
@@ -153,6 +142,42 @@ body {
 #game-container h3{
   padding: 10px 0px 40px 0px;
 }
+
+.card-image {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 10px;
+  z-index: 0;
+}
+
+.cover-color{
+  box-sizing: border-box;
+  position: absolute;
+  width: 100%; height: 100%;
+  background-color: rgba(37, 37, 37, 0.75);
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  padding: 50px 10px;
+
+
+  z-index: 1;
+}
+
+.card-title{
+  text-align: center;
+  z-index: 2;
+  color: rgba(255, 255, 255, 1);
+  font-size: 24px;
+}
+.card-text{
+  text-align: center;
+  z-index: 2;
+  color: rgba(255, 255, 255, 1);
+} 
 
   /*- - - - - Контейнер счетчики - - - - -*/
 #know-container{
