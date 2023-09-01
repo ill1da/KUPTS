@@ -291,12 +291,30 @@ body{
     align-self: center; 
 }
 
+.day-advent-title a{
+    width: 520px; height: 70px;
+    border-radius: 30px;
+    border: 0px;
+    background-color: rgba(37, 37, 37, 1);
+    color: rgba(252, 246, 233, 1);
+    font-size: 36px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    margin-bottom: 10px;
+}
+
 .day-advent-title iframe{
     margin: 20px 0px;
 }
 
-
-
+.promo{
+    background-color: aquamarine;
+    width: max-content; height: max-content;
+    padding: 15px 30px;
+    margin: 50px 0px;
+}
 
 /* - - - - - Медиа запросы - - - - -*/
 @media only screen and (max-width:940px) {

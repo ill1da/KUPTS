@@ -15,3 +15,10 @@ document.getElementById("day1").addEventListener("click", () => {
 document.getElementById("day1-advent-button").addEventListener("click", () => {
     document.getElementById("day1-advent").style.display = "none";
 })
+
+document.getElementById("day2").addEventListener("click", () => {
+    document.getElementById("day2-advent").style.display = "flex";
+});
+document.getElementById("day2-advent-button").addEventListener("click", () => {
+    document.getElementById("day2-advent").style.display = "none";
+})

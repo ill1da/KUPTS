@@ -17,8 +17,7 @@ const cardData = [
     image: './',
     title: 'Шоколадные дороги',
     text: 'Text for Card 2'
-  },
-  // Добавьте другие карточки по аналогии
+  }
 ];
 
 let currentIndex = 0;
