@@ -23,23 +23,12 @@ html {
 }
 body {
   box-sizing: border-box;
-  width: 100%; height: 100%;
+  width: 100%; max-height: 100dvh;
   background-color: rgba(244, 215, 27, 1);
 }
 
 .container{
-  width: 100%; height: 100%;
-}
-
-.game-container{
-  width: 100%; height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 50px 0px;
-  overflow-x: hidden;
-  margin-top: 70px;
+  width: 100%; max-height: 100dvh;
 }
 
 .card {
@@ -97,7 +86,7 @@ body {
 }
 
 /*- - - - - Главное меню - - - - -*/
-.start-container{
+#start-container{
   box-sizing: border-box;
   width: 100%; height: 100dvh;
   display: flex;
@@ -118,11 +107,11 @@ body {
   padding: 30px;
 }
 
-.start-container h1{
+#start-container h1{
   font-size: 30px;
   text-align: center;
 }
-.start-container h3{
+#start-container h3{
   font-size: 16px;
   margin-top: 15px;
   margin-bottom: 70px;
@@ -130,7 +119,7 @@ body {
   max-width: 275px;
 }
 
-.start-container button{
+#start-container button{
   width: max-content; height: max-content;
   padding: 10px 30px;
   background-color: rgba(244, 215, 27, 1);
@@ -139,27 +128,39 @@ body {
   border: 0px;
   transition: 0.2s;
 }
-.start-container button:hover{
+#start-container button:hover{
   cursor: pointer;
   padding: 10px 32px;
   box-shadow: 3px 3px 0 0 rgba(37, 37, 37, 1);
   transition: 0.2s;
 }
-.start-container button:active{
+#start-container button:active{
   box-shadow: 0px 0px 0 0 rgba(37, 37, 37, 1);
   transition: 0.2s;
 }
+
 /*- - - - - Игровой контейнер - - - - -*/
+#game-container{
+  box-sizing: border-box;
+  width: 100%; max-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 70px;
+  overflow-x: hidden;
+}
+#game-container h3{
+  padding: 10px 0px 40px 0px;
+}
 
-
-
-/*- - - - - Контейнер счетчики - - - - -*/
+  /*- - - - - Контейнер счетчики - - - - -*/
 #know-container{
   width: 100%; max-width: 700px;
   box-sizing: border-box;
   display: flex;
   justify-content: space-between;
-  padding: 50px 30px;
+  padding: 50px 30px 0px 30px;
 }
 .counter{
   display: flex;

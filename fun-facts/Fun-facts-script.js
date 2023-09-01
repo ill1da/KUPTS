@@ -4,6 +4,9 @@ const cardText = document.querySelector('.card-text');
 const cardTitle = document.querySelector('.card-text');
 const startButton = document.getElementById('start-button');
 
+const startContainer = document.getElementById('start-container');
+const gameContainer = document.getElementById("game-container");
+
 const cardData = [
   {
     image: './',
@@ -19,6 +22,7 @@ const cardData = [
 ];
 
 let currentIndex = 0;
+let swipeCount = 0;
 let startX = 0;
 let currentTranslateX = 0;
 let isDragging = false;
@@ -110,3 +114,8 @@ showCard(currentIndex);
 
 card.addEventListener('mousedown', handleCardSwipeStart);
 card.addEventListener('touchstart', handleCardSwipeStart);
+
+startButton.addEventListener('click', () => {
+  startContainer.style.display = "none";
+  gameContainer.style.display = "flex";
+});
