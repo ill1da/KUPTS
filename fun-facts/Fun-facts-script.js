@@ -3,9 +3,11 @@ const cardImage = document.querySelector('.card-image');
 const cardText = document.querySelector('.card-text');
 const cardTitle = document.querySelector('.card-title');
 const startButton = document.getElementById('start-button');
+const retryButton = document.getElementById('retry-button');
 
 const startContainer = document.getElementById('start-container');
 const gameContainer = document.getElementById("game-container");
+const endContainer = document.getElementById("end-container");
 
 const cardData = [
   {
@@ -135,7 +137,11 @@ function handleCardSwipeEnd() {
       document.getElementById('dont-know-counter').textContent = swipeLeftCount;
     }
 
-    console.log(`Swipe Right: ${swipeRightCount}, Swipe Left: ${swipeLeftCount}`);
+    if(swipeCount === 10){
+      gameContainer.style.display = "none";
+      endContainer.style.display = "flex";
+      endResult();
+    }
 
     setTimeout(() => {
       currentIndex = getRandomCardIndex(currentIndex);
@@ -160,6 +166,11 @@ function getRandomCardIndex(currentIndex) {
   return randomIndex;
 }
 
+function endResult() {
+  document.getElementById("end-know").textContent = swipeRightCount;
+  document.getElementById("end-dont-know").textContent = swipeLeftCount;
+}
+
 showCard(currentIndex);
 
 card.addEventListener('mousedown', handleCardSwipeStart);
@@ -168,4 +179,23 @@ card.addEventListener('touchstart', handleCardSwipeStart);
 startButton.addEventListener('click', () => {
   startContainer.style.display = "none";
   gameContainer.style.display = "flex";
+
+  swipeRightCount = 0;
+  document.getElementById("end-know").textContent = "0";
+  swipeLeftCount = 0;
+  document.getElementById("end-dont-know").textContent = "0";
+  swipeCount = 0;
+  document.getElementById("count-up").textContent = "0";
 });
+
+retryButton.addEventListener('click', () => {
+  gameContainer.style.display = "flex";
+  endContainer.style.display = "none";
+
+  swipeRightCount = 0;
+  document.getElementById("know-counter").textContent = "0";
+  swipeLeftCount = 0;
+  document.getElementById("dont-know-counter").textContent = "0";
+  swipeCount = 0;
+  document.getElementById("count-up").textContent = "0";
+})

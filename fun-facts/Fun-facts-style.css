@@ -193,3 +193,58 @@ body {
   align-items: center;
   gap: 15px;
 }
+
+/*- - - - - Энд контейнер - - - - -*/
+#end-container{
+  box-sizing: border-box;
+  width: 100%; height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 70px 20px;
+  overflow-x: hidden;
+}
+
+.end-container-card{
+  box-sizing: border-box;
+  max-width: 380px; height: max-content;
+  background-color: rgba(255, 255, 255, 1);
+  box-shadow: 3px 3px 0 0 rgba(37, 37, 37, 1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 30px;
+}
+
+.end-container-card h1{
+  font-size: 30px;
+  text-align: center;
+}
+.end-container-card h3{
+  font-size: 16px;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  text-align: center;
+  max-width: 275px;
+}
+
+#retry-button{
+  width: max-content; height: max-content;
+  padding: 10px 30px;
+  background-color: rgba(244, 215, 27, 1);
+  background-color: rgba(37, 37, 37, 1);
+  color: rgba(255, 255, 255, 1);
+  border: 0px;
+  transition: 0.2s;
+}
+#retry-button:hover{
+  cursor: pointer;
+  padding: 10px 32px;
+  box-shadow: 3px 3px 0 0 rgba(37, 37, 37, 1);
+  transition: 0.2s;
+}
+#retry-button:active{
+  box-shadow: 0px 0px 0 0 rgba(37, 37, 37, 1);
+  transition: 0.2s;
+}
