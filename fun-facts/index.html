@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="./Fun-facts-style.css">
-  <title>Фан фактс</title>
+  <title>СвайпФакты</title>
 </head>
 <body>
 <div class="container">
@@ -12,15 +12,15 @@
     <a class="logo-text" href="https://ill1da.space">ILL1DA.SPACE</a>
   </div>
 
-  <div id="start-container">
+  <div id="start-container" style="display: none;">
     <div class="start-container-card">
-      <h1>ФАН ФАКТС</h1>
+      <h1>СвайпФакты</h1>
       <h3>Коллективно или в одиночку, наберите 10 свайпов, свайпая вправо, если "это знаю", и влево, если "это незнаю".</h3>
       <button id="start-button">Начать</button>
     </div>
   </div>
 
-  <div id="game-container" style="display: none;">
+  <div id="game-container">
     <h3 id="swipe-count-element">Свайпы <span id="count-up">0</span> / 10</h3>
     <div class="card">
       <img class="card-image" src="" alt="Card Image">
@@ -45,7 +45,7 @@
 
   <div id="end-container" style="display: none;">
     <div class="end-container-card">
-      <h1>ФАН ФАКТС</h1>
+      <h1>СвайпФакты</h1>
       <h3>Вы узнали новые факты: <span id="end-know">0</span></h3>
       <h3>Вы подрепили свои знания: <span id="end-dont-know">0</span></h3>
       <button id="retry-button">Ещё раз</button>
@@ -53,5 +53,5 @@
   </div>
 </div>
 </body>
-<script src="./Fun-facts-script.js"></script>
+<script type="module" src="./Fun-facts-script.js"></script>
 </html>
