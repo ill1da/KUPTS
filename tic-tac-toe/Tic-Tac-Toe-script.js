@@ -30,6 +30,7 @@ class TicTacToe {
 			if (!this.step) {
 				new Cross().stepCross(e.target);
 				this.step = !this.step;
+                vibrateOnMove(); // Вызываем виброотклик
 				if (!this.win()) {
 					if (this.playerMode.value == "vs-ai") {
 						this.aiMove();
@@ -39,6 +40,7 @@ class TicTacToe {
 				if (this.playerMode.value == "vs-player") {
 					new Circle().stepZero(e.target);
 					this.step = !this.step;
+                    vibrateOnMove(); // Вызываем виброотклик
 					this.win(); 
 				}
 			}
@@ -80,6 +82,7 @@ class TicTacToe {
             const targetField = this.fields[emptyFields[moveIndex]];
             new Circle().stepZero(targetField);
             this.step = !this.step;
+            vibrateOnMove(); // Вызываем виброотклик
             this.win();
         }
         }, 1000);
@@ -259,10 +262,7 @@ class TicTacToe {
 
 class Cross {
     constructor() {
-		this.cross = `<svg class="cross">
-			<line class="first" x1="15" y1="15" x2="80" y2="80" stroke="rgba(255, 136, 0, 1)" stroke-width="10" stroke-linecap="round" />
-			<line class="second" x1="80" y1="15" x2="15" y2="80" stroke="rgba(255, 136, 0, 1)" stroke-width="10" stroke-linecap="round" />
-		  	</svg>`;
+		this.cross = "x";
 	}
 
 	stepCross(target) {
@@ -275,9 +275,7 @@ class Cross {
 
 class Circle {
     constructor() {
-		this.circle = `<svg class="circle">
-			<circle r="35" cx="48" cy="48" stroke="rgba(134, 81, 162, 1)" stroke-width="10" fill="none" stroke-linecap="round" />
-		</svg>`;
+		this.circle = "o";
 	}
 
 	stepZero(target) {
@@ -286,6 +284,12 @@ class Circle {
 			target.classList.add("o");
 		}
 	}
+}
+
+function vibrateOnMove() {
+    if ("vibrate" in navigator) {
+        navigator.vibrate(20);
+    }
 }
 
 const ticTacToe = new TicTacToe();
@@ -300,3 +304,4 @@ document.getElementById("player-mode").addEventListener("change", function() {
         difficultySelect.style.display = "none";
     }
 });
+

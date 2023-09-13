@@ -38,16 +38,17 @@ const createElements = (word) => {
 
     input.addEventListener("change", () => {
       if(input.checked){
+        navigator.vibrate(20);
         label.classList.add("active");
         checkedBoxes[id] = true;
         checkedCount++;
       } else {
+        navigator.vibrate(20);
         label.classList.remove("active");
         delete checkedBoxes[id];
         checkedCount--;
       }
       
-
       //Обновляем локальное хранилище
       localStorage.setItem("checkedBoxes", JSON.stringify(checkedBoxes));
       localStorage.setItem("checkedCount", JSON.stringify(checkedCount));

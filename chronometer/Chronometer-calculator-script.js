@@ -19,14 +19,14 @@ function calculateDateDiff() {
     // Вычисляем разницу в миллисекундах
     let diff = endDate - startDate;
     // Переводим разницу в нужные единицы измерения
-    let seconds = Math.floor(diff / 1000);
+    let seconds = Math.abs(Math.floor(diff / 1000));
     console.log(seconds);
-    let minutes = Math.floor(seconds / 60);
-    let hours = Math.floor(minutes / 60);
-    let days = Math.floor(hours / 24);
-    let weeks = Math.floor(days / 7);
-    let months = Math.floor(days / 30);
-    let years = Math.floor(months / 12);
+    let minutes = Math.abs(Math.floor(seconds / 60));
+    let hours = Math.abs(Math.floor(minutes / 60));
+    let days = Math.abs(Math.floor(hours / 24));
+    let weeks = Math.abs(Math.floor(days / 7));
+    let months = Math.abs(Math.floor(days / 30));
+    let years = Math.abs(Math.floor(months / 12));
 
     // Выводим результат
     document.getElementById("secondsSpan").textContent = seconds + " ";

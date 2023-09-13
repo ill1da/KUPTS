@@ -304,6 +304,10 @@ body{
     text-decoration: none;
     margin-bottom: 10px;
 }
+.day-advent button:hover{
+    cursor: pointer;
+}
+
 
 .day-advent-title iframe{
     margin: 20px 0px;
@@ -375,3 +379,6 @@ body{
 }
 
 
+.day-advent button{
+    margin-top: 25px;
+}
