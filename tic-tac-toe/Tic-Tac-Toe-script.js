@@ -30,7 +30,7 @@ class TicTacToe {
 			if (!this.step) {
 				new Cross().stepCross(e.target);
 				this.step = !this.step;
-                vibrateOnMove(); // Вызываем виброотклик
+                this.vibrateOnMove(); // Вызываем виброотклик
 				if (!this.win()) {
 					if (this.playerMode.value == "vs-ai") {
 						this.aiMove();
@@ -40,7 +40,7 @@ class TicTacToe {
 				if (this.playerMode.value == "vs-player") {
 					new Circle().stepZero(e.target);
 					this.step = !this.step;
-                    vibrateOnMove(); // Вызываем виброотклик
+                    this.vibrateOnMove(); // Вызываем виброотклик
 					this.win(); 
 				}
 			}
@@ -60,31 +60,29 @@ class TicTacToe {
 
         const difficulty = checkedRadio.value;
         setTimeout(() =>{
+            let moveIndex;
+    
+            switch (difficulty) {
+                case "easy":
+                    moveIndex = Math.floor(Math.random() * emptyFields.length);
+                    break;
+                case "medium":
+                    moveIndex = this.mediumAiMove(emptyFields);
+                    break;
+                case "hard":
+                    moveIndex = this.hardAiMove(emptyFields);
+                    break;
+                default:
+                    moveIndex = Math.floor(Math.random() * emptyFields.length);
+            }
 
-        
-        let moveIndex;
-        console.log(difficulty);
-        switch (difficulty) {
-            case "easy":
-                moveIndex = Math.floor(Math.random() * emptyFields.length);
-                break;
-            case "medium":
-                moveIndex = this.mediumAiMove(emptyFields);
-                break;
-            case "hard":
-                moveIndex = this.hardAiMove(emptyFields);
-                break;
-            default:
-                moveIndex = Math.floor(Math.random() * emptyFields.length);
-        }
-
-        if (emptyFields.length > 0) {
-            const targetField = this.fields[emptyFields[moveIndex]];
-            new Circle().stepZero(targetField);
-            this.step = !this.step;
-            vibrateOnMove(); // Вызываем виброотклик
-            this.win();
-        }
+            if (emptyFields.length > 0) {
+                const targetField = this.fields[emptyFields[moveIndex]];
+                new Circle().stepZero(targetField);
+                this.step = !this.step;
+                this.vibrateOnMove(); // Вызываем виброотклик
+                this.win();
+            }
         }, 1000);
     }
 
@@ -258,6 +256,13 @@ class TicTacToe {
 		return false;
 	}
 
+    vibrateOnMove() {
+        if ("vibrate" in navigator) {
+            navigator.vibrate(20);
+            console.log("+");
+        }
+    }
+
 }
 
 class Cross {
@@ -284,12 +289,6 @@ class Circle {
 			target.classList.add("o");
 		}
 	}
-}
-
-function vibrateOnMove() {
-    if ("vibrate" in navigator) {
-        navigator.vibrate(20);
-    }
 }
 
 const ticTacToe = new TicTacToe();

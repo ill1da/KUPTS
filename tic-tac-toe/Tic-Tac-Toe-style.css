@@ -35,7 +35,6 @@ body{
     align-items: center;
     padding-top: 30px;
     gap: 20px;
-    margin-bottom: 20px;
 }
 
 /*- - - - - Логотип - - - - -*/
@@ -250,7 +249,7 @@ svg.cross, svg.circle{
 @media only screen and (max-width:450px) {
     .ill1da-logo h1{
         font-size: 32px;
-    }
+    }   
 }
 
 @media only screen and (max-width: 426px) {
