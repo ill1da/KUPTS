@@ -153,10 +153,50 @@ h6{
     justify-content: space-between;
 }
 
-#userText, #userDate, #addBtn{
+#userText{
     box-sizing: border-box;
     width: 250px; height: 35px;
     padding: 0px 10px;
+    background-color: rgba(240, 240, 240, 1);
+    outline: 1px rgba(37, 37, 37, 1);
+    border-radius: 10px;
+    transition: background-color 0.3s ease;
+}
+#userText:hover{
+    cursor: pointer;
+    background-color: rgba(215, 215, 215, 1);
+    transition: background-color 0.3s ease;
+}
+
+#userDate{
+    box-sizing: border-box;
+    width: 250px; height: 35px;
+    padding: 0px 10px;
+    background-color: rgba(240, 240, 240, 1);
+    outline: 1px rgba(37, 37, 37, 1);
+    border-radius: 10px;
+    transition: background-color 0.3s ease;
+}
+#userDate:hover{
+    cursor: pointer;
+    background-color: rgba(215, 215, 215, 1);
+    transition: background-color 0.3s ease;
+}
+
+#addBtn{
+    box-sizing: border-box;
+    width: 250px; height: 35px;
+    padding: 0px 10px;
+    background-color: rgba(0, 185, 75, 1);
+    color: rgba(255, 255, 255, 1);
+    border: 0px;
+    border-radius: 10px;
+    transition: background-color 0.3s ease;
+}
+#addBtn:hover{
+    cursor: pointer;
+    background-color: rgba(0, 185, 75, 0.7);
+    transition: background-color 0.3s ease;
 }
 
 .counter{
@@ -229,10 +269,18 @@ h6{
 }
 .dateInput{
     box-sizing: border-box;
-    width: 363px; height: 32px;
+    width: 363px; height: 35px;
     padding: 0px 20px;
     margin-top: 10px;
-    outline: 1px solid rgba(37, 37, 37, 1);
+    outline: 1px rgba(37, 37, 37, 1);
+    background-color: rgba(240, 240, 240, 1);
+    border-radius: 10px;
+    transition: background-color 0.3s ease;
+}
+.dateInput:hover{
+    cursor: pointer;
+    background-color: rgba(215, 215, 215, 1);
+    transition: background-color 0.3s ease;
 }
 
 .date-output{
@@ -302,6 +350,9 @@ h6{
     .chronometer-user-content{
         width: 712px;
     }
+    .user-data-input{
+        gap: 10px;
+    }
 }
 
 @media only screen and (max-width: 760px) {
@@ -332,9 +383,10 @@ h6{
     .user-data-input{
         flex-direction: column;
         gap: 5px;
+        padding: 10px 0;
     }
     #userText, #userDate, #addBtn{
-        width: 100%;
+        min-width: 100%;
     }
     .counter-items{
         width: 100%;
