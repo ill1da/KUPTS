@@ -9,27 +9,25 @@
 </head>
 <body>
 <div class="container">
-    <div class="logotype">
+    <div class="ill1da-logo">
        <a class="logo-text" href="https://ill1da.space">ILL1DA.SPACE</a>
+       <h1>ЖМИ НА КНОПКУ!</h1>
     </div>
-
-    <h1><span class="push">ЖМИ</span> НА КНОПКУ!</h1>
 
     <button class="button" id="red-button"></button>
 
-    <form method="post" enctype="multipart/form-data">
-        <div class="input-file-row">
-            <label class="input-file">
-                <input type="file" id="change-sound" name="file[]" multiple>
-                <span>ВЫБЕРИТЕ ФАЙЛ</span>
-            </label>
-            <div class="input-file-list">Стандартный файл</div> 
-        </div>
-    </form>
-
-    
-
-    <button id="reset-btn">Сброс</button>
+    <div class="buttons">
+        <form method="post" enctype="multipart/form-data">
+            <div class="input-file-row">
+                <label class="input-file">
+                    <input type="file" id="change-sound" name="file[]" multiple>
+                    <span>ВЫБЕРИТЕ ФАЙЛ</span>
+                </label>
+                <div class="input-file-list"></div> 
+            </div>
+        </form>
+        <button id="reset-btn">Сброс</button>
+    </div>
 </div>
 </body>
 <script src="./Press-The-Button-script.js" type="module"></script>
