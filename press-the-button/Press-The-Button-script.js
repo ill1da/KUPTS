@@ -33,6 +33,8 @@ resetButton.addEventListener("click", () => {
   localStorage.removeItem("sound");
   // Удаляем имя файла
   changeTitle.innerHTML = "";
+    localStorage.removeItem("soundName");
+
 
   // Создаем копию начального звука и проигрываем
   const cloneSound = defaultSound.cloneNode();
