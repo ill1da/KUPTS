@@ -1,0 +1,187 @@
+/* - - - - - Шрифты - - - - - */
+@font-face {
+    font-family: PressStart2P;
+    src: url(./Percentage-source/font/PressStart2P-Regular.ttf);
+}
+@font-face {
+    font-family: Rubik;
+    src: url(./Percentage-source/font/Rubik-VariableFont_wght.ttf);
+}
+
+/* - - - - - Проценташ - - - - - */
+*{
+    box-sizing: border-box;
+    margin: 0; padding: 0;
+    font-family: Rubik;
+    font-size: 18px;
+    font-weight: 700;
+    color: rgba(37, 37, 37, 1);
+
+    -webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+html{
+    height: fit-content;
+}
+
+body{
+    width: 100%; height: 100%;
+    background-color: rgba(21, 97, 144, 1);
+    background-image: url(./Percentage-source/img/cell.png);
+    background-position: center center;
+    background-size: 20px;
+    transition: background 0.3s;
+}
+
+.container{
+    height: 100dvh;
+    background-color: rgba(21, 97, 144, 0.85);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    border: 3px solid rgba(255, 255, 255, 1);
+}
+
+/*- - - - - Логотип - - - - -*/
+.ill1da-logo{
+    position: absolute;
+    width: 100%; height: max-content;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    gap: 20px;
+    top: 30px;
+}
+
+.ill1da-logo h1{
+    font-size: 40px;
+    font-weight: 800;
+    color: rgba(255, 255, 255, 1);
+    text-shadow: 1px 1px 1px rgba(37, 37, 37, 1), 2px 2px 1px rgba(37, 37, 37, 1), 3px 3px 1px rgba(37, 37, 37, 1);
+}
+
+.logo-text{
+    width: max-content;
+    background-color: rgba(21, 97, 144, 1);
+    box-shadow: 3px 3px 0 0 rgba(255, 255, 255, 1);
+    font-family: PressStart2P;
+    font-size: 20px;
+    color: rgba(255, 255, 255, 1);
+    padding: 8px 24px 8px 16px;
+    text-decoration: none;
+    align-self: center;
+    transition: 0.2s;
+    border: 3px solid rgba(255, 255, 255, 1);
+ }
+ .logo-text:hover{
+    box-shadow: 5px 5px 0 0 rgba(255, 255, 255, 1);
+    padding: 8px 26px 8px 18px;
+    transition: 0.2s;
+ }
+.logo-text:active{
+    box-shadow: 0px 0px 0 0 rgba(255, 255, 255, 1);
+    border: 0px;
+    transition: 0.2s;
+}
+
+/* - - - - - Главное меню - - - - - */
+
+
+
+/* - - - - - Игровая карточка - - - - - */
+.game-container{
+    width: 100%; height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 60px;
+}
+
+.game-content{
+    width: 100%; height: max-content;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 60px;
+}
+
+/* - - - - - Вопросы - - - - - */
+.percentage-text{
+    width: 620px; height: 460px;
+    display: flex;
+    align-items: center;
+}
+.percentage-text p{
+    color: rgba(255, 255, 255, 1);
+    font-family: Rubik;
+    font-size: 48px;
+    font-style: italic;
+    font-weight: 700;
+    line-height: normal;
+    text-transform: uppercase;
+}
+
+
+/* - - - - - Колесо - - - - - */
+#percentage-circle{
+    width: max-content; height: max-content;
+    display: flex;
+    flex-direction: column;
+    gap: 60px;
+}
+.circle{
+    position: relative;
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    background: conic-gradient(rgba(174, 185, 242, 1) 0%, rgba(174, 185, 242, 1) 0%);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.pointer{
+    position: absolute;
+    width: 20px; height: 20px;
+    background-color: rgba(12, 53, 79, 1);
+    border-radius: 50%;
+    top: 0;
+    left: calc(50% - 10px);
+    transform: translate(-50%, -50%);
+    cursor: pointer;
+    touch-action: none;
+}
+.percent {
+    font-size: 24px;
+    font-weight: bold;
+    color: rgba(255, 255, 255, 1);
+    
+    font-family: Rubik;
+    font-size: 64px;
+    font-style: italic;
+    font-weight: 600;
+    line-height: normal;
+    text-transform: uppercase;
+}
+#button{
+    width: 100%; height: max-content;
+    padding: 5px 0;
+    font-style: italic;
+    color: rgba(255, 255, 255, 1);
+    background-color: rgba(21, 97, 144, 1);
+    border: 3px solid rgba(255, 255, 255, 1);
+    transition: background 0.3s;
+}
+#button:hover{
+    cursor: pointer;
+    background-color: rgba(142, 194, 226, 1);
+    color: rgba(21, 97, 144, 0.85);
+    transition: background 0.3s;
+}
+/* - - - - - Результат - - - - - */

@@ -210,3 +210,10 @@ body{
     background-repeat: no-repeat;
     background-size: cover;
 }
+#Percentage{
+    background-image: url(./MAIN-source/card/Percentage-card.svg);
+    background-color: rgba(165, 149, 154, 1);
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
