@@ -113,7 +113,7 @@ body{
 
 /* - - - - - Вопросы - - - - - */
 .percentage-text{
-    max-width: 620px; max-height: 460px;
+    max-width: 620px; max-height: 460px; width: 620px;
     display: flex;
     align-items: center;
 }
