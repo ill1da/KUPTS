@@ -116,9 +116,6 @@ function drag(evt) {
         if (currentPosition < 0) {
             currentPosition = 100 + currentPosition;
         }
-
-        // Виброотклик на каждый процент
-        navigator.vibrate([10]);
     }
 
     // Обновление заполнения круга градиентом
