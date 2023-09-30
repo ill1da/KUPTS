@@ -74,6 +74,9 @@ function startDragging(evt) {
     drag(evt);
 }
 
+// Предыдущее корректное значение процента
+let previousPosition = 50;
+
 // Функция перетаскивания
 function drag(evt) {
     if (!isDragging) return;
@@ -115,6 +118,14 @@ function drag(evt) {
         // Поправка на отрицательные значения
         if (currentPosition < 0) {
             currentPosition = 100 + currentPosition;
+        }
+
+        // Если currentPosition становится NaN, установить его в предыдущее корректное значение
+        if (isNaN(currentPosition)) {
+            currentPosition = previousPosition;
+        } else {
+            // Обновить предыдущее корректное значение
+            previousPosition = currentPosition;
         }
     }
 
@@ -166,6 +177,10 @@ button.addEventListener('click', () => {
         fillElement.style.display = 'none';
         // После исчезновения градиентной заливки, показываем новый вопрос
         showRandomQuestion();
+        // Сразу сбрасываем currentPosition
+        currentPosition = 50;
+        previousPosition = 50;
+        updatePointerPosition();
     }, 3000); // Задержка перед скрытием слоя (3000 миллисекунд = 3 секунды)
 });
 
@@ -181,11 +196,13 @@ let score = 0; // Счет игрока
 
 // Функция для включения кнопки
 function enableButton() {
+    pointer.style.display = "block";
     button.disabled = false;
 }
 
 // Функция для выключения кнопки
 function disableButton() {
+    pointer.style.display = "none";
     button.disabled = true;
 }
 
@@ -211,7 +228,6 @@ function showRandomQuestion() {
             // Убрать каретку после окончания анимации
             questionElement.textContent = questionText;
             // По окончании анимации, сбросить положение точки и обновить интерфейс
-            currentPosition = 50; // Сброс положения точки
             updatePointerPosition();
             // Включаем кнопку после окончания анимации
             enableButton();
@@ -220,25 +236,6 @@ function showRandomQuestion() {
 
     addNextCharacter();
 }
-
-// // Функция для стирания текста с обратным эффектом и кареткой
-// function eraseText() {
-//     const questionText = questionElement.textContent;
-//     let index = questionText.length;
-
-//     function removeLastCharacter() {
-//         if (index >= 0) {
-//             const textWithCaret = questionText.substring(0, index) + '|'; // Добавление каретки
-//             questionElement.textContent = textWithCaret;
-//             index--;
-//             setTimeout(removeLastCharacter, 10); // Интервал между символами (50 миллисекунд)
-//         } else {
-//             showRandomQuestion(); // После стирания, показать новый вопрос
-//         }
-//     }
-
-//     removeLastCharacter();
-// }
 
 // Функция для получения случайного индекса вопроса
 function getRandomQuestionIndex() {
