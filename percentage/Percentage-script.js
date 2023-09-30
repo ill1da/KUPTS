@@ -180,6 +180,7 @@ button.addEventListener('click', () => {
         // Сразу сбрасываем currentPosition
         currentPosition = 50;
         previousPosition = 50;
+        checkAnswer();
         updatePointerPosition();
     }, 3000); // Задержка перед скрытием слоя (3000 миллисекунд = 3 секунды)
 });
@@ -188,7 +189,6 @@ button.addEventListener('click', () => {
 // Функция для начала игры
 function startGame() {
     showRandomQuestion();
-    // button.addEventListener('click', checkAnswer);
 }
 
 let currentQuestionIndex = -1; // Индекс текущего вопроса
@@ -251,21 +251,21 @@ function checkAnswer() {
 
         // Рассчет разницы между ответами
         const difference = Math.abs(userAnswer - correctAnswer);
+        console.log("difference " + difference);
 
-        // Рассчет очков в соответствии с правилами
+        // Рассчет очков в соответствии с новыми правилами
         let points = 0;
         if (difference === 0) {
-            points = 3000;
+            points = 3000; // Точный ответ
         } else if (difference >= 1 && difference <= 10) {
-            points = 3000 - difference * 100;
+            points = 3000 - difference * 100; // 1-10% разницы
         } else if (difference >= 11 && difference <= 30) {
-            points = 3000 - 1000 - (difference - 10) * 50;
+            points = 3000 - 1000 - (difference - 10) * 50; // 11-30% разницы
         }
 
         // Добавление очков к счету
         score += points;
-        // Переход к следующему вопросу
-        showRandomQuestion();
+        console.log("score " + score);
     }
 }
 
