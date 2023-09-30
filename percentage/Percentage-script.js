@@ -1,10 +1,37 @@
+// Слои
+const gameContainer = document.getElementById('game-container');
+const mainContainer = document.getElementById('main-container');
+const resultContainer = document.getElementById('result-container');
+
+// Игровой слой
+const questionElement = document.getElementById('question-text');
+// Процентное кольцо
 const circle = document.getElementById('circle');
 const pointer = document.getElementById('pointer');
 const percentText = document.getElementById('percent'); // Новый элемент для отображения процента
-const button = document.getElementById('button');
+const currentPercent = document.getElementById('fill');
+// Кнопка подтверждения
+const button = document.getElementById('confirm-button');
+
+let questions = []; // Здесь будут храниться вопросы и ответы из JSON
+let firstQuestionShown = false; // Флаг для отслеживания первого показанного вопроса
+
+// Функция для загрузки JSON-файла
+async function loadJSONFile(url) {
+    try {
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return await response.json();
+    } catch (error) {
+        console.error('Error loading JSON:', error);
+        return null;
+    }
+}
 
 // Радиус круга
-const radius = circle.clientWidth / 2;
+const radius = 100;
 
 // Начальный угол для самой верхней точки
 const initialAngle = -Math.PI / 2;
@@ -95,7 +122,7 @@ function drag(evt) {
     }
 
     // Обновление заполнения круга градиентом
-    circle.style.background = `conic-gradient(rgba(16, 156, 134, 1) ${currentPosition}%, rgba(142, 194, 226, 1) ${currentPosition}%)`;
+    circle.style.background = `conic-gradient(rgba(46, 49, 145, 1) ${currentPosition}%, rgba(142, 194, 226, 1) ${currentPosition}%)`;
 
     // Обновление отображения процента
     percentText.textContent = `${Math.round(currentPosition)}%`;
@@ -116,10 +143,155 @@ function updatePointerPosition() {
     const pointerY = centerY + radius * Math.sin(angle);
     pointer.style.left = pointerX - circle.getBoundingClientRect().left + 'px';
     pointer.style.top = pointerY - circle.getBoundingClientRect().top + 'px';
-    circle.style.background = `conic-gradient(rgba(16, 156, 134, 1) ${currentPosition}%, rgba(142, 194, 226, 1) ${currentPosition}%)`;
+    circle.style.background = `conic-gradient(rgba(46, 49, 145, 1) ${currentPosition}%, rgba(142, 194, 226, 1) ${currentPosition}%)`;
     percentText.textContent = `${Math.round(currentPosition)}%`;
 }
 
 button.addEventListener('click', () => {
-    console.log(Math.round(currentPosition));
+    console.log(Math.round(currentPosition)); // Здесь можно добавить логику для проверки ответа
+
+    // Выключаем кнопку перед началом стирания текста
+    disableButton();
+
+    // После проверки ответа, показываем слой
+    currentPercent.style.display = 'block';
+
+    // Получаем текущий вопрос
+    const currentQuestion = questions[currentQuestionIndex];
+    const correctAnswer = currentQuestion.answer; // Правильный ответ
+
+    // Устанавливаем угол поворота для градиентной заливки правильного процента
+    const fillElement = document.getElementById('fill');
+    fillElement.style.background = `conic-gradient(transparent 0%, rgba(16, 156, 134, 1) 0%, rgba(16, 156, 134, 1) ${correctAnswer}%, rgba(142, 194, 226, 0) ${correctAnswer}%)`;
+
+    // Устанавливаем таймер для исчезновения градиентной заливки и показа нового вопроса
+    setTimeout(() => {
+        fillElement.style.display = 'none';
+        // После исчезновения градиентной заливки, показываем новый вопрос
+        showRandomQuestion();
+    }, 3000); // Задержка перед скрытием слоя (3000 миллисекунд = 3 секунды)
+});
+
+
+// Функция для начала игры
+function startGame() {
+    showRandomQuestion();
+    // button.addEventListener('click', checkAnswer);
+}
+
+let currentQuestionIndex = -1; // Индекс текущего вопроса
+let score = 0; // Счет игрока
+
+// Функция для включения кнопки
+function enableButton() {
+    button.disabled = false;
+}
+
+// Функция для выключения кнопки
+function disableButton() {
+    button.disabled = true;
+}
+
+// Функция для отображения случайного вопроса с эффектом печатающегося текста и кареткой
+function showRandomQuestion() {
+    currentQuestionIndex = getRandomQuestionIndex();
+    const currentQuestion = questions[currentQuestionIndex];
+    const questionText = currentQuestion.question;
+    questionElement.textContent = ''; // Очистить текстовый элемент
+
+    let index = 0;
+
+    // Выключаем кнопку перед началом анимации
+    disableButton();
+
+    function addNextCharacter() {
+        if (index < questionText.length) {
+            const textWithCaret = questionText.substring(0, index) + '|'; // Добавление каретки
+            questionElement.textContent = textWithCaret;
+            index++;
+            setTimeout(addNextCharacter, 40); // Интервал между символами (40 миллисекунд)
+        } else {
+            // Убрать каретку после окончания анимации
+            questionElement.textContent = questionText;
+            // По окончании анимации, сбросить положение точки и обновить интерфейс
+            currentPosition = 50; // Сброс положения точки
+            updatePointerPosition();
+            // Включаем кнопку после окончания анимации
+            enableButton();
+        }
+    }
+
+    addNextCharacter();
+}
+
+// // Функция для стирания текста с обратным эффектом и кареткой
+// function eraseText() {
+//     const questionText = questionElement.textContent;
+//     let index = questionText.length;
+
+//     function removeLastCharacter() {
+//         if (index >= 0) {
+//             const textWithCaret = questionText.substring(0, index) + '|'; // Добавление каретки
+//             questionElement.textContent = textWithCaret;
+//             index--;
+//             setTimeout(removeLastCharacter, 10); // Интервал между символами (50 миллисекунд)
+//         } else {
+//             showRandomQuestion(); // После стирания, показать новый вопрос
+//         }
+//     }
+
+//     removeLastCharacter();
+// }
+
+// Функция для получения случайного индекса вопроса
+function getRandomQuestionIndex() {
+    return Math.floor(Math.random() * questions.length);
+}
+
+// Функция для проверки ответа
+function checkAnswer() {
+    if (currentQuestionIndex < questions.length) {
+        const currentQuestion = questions[currentQuestionIndex];
+        const userAnswer = Math.round(currentPosition); // Ответ пользователя
+        const correctAnswer = currentQuestion.answer; // Правильный ответ
+
+        // Рассчет разницы между ответами
+        const difference = Math.abs(userAnswer - correctAnswer);
+
+        // Рассчет очков в соответствии с правилами
+        let points = 0;
+        if (difference === 0) {
+            points = 3000;
+        } else if (difference >= 1 && difference <= 10) {
+            points = 3000 - difference * 100;
+        } else if (difference >= 11 && difference <= 30) {
+            points = 3000 - 1000 - (difference - 10) * 50;
+        }
+
+        // Добавление очков к счету
+        score += points;
+        // Переход к следующему вопросу
+        showRandomQuestion();
+    }
+}
+
+// Функция для отображения результатов
+function showResults() {
+    mainContainer.style.display = 'none';
+    resultContainer.style.display = 'block';
+    resultContainer.textContent = `Ваши очки: ${score}`;
+}
+
+// Вызов функции для загрузки JSON-файла сразу после загрузки страницы
+window.addEventListener('load', () => {
+    loadJSONFile('./Percentage-source/questions.json').then(data => {
+        if (data) {
+            questions = data;
+            if (questions.length > 0) {
+                startGame(); // Начать игру после загрузки вопросов
+            } else {
+                console.error('No questions loaded.');
+            }
+        }
+    });
 });
