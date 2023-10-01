@@ -245,7 +245,7 @@ function showRandomQuestion() {
             const textWithCaret = questionText.substring(0, index) + '|'; // Добавление каретки
             questionElement.textContent = textWithCaret;
             index++;
-            setTimeout(addNextCharacter, 40); // Интервал между символами (40 миллисекунд)
+            setTimeout(addNextCharacter, 30); // Интервал между символами (30 миллисекунд)
         } else {
             // Убрать каретку после окончания анимации
             questionElement.textContent = questionText;
