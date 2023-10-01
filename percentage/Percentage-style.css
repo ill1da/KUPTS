@@ -126,7 +126,7 @@ body{
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 15px;
+    margin-bottom: 35px;
 
 }
 #question-text{
@@ -141,12 +141,6 @@ body{
 
 
 /* - - - - - Колесо - - - - - */
-#percentage-circle{
-    width: max-content; height: max-content;
-    display: flex;
-    flex-direction: column;
-    gap: 50px;
-}
 #circle{
     position: relative;
     width: 200px; height: 200px;
@@ -186,6 +180,7 @@ body{
     color: rgba(255, 255, 255, 1);
     background-color: rgba(21, 97, 144, 1);
     border: 3px solid rgba(255, 255, 255, 1);
+    margin-top: 50px;
     transition: background 0.3s;
 }
 #confirm-button:hover{
