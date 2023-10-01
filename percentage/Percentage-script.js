@@ -8,6 +8,7 @@ const roundSpan = document.getElementById('round')
 const questionElement = document.getElementById('question-text');
 // Процентное кольцо
 const circle = document.getElementById('circle');
+const circleMini = document.getElementById('circle-mini');
 const pointer = document.getElementById('pointer');
 const percentText = document.getElementById('percent'); // Новый элемент для отображения процента
 const fillElement = document.getElementById('fill');
@@ -142,6 +143,7 @@ function drag(evt) {
 
     // Обновление заполнения круга градиентом
     circle.style.background = `conic-gradient(rgba(46, 49, 145, 1) ${currentPosition}%, rgba(142, 194, 226, 1) ${currentPosition}%)`;
+    circleMini.style.background = `conic-gradient(rgba(46, 49, 145, 1) ${currentPosition}%, rgba(142, 194, 226, 1) ${currentPosition}%)`;
 
     // Обновление отображения процента
     percentText.textContent = `${Math.round(currentPosition)}%`;
@@ -163,6 +165,7 @@ function updatePointerPosition() {
     pointer.style.left = pointerX - circle.getBoundingClientRect().left + 'px';
     pointer.style.top = pointerY - circle.getBoundingClientRect().top + 'px';
     circle.style.background = `conic-gradient(rgba(46, 49, 145, 1) ${currentPosition}%, rgba(142, 194, 226, 1) ${currentPosition}%)`;
+    circleMini.style.background = `conic-gradient(rgba(46, 49, 145, 1) ${currentPosition}%, rgba(142, 194, 226, 1) ${currentPosition}%)`;
     percentText.textContent = `${Math.round(currentPosition)}%`;
 }
 
@@ -266,7 +269,7 @@ function handleConfirmClick() {
             const progress = Math.min(1, (timestamp - startTime) / duration);
             fillValue = progress * correctAnswer;
             rightPercentage.innerText = `${Math.round(fillValue)}%`;
-            fillElement.style.background = `conic-gradient(transparent 0%, rgba(16, 156, 134, 1) 0%, rgba(16, 156, 134, 1) ${fillValue}%, rgba(142, 194, 226, 0) ${fillValue}%)`;
+            fillElement.style.background = `conic-gradient(transparent 0%, rgba(101, 255, 255, 1) 0%, rgba(101, 255, 255, 1) ${fillValue}%, rgba(142, 194, 226, 0) ${fillValue}%)`;
             
             if (progress < 1) {
                 requestAnimationFrame(animateFill);
@@ -278,21 +281,23 @@ function handleConfirmClick() {
                 const userAnswer = Math.round(fillValue); // Ответ пользователя
 
                 // Рассчет разницы между ответами
-                const difference = Math.abs(userAnswer - correctAnswer);
+                const difference = Math.abs(Math.round(currentPosition) - correctAnswer);
                 console.log("difference " + difference);
 
                 // Рассчет очков в соответствии с новыми правилами
                 let points = 0;
                 if (difference === 0) {
-                    points = 3000; // Точный ответ
+                    points = 300; // Точный ответ
                 } else if (difference >= 1 && difference <= 10) {
-                    points = 3000 - difference * 100; // 1-10% разницы
+                    points = 300 - difference * 10; // 1-10% разницы
                 } else if (difference >= 11 && difference <= 30) {
-                    points = 3000 - 1000 - (difference - 10) * 50; // 11-30% разницы
+                    points = 300 - 100 - (difference - 1) * 5; // 11-30% разницы
                 }
 
-                // Добавление очков к счету
                 accruedPoints.innerText = points;
+
+                score += points;
+                console.log(score);
 
                 // Имитация полученных очков
                 setTimeout(startNewRound, 2000); // Переход к следующему раунду через 2 секунды
