@@ -10,6 +10,7 @@ const circle = document.getElementById('circle');
 const pointer = document.getElementById('pointer');
 const percentText = document.getElementById('percent'); // Новый элемент для отображения процента
 const currentPercent = document.getElementById('fill');
+const correctPercent = document.getElementById('correct-percent');
 // Кнопка подтверждения
 const button = document.getElementById('confirm-button');
 

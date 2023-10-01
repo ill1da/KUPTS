@@ -16,7 +16,7 @@
     font-size: 18px;
     font-weight: 700;
     color: rgba(37, 37, 37, 1);
-
+    font-style: italic;
     -webkit-user-select: none;
 	-khtml-user-select: none;
 	-moz-user-select: none;
@@ -77,6 +77,7 @@ body{
     align-self: center;
     transition: 0.2s;
     border: 3px solid rgba(255, 255, 255, 1);
+    font-style: normal;
  }
  .logo-text:hover{
     box-shadow: 5px 5px 0 0 rgba(255, 255, 255, 1);
@@ -99,7 +100,7 @@ body{
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 0 60px;
+    padding: 0 20px;
 }
 
 .game-content{
@@ -109,23 +110,33 @@ body{
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    gap: 60px;
+}
+
+/* - - - - - Раунд - - - - - */
+.round-score, #round{
+    width: max-content; height: max-content;
+    color: rgba(255, 255, 255, 1);
+    margin-bottom: 15px;
 }
 
 /* - - - - - Вопросы - - - - - */
 .percentage-text{
-    max-width: 620px; max-height: 460px; width: 620px;
+    width: 700px; height: max-content;
+    min-height: 150px;
     display: flex;
     align-items: center;
+    justify-content: center;
+    margin-bottom: 15px;
+
 }
 #question-text{
+    width: 100%; height: 100%;
+    font-size: 40px;
     color: rgba(255, 255, 255, 1);
-    font-family: Rubik;
-    font-size: 48px;
-    font-style: italic;
     font-weight: 700;
-    line-height: normal;
     text-transform: uppercase;
+    display: flex;
+    align-items: center;
 }
 
 
@@ -134,7 +145,7 @@ body{
     width: max-content; height: max-content;
     display: flex;
     flex-direction: column;
-    gap: 60px;
+    gap: 50px;
 }
 #circle{
     position: relative;
@@ -164,7 +175,6 @@ body{
     
     font-family: Rubik;
     font-size: 64px;
-    font-style: italic;
     font-weight: 600;
     line-height: normal;
     text-transform: uppercase;
@@ -173,7 +183,6 @@ body{
 #confirm-button{
     width: 100%; height: max-content;
     padding: 5px 0;
-    font-style: italic;
     color: rgba(255, 255, 255, 1);
     background-color: rgba(21, 97, 144, 1);
     border: 3px solid rgba(255, 255, 255, 1);
@@ -202,13 +211,17 @@ body{
 @media only screen and (max-width: 1000px) {
     .game-content{
         width: 100%; height: 100%;
-        padding: 100px 0;
+        padding: 90px 0 30px;
         flex-direction: column;
-        justify-content: space-between;
+        justify-content: start;
     }
 
+    .percentage-text{
+        width: 100%;
+    }
+    
     #question-text{
-        width: 100%; max-height: max-content;
+        width: 100%;
         font-size: 24px;
         text-align: center;
         margin: 0 auto;
@@ -230,8 +243,4 @@ body{
         font-size: 20px;
         
     }
-}
-
-#pointer, #fill {
-    transition: left 0.5s ease-in-out, top 0.5s ease-in-out, transform 0.5s ease-in-out;
 }
