@@ -186,7 +186,7 @@ function startNewRound() {
         showRandomQuestion();
     } else {
         // Окончание игры
-        alert("Игра окончена. Все раунды завершены!");
+        alert(`Игра окончена. Счет: ${score}`);
     }
 }
 
