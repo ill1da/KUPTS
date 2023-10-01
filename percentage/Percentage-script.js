@@ -44,6 +44,7 @@ async function loadJSONFile(url) {
 
 // Радиус круга
 const radius = 100;
+const radiusMini = 70; // Радиус круга circleMini
 
 // Начальный угол для самой верхней точки
 const initialAngle = -Math.PI / 2;
@@ -59,6 +60,9 @@ let isDragging = false;
 
 // Позиция точки (по умолчанию - 50%)
 let currentPosition = 50;
+
+// Позиция точки circleMini (по умолчанию - 50%)
+let currentMiniPosition = 50;
 
 // Обновление положения точки в соответствии с текущей позицией
 updatePointerPosition();
@@ -111,8 +115,10 @@ function drag(evt) {
     // Проверка минимального угла и максимального угла (полный оборот)
     if (angle < minAngle) {
         currentPosition = 0; // Задать минимальную позицию
+        currentMiniPosition = 0; // Задать минимальную позицию для circleMini
     } else if (angle > maxAngle) {
         currentPosition = 100; // Задать максимальную позицию
+        currentMiniPosition = 100; // Задать максимальную позицию для circleMini
     } else {
         const degrees = (angle * 180) / Math.PI;
 
@@ -127,9 +133,17 @@ function drag(evt) {
         // Расчет процента относительно положения красного круга на основном
         currentPosition = ((angle - initialAngle) / (2 * Math.PI)) * 100;
 
+        // Расчет процента относительно положения красного круга на circleMini
+        currentMiniPosition = ((angle - initialAngle) / (2 * Math.PI)) * 100;
+
         // Поправка на отрицательные значения
         if (currentPosition < 0) {
             currentPosition = 100 + currentPosition;
+        }
+
+        // Поправка на отрицательные значения для circleMini
+        if (currentMiniPosition < 0) {
+            currentMiniPosition = 100 + currentMiniPosition;
         }
 
         // Если currentPosition становится NaN, установить его в предыдущее корректное значение
@@ -143,7 +157,7 @@ function drag(evt) {
 
     // Обновление заполнения круга градиентом
     circle.style.background = `conic-gradient(rgba(46, 49, 145, 1) ${currentPosition}%, rgba(142, 194, 226, 1) ${currentPosition}%)`;
-    circleMini.style.background = `conic-gradient(rgba(46, 49, 145, 1) ${currentPosition}%, rgba(142, 194, 226, 1) ${currentPosition}%)`;
+    circleMini.style.background = `conic-gradient(rgba(46, 49, 145, 1) ${currentMiniPosition}%, rgba(142, 194, 226, 1) ${currentMiniPosition}%)`;
 
     // Обновление отображения процента
     percentText.textContent = `${Math.round(currentPosition)}%`;
@@ -165,7 +179,7 @@ function updatePointerPosition() {
     pointer.style.left = pointerX - circle.getBoundingClientRect().left + 'px';
     pointer.style.top = pointerY - circle.getBoundingClientRect().top + 'px';
     circle.style.background = `conic-gradient(rgba(46, 49, 145, 1) ${currentPosition}%, rgba(142, 194, 226, 1) ${currentPosition}%)`;
-    circleMini.style.background = `conic-gradient(rgba(46, 49, 145, 1) ${currentPosition}%, rgba(142, 194, 226, 1) ${currentPosition}%)`;
+    circleMini.style.background = `conic-gradient(rgba(46, 49, 145, 1) ${currentMiniPosition}%, rgba(142, 194, 226, 1) ${currentMiniPosition}%)`;
     percentText.textContent = `${Math.round(currentPosition)}%`;
 }
 
@@ -180,6 +194,7 @@ function startNewRound() {
         rightPercentage.innerText = "0%";
         accruedPoints.innerText = "0";
         currentPosition = 50;
+        currentMiniPosition = 50;
         previousPosition = 50;
         updatePointerPosition();
         // Показ нового вопроса
