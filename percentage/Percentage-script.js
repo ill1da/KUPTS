@@ -9,6 +9,7 @@ const questionElement = document.getElementById('question-text');
 // Процентное кольцо
 const circle = document.getElementById('circle');
 const circleMini = document.getElementById('circle-mini');
+const differenceElement = document.getElementById('circle-max');
 const pointer = document.getElementById('pointer');
 const percentText = document.getElementById('percent'); // Новый элемент для отображения процента
 const fillElement = document.getElementById('fill');
@@ -191,8 +192,10 @@ function startNewRound() {
         // Сброс интерфейса для нового раунда
         estimation.style.display = "none";
         fillElement.style.display = "none";
+        differenceElement.style.display = "none";
         rightPercentage.innerText = "0%";
         accruedPoints.innerText = "0";
+        fillValue = 0;
         currentPosition = 50;
         currentMiniPosition = 50;
         previousPosition = 50;
@@ -264,7 +267,7 @@ function getRandomQuestionIndex() {
     return Math.floor(Math.random() * questions.length);
 }
 
-// Функция для обработки нажатия на кнопку "ПОДТВЕРДИТЬ"
+// Обновленная функция handleConfirmClick
 function handleConfirmClick() {
     // Выключаем кнопку перед началом стирания текста
     disableButton();
@@ -273,7 +276,8 @@ function handleConfirmClick() {
     const correctAnswer = currentQuestion.answer; // Правильный ответ
     setTimeout(() => {
         estimation.style.display = "flex";
-        fillElement.style.display = "block"
+        fillElement.style.display = "block";
+        differenceElement.style.display = "block"; // Показываем элемент разницы
 
         // Имитация заполнения fill (круга) с анимацией (через requestAnimationFrame)
         let fillValue = 0;
@@ -292,15 +296,15 @@ function handleConfirmClick() {
                 // После анимации заполнения
                 rightPercentage.innerText = `${Math.round(correctAnswer)}%`;
 
+                // Обновление элемента разницы
+                updateDifferenceElement(correctAnswer);
+
                 // Общая логика проверки ответа
                 const userAnswer = Math.round(fillValue); // Ответ пользователя
 
-                // Рассчет разницы между ответами
-                const difference = Math.abs(Math.round(currentPosition) - correctAnswer);
-                console.log("difference " + difference);
-
                 // Рассчет очков в соответствии с новыми правилами
                 let points = 0;
+                const difference = Math.abs(correctAnswer - userAnswer);
                 if (difference === 0) {
                     points = 300; // Точный ответ
                 } else if (difference >= 1 && difference <= 10) {
@@ -322,6 +326,28 @@ function handleConfirmClick() {
         requestAnimationFrame(animateFill);
 
     }, 1000); // Подождем 1 секунду перед показом результатов
+}
+
+// Функция для анимации элемента разницы (differenceElement)
+function updateDifferenceElement(correctAnswer) {
+    const userPercentage = Math.round(currentPosition); // Процент пользователя
+    const difference = Math.abs(correctAnswer - userPercentage);
+
+    const animationDuration = 1000; // Длительность анимации (1 секунда)
+    const startTimestamp = performance.now();
+
+    function animateDifferenceElement(timestamp) {
+        const progress = Math.min(1, (timestamp - startTimestamp) / animationDuration);
+        const degMax = 3.6 * (userPercentage + (correctAnswer - userPercentage) * progress);
+        differenceElement.style.transform = `rotate(${degMax}deg)`;
+        differenceElement.style.background = `conic-gradient(transparent 0%, rgba(10, 0, 28, 1) 0%, rgba(10, 0, 28, 1) ${difference * progress}%, rgba(142, 194, 226, 0) ${difference * progress}%)`;
+
+        if (progress < 1) {
+            requestAnimationFrame(animateDifferenceElement);
+        }
+    }
+
+    requestAnimationFrame(animateDifferenceElement);
 }
 
 // Вызов функции для загрузки JSON-файла сразу после загрузки страницы
