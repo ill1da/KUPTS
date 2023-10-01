@@ -4,18 +4,28 @@ const mainContainer = document.getElementById('main-container');
 const resultContainer = document.getElementById('result-container');
 
 // Игровой слой
+const roundSpan = document.getElementById('round')
 const questionElement = document.getElementById('question-text');
 // Процентное кольцо
 const circle = document.getElementById('circle');
 const pointer = document.getElementById('pointer');
 const percentText = document.getElementById('percent'); // Новый элемент для отображения процента
-const currentPercent = document.getElementById('fill');
+const fillElement = document.getElementById('fill');
 const correctPercent = document.getElementById('correct-percent');
+const estimation = document.getElementById('estimation');
+const rightPercentage = document.getElementById('right-percentage');
+const accruedPoints = document.getElementById('accrued-points');
 // Кнопка подтверждения
 const button = document.getElementById('confirm-button');
 
 let questions = []; // Здесь будут храниться вопросы и ответы из JSON
 let firstQuestionShown = false; // Флаг для отслеживания первого показанного вопроса
+
+// Добавьте следующую переменную в ваш код перед функцией `startGame`:
+let askedQuestionIndexes = [];
+
+let currentRound = 1; // Текущий раунд
+const maxRounds = 8; // Максимальное количество раундов
 
 // Функция для загрузки JSON-файла
 async function loadJSONFile(url) {
@@ -156,36 +166,29 @@ function updatePointerPosition() {
     percentText.textContent = `${Math.round(currentPosition)}%`;
 }
 
-button.addEventListener('click', () => {
-    console.log(Math.round(currentPosition)); // Здесь можно добавить логику для проверки ответа
-
-    // Выключаем кнопку перед началом стирания текста
-    disableButton();
-
-    // После проверки ответа, показываем слой
-    currentPercent.style.display = 'block';
-
-    // Получаем текущий вопрос
-    const currentQuestion = questions[currentQuestionIndex];
-    const correctAnswer = currentQuestion.answer; // Правильный ответ
-
-    // Устанавливаем угол поворота для градиентной заливки правильного процента
-    const fillElement = document.getElementById('fill');
-    fillElement.style.background = `conic-gradient(transparent 0%, rgba(16, 156, 134, 1) 0%, rgba(16, 156, 134, 1) ${correctAnswer}%, rgba(142, 194, 226, 0) ${correctAnswer}%)`;
-
-    // Устанавливаем таймер для исчезновения градиентной заливки и показа нового вопроса
-    setTimeout(() => {
-        fillElement.style.display = 'none';
-        // После исчезновения градиентной заливки, показываем новый вопрос
-        showRandomQuestion();
-        // Сразу сбрасываем currentPosition
+// Функция для начала нового раунда
+function startNewRound() {
+    currentRound += 1;
+    roundSpan.textContent = currentRound;
+    if (currentRound <= maxRounds) {
+        // Сброс интерфейса для нового раунда
+        estimation.style.display = "none";
+        fillElement.style.display = "none";
+        rightPercentage.innerText = "0%";
+        accruedPoints.innerText = "0";
         currentPosition = 50;
         previousPosition = 50;
-        checkAnswer();
         updatePointerPosition();
-    }, 3000); // Задержка перед скрытием слоя (3000 миллисекунд = 3 секунды)
-});
+        // Показ нового вопроса
+        showRandomQuestion();
+    } else {
+        // Окончание игры
+        alert("Игра окончена. Все раунды завершены!");
+    }
+}
 
+// Обработчик нажатия на кнопку "ПОДТВЕРДИТЬ"
+button.addEventListener('click', handleConfirmClick);
 
 // Функция для начала игры
 function startGame() {
@@ -243,38 +246,62 @@ function getRandomQuestionIndex() {
     return Math.floor(Math.random() * questions.length);
 }
 
-// Функция для проверки ответа
-function checkAnswer() {
-    if (currentQuestionIndex < questions.length) {
-        const currentQuestion = questions[currentQuestionIndex];
-        const userAnswer = Math.round(currentPosition); // Ответ пользователя
-        const correctAnswer = currentQuestion.answer; // Правильный ответ
+// Функция для обработки нажатия на кнопку "ПОДТВЕРДИТЬ"
+function handleConfirmClick() {
+    // Выключаем кнопку перед началом стирания текста
+    disableButton();
+    // Имитация загрузки данных (через setTimeout)
+    const currentQuestion = questions[currentQuestionIndex];
+    const correctAnswer = currentQuestion.answer; // Правильный ответ
+    setTimeout(() => {
+        estimation.style.display = "flex";
+        fillElement.style.display = "block"
 
-        // Рассчет разницы между ответами
-        const difference = Math.abs(userAnswer - correctAnswer);
-        console.log("difference " + difference);
+        // Имитация заполнения fill (круга) с анимацией (через requestAnimationFrame)
+        let fillValue = 0;
+        const startTime = performance.now();
+        const duration = 1000; // 1000 мс (1 секунда)
 
-        // Рассчет очков в соответствии с новыми правилами
-        let points = 0;
-        if (difference === 0) {
-            points = 3000; // Точный ответ
-        } else if (difference >= 1 && difference <= 10) {
-            points = 3000 - difference * 100; // 1-10% разницы
-        } else if (difference >= 11 && difference <= 30) {
-            points = 3000 - 1000 - (difference - 10) * 50; // 11-30% разницы
+        function animateFill(timestamp) {
+            const progress = Math.min(1, (timestamp - startTime) / duration);
+            fillValue = progress * correctAnswer;
+            rightPercentage.innerText = `${Math.round(fillValue)}%`;
+            fillElement.style.background = `conic-gradient(transparent 0%, rgba(16, 156, 134, 1) 0%, rgba(16, 156, 134, 1) ${fillValue}%, rgba(142, 194, 226, 0) ${fillValue}%)`;
+            
+            if (progress < 1) {
+                requestAnimationFrame(animateFill);
+            } else {
+                // После анимации заполнения
+                rightPercentage.innerText = `${Math.round(correctAnswer)}%`;
+
+                // Общая логика проверки ответа
+                const userAnswer = Math.round(fillValue); // Ответ пользователя
+
+                // Рассчет разницы между ответами
+                const difference = Math.abs(userAnswer - correctAnswer);
+                console.log("difference " + difference);
+
+                // Рассчет очков в соответствии с новыми правилами
+                let points = 0;
+                if (difference === 0) {
+                    points = 3000; // Точный ответ
+                } else if (difference >= 1 && difference <= 10) {
+                    points = 3000 - difference * 100; // 1-10% разницы
+                } else if (difference >= 11 && difference <= 30) {
+                    points = 3000 - 1000 - (difference - 10) * 50; // 11-30% разницы
+                }
+
+                // Добавление очков к счету
+                accruedPoints.innerText = points;
+
+                // Имитация полученных очков
+                setTimeout(startNewRound, 2000); // Переход к следующему раунду через 2 секунды
+            }
         }
 
-        // Добавление очков к счету
-        score += points;
-        console.log("score " + score);
-    }
-}
+        requestAnimationFrame(animateFill);
 
-// Функция для отображения результатов
-function showResults() {
-    mainContainer.style.display = 'none';
-    resultContainer.style.display = 'block';
-    resultContainer.textContent = `Ваши очки: ${score}`;
+    }, 1000); // Подождем 1 секунду перед показом результатов
 }
 
 // Вызов функции для загрузки JSON-файла сразу после загрузки страницы
