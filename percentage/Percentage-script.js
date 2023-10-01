@@ -195,7 +195,6 @@ function startNewRound() {
         differenceElement.style.display = "none";
         rightPercentage.innerText = "0%";
         accruedPoints.innerText = "0";
-        fillValue = 0;
         currentPosition = 50;
         currentMiniPosition = 50;
         previousPosition = 50;
@@ -296,15 +295,29 @@ function handleConfirmClick() {
                 // После анимации заполнения
                 rightPercentage.innerText = `${Math.round(correctAnswer)}%`;
 
-                // Обновление элемента разницы
-                updateDifferenceElement(correctAnswer);
-
                 // Общая логика проверки ответа
                 const userAnswer = Math.round(fillValue); // Ответ пользователя
 
+                // Рассчет разницы между процентами circleMax и пользователя
+                const userPercentage = Math.round(currentPosition); // Процент пользователя
+                const difference = Math.abs(correctAnswer - userPercentage);
+
+                // Обновление элемента разницы с задержкой в 1 секунду
+                setTimeout(() => {
+                    let degMax;
+                    if (currentPosition > correctAnswer) {
+                        degMax = 3.6 * correctAnswer;
+                        differenceElement.style.transform = `rotate(${degMax}deg)`;
+                        differenceElement.style.background = `conic-gradient(transparent 0%, rgba(10, 0, 28, 1) 0%, rgba(10, 0, 28, 1) ${difference}%, rgba(142, 194, 226, 0) ${difference}%)`;
+                    } else {
+                        degMax = 3.6 * userPercentage;
+                        differenceElement.style.transform = `rotate(${degMax}deg)`;
+                        differenceElement.style.background = `conic-gradient(transparent 0%, rgba(10, 0, 28, 1) 0%, rgba(10, 0, 28, 1) ${difference}%, rgba(142, 194, 226, 0) ${difference}%)`;
+                    }
+                }, 1000); // Задержка в 1 секунду
+
                 // Рассчет очков в соответствии с новыми правилами
                 let points = 0;
-                const difference = Math.abs(correctAnswer - userAnswer);
                 if (difference === 0) {
                     points = 300; // Точный ответ
                 } else if (difference >= 1 && difference <= 10) {
@@ -326,28 +339,6 @@ function handleConfirmClick() {
         requestAnimationFrame(animateFill);
 
     }, 1000); // Подождем 1 секунду перед показом результатов
-}
-
-// Функция для анимации элемента разницы (differenceElement)
-function updateDifferenceElement(correctAnswer) {
-    const userPercentage = Math.round(currentPosition); // Процент пользователя
-    const difference = Math.abs(correctAnswer - userPercentage);
-
-    const animationDuration = 1000; // Длительность анимации (1 секунда)
-    const startTimestamp = performance.now();
-
-    function animateDifferenceElement(timestamp) {
-        const progress = Math.min(1, (timestamp - startTimestamp) / animationDuration);
-        const degMax = 3.6 * (userPercentage + (correctAnswer - userPercentage) * progress);
-        differenceElement.style.transform = `rotate(${degMax}deg)`;
-        differenceElement.style.background = `conic-gradient(transparent 0%, rgba(10, 0, 28, 1) 0%, rgba(10, 0, 28, 1) ${difference * progress}%, rgba(142, 194, 226, 0) ${difference * progress}%)`;
-
-        if (progress < 1) {
-            requestAnimationFrame(animateDifferenceElement);
-        }
-    }
-
-    requestAnimationFrame(animateDifferenceElement);
 }
 
 // Вызов функции для загрузки JSON-файла сразу после загрузки страницы
