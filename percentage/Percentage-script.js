@@ -19,6 +19,7 @@ const rightPercentage = document.getElementById('right-percentage');
 const accruedPoints = document.getElementById('accrued-points');
 // Кнопка подтверждения
 const button = document.getElementById('confirm-button');
+const nextButton = document.getElementById('next-button');
 
 let questions = []; // Здесь будут храниться вопросы и ответы из JSON
 let firstQuestionShown = false; // Флаг для отслеживания первого показанного вопроса
@@ -187,6 +188,10 @@ function updatePointerPosition() {
 // Функция для начала нового раунда
 function startNewRound() {
     currentRound += 1;
+    // Показываем кнопку "Продолжить"
+    nextButton.style.display = 'none';
+    // Скрываем кнопку "Подтвердить"
+    button.style.display = 'block';
     roundSpan.textContent = currentRound;
     if (currentRound <= maxRounds) {
         // Сброс интерфейса для нового раунда
@@ -289,11 +294,11 @@ function handleConfirmClick() {
             fillValue = progress * correctAnswer;
             rightPercentage.innerText = `${Math.round(fillValue)}%`;
             fillElement.style.background = `conic-gradient(transparent 0%, rgba(101, 255, 255, 1) 0%, rgba(101, 255, 255, 1) ${fillValue}%, rgba(142, 194, 226, 0) ${fillValue}%)`;
-            
+
             if (progress < 1) {
                 requestAnimationFrame(animateFill);
             } else {
-                // После анимации заполнения
+                // После анимации заполнения fillElement
                 rightPercentage.innerText = `${Math.round(correctAnswer)}%`;
 
                 // Общая логика проверки ответа
@@ -303,37 +308,60 @@ function handleConfirmClick() {
                 const userPercentage = Math.round(currentPosition); // Процент пользователя
                 const difference = Math.abs(correctAnswer - userPercentage);
 
-                // Обновление элемента разницы с задержкой в 1 секунду
-                setTimeout(() => {
-                    let degMax;
-                    if (currentPosition > correctAnswer) {
-                        degMax = 3.6 * correctAnswer;
-                        differenceElement.style.transform = `rotate(${degMax}deg)`;
-                        differenceElement.style.background = `conic-gradient(transparent 0%, rgba(10, 0, 28, 1) 0%, rgba(10, 0, 28, 1) ${difference}%, rgba(142, 194, 226, 0) ${difference}%)`;
-                    } else {
-                        degMax = 3.6 * userPercentage;
-                        differenceElement.style.transform = `rotate(${degMax}deg)`;
-                        differenceElement.style.background = `conic-gradient(transparent 0%, rgba(10, 0, 28, 1) 0%, rgba(10, 0, 28, 1) ${difference}%, rgba(142, 194, 226, 0) ${difference}%)`;
-                    }
-                }, 1000); // Задержка в 1 секунду
+                // Обновление элемента разницы с анимацией (через requestAnimationFrame)
+                let differenceValue = 0;
+                const differenceStartTime = performance.now();
+                const differenceDuration = 1000; // 1000 мс (1 секунда)
 
-                // Рассчет очков в соответствии с новыми правилами
-                let points = 0;
-                if (difference === 0) {
-                    points = 300; // Точный ответ
-                } else if (difference >= 1 && difference <= 10) {
-                    points = 300 - difference * 10; // 1-10% разницы
-                } else if (difference >= 11 && difference <= 30) {
-                    points = 300 - 100 - (difference - 1) * 5; // 11-30% разницы
+                function animateDifference(timestamp) {
+                    const differenceProgress = Math.min(1, (timestamp - differenceStartTime) / differenceDuration);
+                    differenceValue = differenceProgress * difference;
+
+                    // Рассчитываем угол в зависимости от условия
+                    let degMax;
+
+                    // Здесь происходит изменение способа вычисления degMax
+                    if (currentPosition < correctAnswer) {
+                        // Заполняем по часовой стрелке
+                        degMax = 3.6 * (correctAnswer - differenceValue);
+                    } else {
+                        // Заполняем против часовой стрелки
+                        degMax = 3.6 * correctAnswer;
+                    }
+
+                    differenceElement.style.transform = `rotate(${degMax}deg)`;
+                    differenceElement.style.background = `conic-gradient(transparent 0%, rgba(10, 0, 28, 1) 0%, rgba(10, 0, 28, 1) ${differenceValue}%, rgba(142, 194, 226, 0) ${differenceValue}%)`;
+
+                    if (differenceProgress < 1) {
+                        requestAnimationFrame(animateDifference);
+                    } else {
+                        // После анимации заполнения differenceElement
+                        // Рассчет очков в соответствии с новыми правилами
+                        let points = 0;
+                        if (difference === 0) {
+                            points = 300; // Точный ответ
+                        } else if (difference >= 1 && difference <= 10) {
+                            points = 300 - difference * 10; // 1-10% разницы
+                        } else if (difference >= 11 && difference <= 30) {
+                            points = 300 - 100 - (difference - 1) * 5; // 11-30% разницы
+                        }
+
+                        accruedPoints.innerText = points;
+
+                        score += points;
+                        console.log(score);
+
+                        // Имитация полученных очков
+                        setTimeout(() => {
+                            // Показываем кнопку "Продолжить"
+                            nextButton.style.display = 'block';
+                            // Скрываем кнопку "Подтвердить"
+                            button.style.display = 'none';
+                        }, 1000); // Задержка в 1 секунду перед появлением кнопки "Продолжить"
+                    }
                 }
 
-                accruedPoints.innerText = points;
-
-                score += points;
-                console.log(score);
-
-                // Имитация полученных очков
-                setTimeout(startNewRound, 2000); // Переход к следующему раунду через 2 секунды
+                requestAnimationFrame(animateDifference);
             }
         }
 
@@ -341,6 +369,8 @@ function handleConfirmClick() {
 
     }, 1000); // Подождем 1 секунду перед показом результатов
 }
+
+nextButton.addEventListener('click', startNewRound);
 
 // Вызов функции для загрузки JSON-файла сразу после загрузки страницы
 window.addEventListener('load', () => {
