@@ -143,6 +143,13 @@ body {
 }
 
 /* Колесо */
+.circle-container {
+    width: 217px; height: 217px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 #circle {
     position: relative;
     width: 200px;

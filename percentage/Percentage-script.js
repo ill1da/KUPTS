@@ -198,6 +198,7 @@ function startNewRound() {
         currentPosition = 50;
         currentMiniPosition = 50;
         previousPosition = 50;
+        differenceElement.style.background = `conic-gradient(transparent 0%, rgba(10, 0, 28, 0) 0%, rgba(10, 0, 28, 0) ${0}%, rgba(142, 194, 226, 0) ${0}%)`;
         updatePointerPosition();
         // Показ нового вопроса
         showRandomQuestion();
