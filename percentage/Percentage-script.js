@@ -362,17 +362,12 @@ function handleConfirmClick() {
 
                             // Создаем или обновляем элемент percentageDifferenceCircle
                             let percentageDifferenceCircle = document.getElementById('percentage-difference-circle');
-                            if (!percentageDifferenceCircle) {
-                                percentageDifferenceCircle = document.createElement('div');
-                                percentageDifferenceCircle.id = 'percentage-difference-circle';
-                                gameContainer.appendChild(percentageDifferenceCircle);
-                            }
 
                             percentageDifferenceCircle.textContent = `${Math.round(differenceValue)}%`;
                             percentageDifferenceCircle.style.opacity = '1';
 
                             // Рассчитываем угол для центрирования круга с процентом разницы
-                            const centerAngle = (initialAngle + degMax * Math.PI / 180) / 2;
+                            const centerAngle = (initialAngle + degMax * (Math.PI / 180)) / 2;
 
                             // Рассчитываем координаты для позиционирования круга с процентом разницы
                             const centerX = circle.getBoundingClientRect().left + radius;

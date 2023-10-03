@@ -209,7 +209,8 @@ body {
     position: absolute;
     width: 50px; /* Задайте желаемую ширину */
     height: 50px; /* Задайте желаемую высоту */
-    background-color: rgba(255, 255, 255, 0.8); /* Задайте желаемый цвет фона */
+    background-color: rgba(10, 0, 28, 1); /* Задайте желаемый цвет фона */
+    color: rgba(255, 255, 255, 1);
     border-radius: 50%; /* Для создания круга */
     display: flex;
     align-items: center;
