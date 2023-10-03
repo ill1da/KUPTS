@@ -172,8 +172,8 @@ body {
 }
 #circle-max {
     position: absolute;
-    width: 217px;
-    height: 217px; 
+    width: 220px;
+    height: 220px; 
     border-radius: 50%;
     background: conic-gradient(rgba(10, 0, 28, 0) 0%, rgba(10, 0, 28, 0) 0%);
     z-index: 0;
@@ -203,6 +203,23 @@ body {
     line-height: normal;
     text-transform: uppercase;
     z-index: 9;
+}
+
+#percentage-difference-circle {
+    position: absolute;
+    width: 50px; /* Задайте желаемую ширину */
+    height: 50px; /* Задайте желаемую высоту */
+    background-color: rgba(255, 255, 255, 0.8); /* Задайте желаемый цвет фона */
+    border-radius: 50%; /* Для создания круга */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px; /* Задайте желаемый размер шрифта */
+    font-weight: bold;
+    z-index: 11; /* Чтобы круг был поверх градиентной заливки */
+    pointer-events: none; /* Чтобы не мешать взаимодействию с другими элементами */
+    transition: opacity 0.3s ease-in-out;
+    opacity: 0; /* Начальная прозрачность (будет видим после анимации) */
 }
 
 #confirm-button{

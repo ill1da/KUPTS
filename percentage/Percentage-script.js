@@ -10,6 +10,7 @@ const questionElement = document.getElementById('question-text');
 const circle = document.getElementById('circle');
 const circleMini = document.getElementById('circle-mini');
 const differenceElement = document.getElementById('circle-max');
+const percentageDifferenceCircle = document.getElementById('percentage-difference-circle');
 const pointer = document.getElementById('pointer');
 const percentText = document.getElementById('percent'); // Новый элемент для отображения процента
 const fillElement = document.getElementById('fill');
@@ -253,7 +254,7 @@ function showRandomQuestion() {
             const textWithCaret = questionText.substring(0, index) + '|'; // Добавление каретки
             questionElement.textContent = textWithCaret;
             index++;
-            setTimeout(addNextCharacter, 30); // Интервал между символами (30 миллисекунд)
+            setTimeout(addNextCharacter, 20); // Интервал между символами (20 миллисекунд)
         } else {
             // Убрать каретку после окончания анимации
             questionElement.textContent = questionText;
@@ -313,6 +314,7 @@ function handleConfirmClick() {
                 const differenceStartTime = performance.now();
                 const differenceDuration = 1000; // 1000 мс (1 секунда)
 
+                // Обновленная функция animateDifference
                 function animateDifference(timestamp) {
                     const differenceProgress = Math.min(1, (timestamp - differenceStartTime) / differenceDuration);
                     differenceValue = differenceProgress * difference;
@@ -326,7 +328,7 @@ function handleConfirmClick() {
                         degMax = 3.6 * (correctAnswer - differenceValue);
                     } else {
                         // Заполняем против часовой стрелки
-                        degMax = 3.6 * correctAnswer;
+                        degMax = 3.6 * correctAnswer; // Изменено
                     }
 
                     differenceElement.style.transform = `rotate(${degMax}deg)`;
@@ -357,6 +359,35 @@ function handleConfirmClick() {
                             nextButton.style.display = 'block';
                             // Скрываем кнопку "Подтвердить"
                             button.style.display = 'none';
+
+                            // Создаем или обновляем элемент percentageDifferenceCircle
+                            let percentageDifferenceCircle = document.getElementById('percentage-difference-circle');
+                            if (!percentageDifferenceCircle) {
+                                percentageDifferenceCircle = document.createElement('div');
+                                percentageDifferenceCircle.id = 'percentage-difference-circle';
+                                gameContainer.appendChild(percentageDifferenceCircle);
+                            }
+
+                            percentageDifferenceCircle.textContent = `${Math.round(differenceValue)}%`;
+                            percentageDifferenceCircle.style.opacity = '1';
+
+                            // Рассчитываем угол для центрирования круга с процентом разницы
+                            const centerAngle = (initialAngle + degMax * Math.PI / 180) / 2;
+
+                            // Рассчитываем координаты для позиционирования круга с процентом разницы
+                            const centerX = circle.getBoundingClientRect().left + radius;
+                            const centerY = circle.getBoundingClientRect().top + radius;
+                            const differencePercentRadius = radius + 10; // Радиус круга с процентом (можно настроить)
+
+                            // Учитываем половину разности процентов
+                            const adjustedDifferenceValue = differenceValue * 0.5;
+
+                            const differencePercentX = centerX + differencePercentRadius * Math.cos(centerAngle) - percentageDifferenceCircle.offsetWidth / 2;
+                            const differencePercentY = centerY + differencePercentRadius * Math.sin(centerAngle) - percentageDifferenceCircle.offsetHeight / 2;
+
+                            // Установка позиции для круга с процентом разницы
+                            percentageDifferenceCircle.style.left = differencePercentX + 'px';
+                            percentageDifferenceCircle.style.top = differencePercentY + 'px';
                         }, 1000); // Задержка в 1 секунду перед появлением кнопки "Продолжить"
                     }
                 }
