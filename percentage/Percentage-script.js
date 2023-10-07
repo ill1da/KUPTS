@@ -15,6 +15,8 @@ const percentText = document.getElementById('percent'); // Новый элеме
 const fillElement = document.getElementById('fill');
 const correctPercent = document.getElementById('correct-percent');
 const estimation = document.getElementById('estimation');
+const percentageDifferenceCircle = document.getElementById('percentage-difference-circle');
+const percentageDifferenceText = document.getElementById('percentage-difference-text');
 const rightPercentage = document.getElementById('right-percentage');
 const accruedPoints = document.getElementById('accrued-points');
 // Кнопка подтверждения
@@ -198,6 +200,7 @@ function startNewRound() {
         estimation.style.display = "none";
         fillElement.style.display = "none";
         differenceElement.style.display = "none";
+        percentageDifferenceCircle.style.display = "none";
         rightPercentage.innerText = "0%";
         accruedPoints.innerText = "0";
         currentPosition = 50;
@@ -248,6 +251,18 @@ function showRandomQuestion() {
     // Выключаем кнопку перед началом анимации
     disableButton();
 
+    // Устанавливаем начальное положение элемента percentage-difference-circle
+    const initialPercentage = currentQuestion.answer; // Правильный ответ текущего вопроса
+    const angleInitial = ((initialPercentage / 100) * 2 * Math.PI) + initialAngle;
+
+    const centerX = circle.getBoundingClientRect().left + radius;
+    const centerY = circle.getBoundingClientRect().top + radius;
+    const circleX = centerX + radius * Math.cos(angleInitial);
+    const circleY = centerY + radius * Math.sin(angleInitial);
+
+    percentageDifferenceCircle.style.left = circleX - percentageDifferenceCircle.offsetWidth / 2 + 'px';
+    percentageDifferenceCircle.style.top = circleY - percentageDifferenceCircle.offsetHeight / 2 + 'px';
+
     function addNextCharacter() {
         if (index < questionText.length) {
             const textWithCaret = questionText.substring(0, index) + '|'; // Добавление каретки
@@ -269,7 +284,22 @@ function showRandomQuestion() {
 
 // Функция для получения случайного индекса вопроса
 function getRandomQuestionIndex() {
-    return Math.floor(Math.random() * questions.length);
+    // Проверяем, есть ли еще не заданные вопросы
+    if (askedQuestionIndexes.length === questions.length) {
+        // Если все вопросы были заданы, сбросим массив и начнем заново
+        askedQuestionIndexes = [];
+    }
+
+    let randomIndex;
+    do {
+        // Генерируем случайный индекс
+        randomIndex = Math.floor(Math.random() * questions.length);
+    } while (askedQuestionIndexes.includes(randomIndex)); // Повторяем, пока индекс не станет уникальным
+
+    // Добавляем индекс в массив заданных вопросов
+    askedQuestionIndexes.push(randomIndex);
+
+    return randomIndex;
 }
 
 // Обновленная функция handleConfirmClick
@@ -280,14 +310,23 @@ function handleConfirmClick() {
     const currentQuestion = questions[currentQuestionIndex];
     const correctAnswer = currentQuestion.answer; // Правильный ответ
     setTimeout(() => {
+        // Имитация загрузки данных (через setTimeout)
+        const currentQuestion = questions[currentQuestionIndex];
+        const correctAnswer = currentQuestion.answer; // Правильный ответ
+        const userAnswer = Math.round(currentPosition); // Ответ пользователя
+
+        // Вычисляем разницу в процентах
+        const difference = Math.abs(correctAnswer - userAnswer);
+        const isFillingClockwise = currentPosition < correctAnswer;
+
         estimation.style.display = "flex";
         fillElement.style.display = "block";
         differenceElement.style.display = "block"; // Показываем элемент разницы
 
-        // Имитация заполнения fill (круга) с анимацией (через requestAnimationFrame)
-        let fillValue = 0;
+        // Настройки анимации
         const startTime = performance.now();
         const duration = 1000; // 1000 мс (1 секунда)
+        let fillValue = 0;
 
         function animateFill(timestamp) {
             const progress = Math.min(1, (timestamp - startTime) / duration);
@@ -329,8 +368,37 @@ function handleConfirmClick() {
                         degMax = 3.6 * correctAnswer;
                     }
 
+                    percentageDifferenceCircle.style.display = "flex";
+
                     differenceElement.style.transform = `rotate(${degMax}deg)`;
                     differenceElement.style.background = `conic-gradient(transparent 0%, rgba(10, 0, 28, 1) 0%, rgba(10, 0, 28, 1) ${differenceValue}%, rgba(142, 194, 226, 0) ${differenceValue}%)`;
+
+                     // Устанавливаем текст и стили для элемента percentageDifferenceCircle
+                    percentageDifferenceText.textContent = `${Math.round(differenceValue)}%`;
+
+                    // Устанавливаем начальное положение элемента percentage-difference-circle
+                    const initialPercentage = correctAnswer; // Используйте правильный ответ
+                    const angleInitial = ((initialPercentage / 100) * 2 * Math.PI) + initialAngle;
+
+                    const centerX = circle.getBoundingClientRect().left + radius;
+                    const centerY = circle.getBoundingClientRect().top + radius;
+                    const circleX = centerX + radius * Math.cos(angleInitial);
+                    const circleY = centerY + radius * Math.sin(angleInitial);
+
+                    percentageDifferenceCircle.style.left = circleX - percentageDifferenceCircle.offsetWidth / 2 + 'px';
+                    percentageDifferenceCircle.style.top = circleY - percentageDifferenceCircle.offsetHeight / 2 + 'px';
+
+                    // Определите, в какую сторону двигаться, и насколько
+                    const differenceDirection = currentPosition < correctAnswer ? -1 : 1;
+                    const differenceValueToMove = difference / 2;
+                    const angleToMove = ((differenceValueToMove / 100) * 2 * Math.PI) * differenceDirection;
+
+                    // Вычислите новое положение элемента percentage-difference-circle
+                    const newX = centerX + radius * Math.cos(angleInitial + angleToMove);
+                    const newY = centerY + radius * Math.sin(angleInitial + angleToMove);
+
+                    percentageDifferenceCircle.style.left = newX - percentageDifferenceCircle.offsetWidth / 2 + 'px';
+                    percentageDifferenceCircle.style.top = newY - percentageDifferenceCircle.offsetHeight / 2 + 'px';
 
                     if (differenceProgress < 1) {
                         requestAnimationFrame(animateDifference);

@@ -207,20 +207,24 @@ body {
 
 #percentage-difference-circle {
     position: absolute;
-    width: 50px; /* Задайте желаемую ширину */
-    height: 50px; /* Задайте желаемую высоту */
-    background-color: rgba(10, 0, 28, 1); /* Задайте желаемый цвет фона */
-    color: rgba(255, 255, 255, 1);
-    border-radius: 50%; /* Для создания круга */
+    width: 40px;
+    height: 40px;
+    background: rgba(10, 0, 28, 1);
+    border-radius: 50%;
+    display: none;
     display: flex;
-    align-items: center;
     justify-content: center;
-    font-size: 14px; /* Задайте желаемый размер шрифта */
-    font-weight: bold;
-    z-index: 11; /* Чтобы круг был поверх градиентной заливки */
-    pointer-events: none; /* Чтобы не мешать взаимодействию с другими элементами */
-    transition: opacity 0.3s ease-in-out;
-    opacity: 0; /* Начальная прозрачность (будет видим после анимации) */
+    align-items: center;
+    transition: transform 0.5s ease-in-out;
+    z-index: 10;
+}
+
+
+#percentage-difference-text {
+    color: rgba(255, 255, 255, 1);
+    font-size: 12px;
+    margin: 0;
+    padding: 0;
 }
 
 #confirm-button{
