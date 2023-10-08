@@ -8,16 +8,15 @@
     src: url(./Percentage-source/font/Rubik-VariableFont_wght.ttf);
 }
 
-/* Основные стили */
+/* - - - - - Проценташ - - - - - */
 * {
     box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    font-family: Rubik, sans-serif;
+    margin: 0; padding: 0;
+    font-family: Rubik;
+    font-style: italic;
     font-size: 18px;
     font-weight: 700;
     color: rgba(37, 37, 37, 1);
-    font-style: italic;
     user-select: none;
 }
 
@@ -26,8 +25,7 @@ html {
 }
 
 body {
-    width: 100%;
-    height: 100%;
+    width: 100%; height: 100dvh;
     background-color: rgba(21, 97, 144, 1);
     background-image: url(./Percentage-source/img/cell.png);
     background-position: center center;
@@ -38,18 +36,17 @@ body {
 .container {
     height: 100dvh;
     background-color: rgba(21, 97, 144, 0.85);
+    border: 3px solid rgba(255, 255, 255, 1);
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 20px;
-    border: 3px solid rgba(255, 255, 255, 1);
 }
 
 /* Логотип */
 .ill1da-logo {
     position: absolute;
-    width: 100%;
-    height: max-content;
+    width: 100%; height: max-content;
     display: flex;
     flex-direction: column;
     text-align: center;
@@ -67,16 +64,16 @@ body {
 .logo-text {
     width: max-content;
     background-color: rgba(21, 97, 144, 1);
+    border: 3px solid rgba(255, 255, 255, 1);
     box-shadow: 3px 3px 0 0 rgba(255, 255, 255, 1);
-    font-family: PressStart2P, sans-serif;
-    font-size: 20px;
     color: rgba(255, 255, 255, 1);
-    padding: 8px 24px 8px 16px;
+    font-family: PressStart2P;
     text-decoration: none;
+    font-style: normal;
+    font-size: 20px;
+    padding: 8px 24px 8px 16px;
     align-self: center;
     transition: 0.2s;
-    border: 3px solid rgba(255, 255, 255, 1);
-    font-style: normal;
 }
 
 .logo-text:hover {
@@ -91,10 +88,14 @@ body {
     transition: 0.2s;
 }
 
-/* Игровая карточка */
+/* Главное меню */
+
+
+
+/* - - - - - Игровая карточка - - - - - */
 #game-container {
     width: 100%;
-    height: 100%;
+    height: 100dvh;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -106,14 +107,14 @@ body {
     height: max-content;
     display: flex;
     justify-content: start;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
+    margin-top: 70px;
 }
 
 /* Раунд */
-.round-score,
-#round {
+.round-score, #round {
     width: max-content;
     height: max-content;
     color: rgba(255, 255, 255, 1);
@@ -125,6 +126,7 @@ body {
     width: 700px;
     height: max-content;
     min-height: 150px;
+    text-align: center;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -134,7 +136,7 @@ body {
 #question-text {
     width: 100%;
     height: 100%;
-    font-size: 40px;
+    font-size: 36px;
     color: rgba(255, 255, 255, 1);
     font-weight: 700;
     text-transform: uppercase;
@@ -144,10 +146,45 @@ body {
 
 /* Колесо */
 .circle-container {
-    width: 217px; height: 217px;
+    width: 220px; height: 220px;
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+#circle-mini {
+    position: absolute;
+    width: 140px;
+    height: 140px; 
+    border-radius: 50%;
+    background: conic-gradient(rgba(174, 185, 242, 1) 0%, rgba(174, 185, 242, 1) 0%);
+    z-index: 8;
+}
+
+/* Результат колеса */
+#fill {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: conic-gradient(transparent 0%, rgba(101, 255, 255, 1) 0%);
+    transform: rotate(0deg);
+    transform-origin: center;
+    z-index: 7;
+}
+
+.percent {
+    font-size: 24px;
+    font-weight: bold;
+    color: rgba(255, 255, 255, 1);
+    font-family: Rubik, sans-serif;
+    font-size: 48px;
+    font-weight: 600;
+    line-height: normal;
+    text-transform: uppercase;
+    z-index: 9;
 }
 
 #circle {
@@ -157,19 +194,11 @@ body {
     border-radius: 50%;
     background: conic-gradient(rgba(174, 185, 242, 1) 0%, rgba(174, 185, 242, 1) 0%);
     display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
     z-index: 6;
 }
-#circle-mini {
-    position: absolute;
-    width: 140px;
-    height: 140px; 
-    border-radius: 50%;
-    background: conic-gradient(rgba(174, 185, 242, 1) 0%, rgba(174, 185, 242, 1) 0%);
-    z-index: 8;
-}
+
 #circle-max {
     position: absolute;
     width: 220px;
@@ -193,18 +222,6 @@ body {
     z-index: 10;
 }
 
-.percent {
-    font-size: 24px;
-    font-weight: bold;
-    color: rgba(255, 255, 255, 1);
-    font-family: Rubik, sans-serif;
-    font-size: 64px;
-    font-weight: 600;
-    line-height: normal;
-    text-transform: uppercase;
-    z-index: 9;
-}
-
 #percentage-difference-circle {
     position: absolute;
     width: 40px;
@@ -219,64 +236,9 @@ body {
     z-index: 10;
 }
 
-
 #percentage-difference-text {
-    color: rgba(255, 255, 255, 1);
     font-size: 12px;
-    margin: 0;
-    padding: 0;
-}
-
-#confirm-button{
-    width: 100%;
-    height: max-content;
-    padding: 5px 0;
     color: rgba(255, 255, 255, 1);
-    background-color: rgba(21, 97, 144, 1);
-    border: 3px solid rgba(255, 255, 255, 1);
-    margin-top: 20px;
-    transition: background 0.3s;
-}
-
-#confirm-button:hover, #next-button:hover {
-    cursor: pointer;
-    background-color: rgba(142, 194, 226, 1);
-    color: rgba(21, 97, 144, 0.85);
-    transition: background 0.3s;
-}
-
-#next-button {
-    width: 100%;
-    height: max-content;
-    padding: 5px 0;
-    color: rgba(101, 255, 255, 1);
-    background-color: rgba(21, 97, 144, 1);
-    border: 3px solid rgba(101, 255, 255, 1);
-    margin-top: 20px;
-    transition: background 0.3s;
-}
-
-/* Результат колеса */
-#fill {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    background: conic-gradient(transparent 0%, rgba(101, 255, 255, 1) 0%);
-    transform: rotate(0deg);
-    transform-origin: center;
-    z-index: 7;
-}
-
-#estimation {
-    width: 100%;
-    height: max-content;
-    display: flex;
-    justify-content: center;
-    gap: 60px;
-    margin-top: 20px;
 }
 
 .answer {
@@ -295,39 +257,47 @@ body {
     color: rgba(14, 22, 77, 1);
 }
 
-@media only screen and (max-width: 1000px) {
-    .game-content {
-        width: 100%;
-        height: 100%;
-        padding: 90px 0 30px;
-        flex-direction: column;
-        justify-content: start;
-    }
-
-    .percentage-text {
-        width: 100%;
-        height: 120px;
-    }
-
-    #question-text {
-        width: 100%;
-        max-height: max-content;
-        font-size: 24px;
-        text-align: center;
-        margin: 0 auto;
-        white-space: normal;
-        padding: 0;
-    }
+/* Кнопка подтвердить */
+#confirm-button{
+    width: 100%;
+    height: max-content;
+    padding: 5px 0;
+    color: rgba(255, 255, 255, 1);
+    background-color: rgba(21, 97, 144, 1);
+    border: 3px solid rgba(255, 255, 255, 1);
+    margin-top: 20px;
+    transition: background 0.3s;
 }
 
-@media only screen and (max-width: 425px) {
-    .percentage-text {
-        width: 100%;
-    }
+/* Кнопка продолжить */
+#next-button {
+    width: 100%;
+    height: max-content;
+    padding: 5px 0;
+    color: rgba(101, 255, 255, 1);
+    background-color: rgba(21, 97, 144, 1);
+    border: 3px solid rgba(101, 255, 255, 1);
+    margin-top: 20px;
+    transition: background 0.3s;
+}
 
-    #question-text {
-        width: 100%;
-        max-height: max-content;
-        font-size: 20px;
-    }
+#confirm-button:hover, #next-button:hover {
+    cursor: pointer;
+    background-color: rgba(142, 194, 226, 1);
+    color: rgba(21, 97, 144, 0.85);
+    transition: background 0.3s;
+}
+
+/* Результат */
+.estimation-container {
+    width: 100%; height: 45px;
+    margin-top: 20px;
+}
+
+#estimation {
+    width: 100%;
+    height: max-content;
+    display: flex;
+    justify-content: center;
+    gap: 60px;
 }

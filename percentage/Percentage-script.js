@@ -268,7 +268,7 @@ function showRandomQuestion() {
             const textWithCaret = questionText.substring(0, index) + '|'; // Добавление каретки
             questionElement.textContent = textWithCaret;
             index++;
-            setTimeout(addNextCharacter, 30); // Интервал между символами (30 миллисекунд)
+            setTimeout(addNextCharacter, 25); // Интервал между символами (30 миллисекунд)
         } else {
             // Убрать каретку после окончания анимации
             questionElement.textContent = questionText;
@@ -407,11 +407,9 @@ function handleConfirmClick() {
                         // Рассчет очков в соответствии с новыми правилами
                         let points = 0;
                         if (difference === 0) {
-                            points = 300; // Точный ответ
-                        } else if (difference >= 1 && difference <= 10) {
-                            points = 300 - difference * 10; // 1-10% разницы
-                        } else if (difference >= 11 && difference <= 30) {
-                            points = 300 - 100 - (difference - 1) * 5; // 11-30% разницы
+                            points = 3000; // Точный ответ
+                        } else if (difference >= 1 && difference <= 30) {
+                            points = 3000 - difference * 96; // 1-10% разницы
                         }
 
                         accruedPoints.innerText = points;
