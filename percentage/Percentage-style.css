@@ -301,3 +301,20 @@ body {
     justify-content: center;
     gap: 60px;
 }
+
+@media only screen and (max-width: 721px) {
+    .percentage-text {
+        width: max-content;
+    }
+
+    #question-text {
+        width: 500px;
+    }
+}
+
+@media only screen and (max-width: 501px) { 
+    #question-text {
+        width: 280px;
+        font-size: 24px;
+    }
+}
