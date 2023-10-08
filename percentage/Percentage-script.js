@@ -447,6 +447,7 @@ function resultEnd() {
 
 document.getElementById('new-game').addEventListener('click', () => {
     currentRound = 1;
+    score = 0;
     roundSpan.textContent = currentRound;
 
     // Сброс интерфейса для нового раунда
