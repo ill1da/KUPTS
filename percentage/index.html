@@ -8,15 +8,34 @@
 </head>
 <body>
 <div class="container">
-    <div id="main-container" style="display: none;">
+    <div id="main-container">
         <div class="ill1da-logo">
             <a class="logo-text" href="https://ill1da.space">ILL1DA.SPACE</a>
             <h1>ПРОЦЕНТАШ</h1>
         </div>
-        <!-- Дополнительный контент, если есть -->
+        
+        <div id="rules-text" style="display: none;">
+            <div id="rules-text-content">
+                Цель игры - угадать процент, представленный внутри градиентного круга, и набрать как можно больше очков.
+                <br> <br>
+                В игре 8 раундов, и каждый раунд предоставляет тебе градиентный круг с разными цветами. Твоя задача - перетаскивать точку по контуру этого круга и попытаться угадать процент, который отображается.
+                <br> <br>
+                Чтобы сделать свой выбор, нажми кнопку "Подтвердить". Затем система оценит, насколько близко был твой ответ к правильному. За каждый точный ответ игрок получает 3000 очков. За ответ с небольшой разницей в процентах начисляются меньшие баллы.
+                <br> <br>
+                Твоя задача - соревноваться с самим собой и попытаться набрать наибольшее количество очков, проявляя точность в угадывании процентов. Удачи в игре!
+                
+                <button type="button" id="go-back">Вернуться</button>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <button type="button" id="go-button">Начать</button>
+            <button type="button" id="rules">Правила</button>   
+        </div>
+
     </div>
     
-    <div id="game-container">
+    <div id="game-container" style="display: none;">
         <div class="ill1da-logo">
             <a class="logo-text" href="https://ill1da.space">ILL1DA.SPACE</a>
         </div>
@@ -57,7 +76,14 @@
     </div>
 
     <div id="result-container" style="display: none;">
-        <div class="score"></div>
+        <div class="ill1da-logo">
+            <a class="logo-text" href="https://ill1da.space">ILL1DA.SPACE</a>
+            <h1>ПРОЦЕНТАШ</h1>
+        </div>
+
+        <div id="result-end">Результат: <span id="result-text">#</span></div>
+
+        <button type="button" id="new-game">Заново</button> 
     </div>
 </div>
 </body>

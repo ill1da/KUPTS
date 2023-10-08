@@ -2,7 +2,8 @@
 const gameContainer = document.getElementById('game-container');
 const mainContainer = document.getElementById('main-container');
 const resultContainer = document.getElementById('result-container');
-
+//главное меню
+const goButton = document.getElementById('go-button');
 // Игровой слой
 const roundSpan = document.getElementById('round')
 const questionElement = document.getElementById('question-text');
@@ -212,7 +213,7 @@ function startNewRound() {
         showRandomQuestion();
     } else {
         // Окончание игры
-        alert(`Игра окончена. Счет: ${score}`);
+        resultEnd();
     }
 }
 
@@ -437,6 +438,48 @@ function handleConfirmClick() {
 }
 
 nextButton.addEventListener('click', startNewRound);
+
+function resultEnd() {
+    document.getElementById('result-text').textContent = score;
+    document.getElementById('result-container').style.display = "flex";
+    document.getElementById('game-container').style.display = "none";
+}
+
+document.getElementById('new-game').addEventListener('click', () => {
+    currentRound = 1;
+    roundSpan.textContent = currentRound;
+
+    // Сброс интерфейса для нового раунда
+    estimation.style.display = "none";
+    fillElement.style.display = "none";
+    differenceElement.style.display = "none";
+    percentageDifferenceCircle.style.display = "none";
+    rightPercentage.innerText = "0%";
+    accruedPoints.innerText = "0";
+    currentPosition = 50;
+    currentMiniPosition = 50;
+    previousPosition = 50;
+    differenceElement.style.background = `conic-gradient(transparent 0%, rgba(10, 0, 28, 0) 0%, rgba(10, 0, 28, 0) ${0}%, rgba(142, 194, 226, 0) ${0}%)`;
+    updatePointerPosition();
+    // Показ нового вопроса
+    showRandomQuestion();
+
+    document.getElementById('result-container').style.display = "none";
+    document.getElementById('game-container').style.display = "block";
+});
+
+document.getElementById('go-back').addEventListener('click', () => {
+    document.getElementById('rules-text').style.display = "none";
+});
+
+document.getElementById('rules').addEventListener('click', () => {
+    document.getElementById('rules-text').style.display = "flex";
+});
+
+document.getElementById('go-button').addEventListener('click', () => {
+    document.getElementById('game-container').style.display = "block";
+    document.getElementById('main-container').style.display = "none";
+});
 
 // Вызов функции для загрузки JSON-файла сразу после загрузки страницы
 window.addEventListener('load', () => {
