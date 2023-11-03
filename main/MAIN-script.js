@@ -19,7 +19,7 @@ cards.forEach(card => {
     let dx = e.clientX - xCenter;
     let dy = e.clientY - yCenter;
     
-    let tiltX = dy / rect.height * -30;
+    let tiltX = dy / rect.height * -35;
     let tiltY = dx / rect.width * 30;
     
     card.style.transform = `${defaultTransform} perspective(1000px) rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;

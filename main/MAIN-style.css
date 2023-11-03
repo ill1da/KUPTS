@@ -18,7 +18,7 @@
     font-size: 20px;
     line-height: 24px;
     font-weight: 500;
-    color: rgba(245, 245, 245, 1);
+    color: rgba(23, 25, 29, 1);
     
 }
 
@@ -66,10 +66,12 @@ body {
 .logo-text h1 {
     font-family: PressStart2P;
     font-size: 40px;
+    color: #F5F5F5;
 }
 
 .ill1da-title {
     opacity: 0.6;
+    color: #F5F5F5;
 }
 
 /* - - - - - Посты - - - - - */
@@ -283,42 +285,48 @@ body {
 
 /* - - - - - Карточки - - - - -*/
 #Tic-Tac-Toe {
-    /* background-image: url(./MAIN-source/card/Tic-Tac-Toe-card.svg); */
+    background-image: url(./MAIN-source/card/Tic-Tac-Toe-card.svg);
+    background-color: rgba(24, 68, 220, 1);
     background-position: center center;
     background-repeat: no-repeat;
     background-size: cover;
 }
 
 #Life-checklist {
-    /* background-image: url(./MAIN-source/card/Life-checklist-card.svg); */
+    background-image: url(./MAIN-source/card/Life-checklist-card.svg);
+    background-color: rgba(245, 132, 180, 1);
     background-position: center center;
     background-repeat: no-repeat;
     background-size: cover;
 }
 
 #Chronometer {
-    /* background-image: url(./MAIN-source/card/Chronometer-card.svg); */
-    background-position: center center;
-    background-repeat: no-repeat;
-    background-size: cover;
-}
-
-#Press-the-button {
-    /* background-image: url(./MAIN-source/card/Press-the-button-card.svg); */
+    background-image: url(./MAIN-source/card/Chronometer-card.svg);
+    background-color: rgba(0, 185, 75, 1);
     background-position: center center;
     background-repeat: no-repeat;
     background-size: cover;
 }
 
 #Swipe-facts {
-    /* background-image: url(./MAIN-source/card/Swipe-facts-card.svg); */
+    background-image: url(./MAIN-source/card/Swipe-facts-card.svg);
+    background-color: rgba(255, 204, 0, 1);
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+#Press-the-button {
+    background-image: url(./MAIN-source/card/Press-the-button-card.svg);
+    background-color: rgba(239, 85, 43, 1);
     background-position: center center;
     background-repeat: no-repeat;
     background-size: cover;
 }
 
 #Percentage {
-    /* background-image: url(./MAIN-source/card/Percentage-card.svg); */
+    background-image: url(./MAIN-source/card/Percentage-card.svg);
+    background-color: rgba(51, 153, 255, 1);
     background-position: center center;
     background-repeat: no-repeat;
     background-size: cover;
