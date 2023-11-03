@@ -19,7 +19,7 @@
     line-height: 24px;
     font-weight: 500;
     color: rgba(23, 25, 29, 1);
-    
+    cursor: url(./MAIN-source/img/cursor.svg), default;
 }
 
 ::selection {
@@ -281,7 +281,6 @@ body {
 .animated-button-cup:hover span:nth-child(1) {
     animation: wave 1.5s 1.4s cubic-bezier(0.36, 0, 0.66, -0.56) infinite;
 }
-
 
 /* - - - - - Карточки - - - - -*/
 #Tic-Tac-Toe {
