@@ -290,6 +290,10 @@ body {
     background-repeat: no-repeat;
     background-size: cover;
 }
+#Tic-Tac-Toe:hover {
+    background-image: url(./MAIN-source/card/Tic-Tac-Toe-card2.svg);
+    background-color: rgba(47, 87, 224, 1);
+}
 
 #Life-checklist {
     background-image: url(./MAIN-source/card/Life-checklist-card.svg);
@@ -297,6 +301,10 @@ body {
     background-position: center center;
     background-repeat: no-repeat;
     background-size: cover;
+}
+#Life-checklist:hover {
+    background-image: url(./MAIN-source/card/Life-checklist-card2.svg);
+    background-color: rgba(246, 144, 187, 1);
 }
 
 #Chronometer {
@@ -306,6 +314,10 @@ body {
     background-repeat: no-repeat;
     background-size: cover;
 }
+#Chronometer:hover {
+    background-image: url(./MAIN-source/card/Chronometer-card2.svg);
+    background-color: rgba(25, 192, 93, 1);
+}
 
 #Swipe-facts {
     background-image: url(./MAIN-source/card/Swipe-facts-card.svg);
@@ -313,6 +325,10 @@ body {
     background-position: center center;
     background-repeat: no-repeat;
     background-size: cover;
+}
+#Swipe-facts:hover {
+    background-image: url(./MAIN-source/card/Swipe-facts-card2.svg);
+    background-color: rgba(255, 209, 25, 1);
 }
 
 #Press-the-button {
@@ -322,6 +338,10 @@ body {
     background-repeat: no-repeat;
     background-size: cover;
 }
+#Press-the-button:hover {
+    background-image: url(./MAIN-source/card/Press-the-button-card2.svg);
+    background-color: rgba(241, 102, 64, 1);
+}
 
 #Percentage {
     background-image: url(./MAIN-source/card/Percentage-card.svg);
@@ -329,4 +349,8 @@ body {
     background-position: center center;
     background-repeat: no-repeat;
     background-size: cover;
+}
+#Percentage:hover {
+    background-image: url(./MAIN-source/card/Percentage-card2.svg);
+    background-color: rgba(71, 163, 255, 1);
 }
