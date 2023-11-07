@@ -61,7 +61,7 @@ canvas.addEventListener('touchmove', (e) => {
 particlesJS('particles-js', {
     "particles": {
         "number": {
-            "value": 10000, // Увеличьте это значение
+            "value": 50000, // Увеличьте это значение
             "density": {
                 "enable": false,
             }
