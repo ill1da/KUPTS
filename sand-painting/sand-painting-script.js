@@ -32,6 +32,10 @@ canvas.addEventListener('mousedown', startPosition);
 canvas.addEventListener('mouseup', endPosition);
 canvas.addEventListener('mousemove', draw);
 
+canvas.addEventListener('touchstart', startPosition);
+canvas.addEventListener('touchend', endPosition);
+canvas.addEventListener('touchmove', draw);
+
 // Настройка эффекта песчаных частиц
 particlesJS('particles-js', {
     "particles": {
