@@ -19,7 +19,6 @@
     line-height: 24px;
     font-weight: 500;
     color: rgba(23, 25, 29, 1);
-    cursor: url(./MAIN-source/img/cursor.svg), default;
 }
 
 ::selection {
@@ -353,4 +352,28 @@ body {
 #Percentage:hover {
     background-image: url(./MAIN-source/card/Percentage-card2.svg);
     background-color: rgba(71, 163, 255, 1);
+}
+
+#Sand-painting {
+    background-image: url(./MAIN-source/card/Sand-painting-card.svg);
+    background-color: rgba(217, 163, 102, 1);
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+#Sand-painting:hover {
+    background-image: url(./MAIN-source/card/Sand-painting-card2.svg);
+    background-color: rgba(221, 172, 117, 1);
+}
+
+#Pixel-battle {
+    background-image: url(./MAIN-source/card/Pixel-battle-card.svg);
+    background-color: rgba(128, 128, 255, 1);
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+#Pixel-battle:hover {
+    background-image: url(./MAIN-source/card/Pixel-battle-card2.svg);
+    background-color: rgba(141, 141, 255, 1);
 }

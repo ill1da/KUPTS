@@ -1,41 +1,75 @@
-const sand = document.getElementById("sand");
-let drawing = false;
+const canvas = document.getElementById('canvas');
+const context = canvas.getContext('2d');
+let painting = false;
 
-sand.addEventListener("mousedown", () => {
-    drawing = true;
-    sand.style.cursor = "pointer";
-});
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
 
-sand.addEventListener("mouseup", () => {
-    drawing = false;
-    sand.style.cursor = "crosshair";
-});
+context.lineWidth = 5;
+context.lineCap = 'round';
+context.strokeStyle = '#000';
 
-sand.addEventListener("mousemove", draw);
+function startPosition(e) {
+    painting = true;
+    draw(e);
+}
 
-sand.addEventListener("touchstart", () => {
-    drawing = true;
-    sand.style.cursor = "pointer";
-});
-
-sand.addEventListener("touchend", () => {
-    drawing = false;
-    sand.style.cursor = "crosshair";
-});
-
-sand.addEventListener("touchmove", draw);
+function endPosition() {
+    painting = false;
+    context.beginPath();
+}
 
 function draw(e) {
-    if (!drawing) return;
+    if (!painting) return;
 
-    const dot = document.createElement("div");
-    dot.classList.add("dot");
-    dot.style.left = (e.clientX - sand.getBoundingClientRect().left) + "px";
-    dot.style.top = (e.clientY - sand.getBoundingClientRect().top) + "px";
-
-    sand.appendChild(dot);
-
-    setTimeout(() => {
-        dot.remove();
-    }, 3000); // Убираем точку через 3 секунды (или любое другое значение в миллисекундах)
+    context.lineTo(e.clientX, e.clientY);
+    context.stroke();
+    context.beginPath();
+    context.moveTo(e.clientX, e.clientY);
 }
+
+canvas.addEventListener('mousedown', startPosition);
+canvas.addEventListener('mouseup', endPosition);
+canvas.addEventListener('mousemove', draw);
+
+// Настройка эффекта песчаных частиц
+particlesJS('particles-js', {
+    "particles": {
+        "number": {
+            "value": 100,
+            "density": {
+                "enable": true,
+                "value_area": 800
+            }
+        },
+        "color": {
+            "value": ["#fcdd76", "#e3c087", "#e6c16d", "#e0d0a7"] // Дополнительные оттенки песка
+        },
+        "shape": {
+            "type": "circle"
+        },
+        "opacity": {
+            "value": 0.5,
+            "random": false
+        },
+        "size": {
+            "value": 5,
+            "random": true
+        },
+        "line_linked": {
+            "enable": false
+        },
+        "move": {
+            "enable": true,
+            "speed": 0
+        }
+    },
+    "interactivity": {
+        "events": {
+            "onhover": {
+                "enable": true,
+                "mode": "repulse"
+            }
+        }
+    }
+});
