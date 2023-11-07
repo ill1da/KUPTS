@@ -7,25 +7,13 @@ let lastY = 0;
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-const particles = []; // Массив для хранения частиц
-
-function createParticle(x, y) {
-    const particle = new Path2D();
-    particle.arc(x, y, 3, 0, Math.PI * 2);
-    particles.push(particle);
-}
-
-function drawParticles() {
-    context.fillStyle = 'rgba(194, 147, 97, 1)'; // Цвет песчаных частиц
-    for (const particle of particles) {
-        context.fill(particle);
-    }
-}
+context.lineWidth = 15;
+context.lineCap = 'round';
+context.strokeStyle = '#825937';
 
 function startPosition(e) {
     painting = true;
     [lastX, lastY] = [e.clientX, e.clientY];
-    createParticle(lastX, lastY);
     draw(e);
 }
 
@@ -37,30 +25,26 @@ function endPosition() {
 function draw(e) {
     if (!painting) return;
 
-    const currentX = e.clientX;
-    const currentY = e.clientY;
-
-    for (let i = 0; i < 5; i++) { // Создаем несколько частиц на каждом шаге
-        const offsetX = (Math.random() - 0.5) * 20;
-        const offsetY = (Math.random() - 0.5) * 20;
-        const x = lastX + offsetX;
-        const y = lastY + offsetY;
-        createParticle(x, y);
+    if (e.type === 'mousemove' || e.type === 'mousedown') {
+        context.beginPath();
+        context.moveTo(lastX, lastY);
+        context.lineTo(e.clientX, e.clientY);
+        context.stroke();
+        [lastX, lastY] = [e.clientX, e.clientY];
+    } else if (e.type === 'touchmove' || e.type === 'touchstart') {
+        e.preventDefault();
+        const touch = e.touches[0];
+        context.beginPath();
+        context.moveTo(lastX, lastY);
+        context.lineTo(touch.clientX, touch.clientY);
+        context.stroke();
+        [lastX, lastY] = [touch.clientX, touch.clientY];
     }
-
-    drawParticles();
-    [lastX, lastY] = [currentX, currentY];
 }
 
 canvas.addEventListener('mousedown', startPosition);
 canvas.addEventListener('mouseup', endPosition);
 canvas.addEventListener('mousemove', draw);
-
-// Очистка холста
-function clearCanvas() {
-    context.clearRect(0, 0, canvas.width, canvas.height);
-    particles.length = 0; // Очистка массива частиц
-}
 
 canvas.addEventListener('touchstart', (e) => {
     e.preventDefault();
