@@ -36,10 +36,9 @@ canvas.addEventListener('mousemove', draw);
 particlesJS('particles-js', {
     "particles": {
         "number": {
-            "value": 1500, // Увеличьте это значение
+            "value": 10000, // Увеличьте это значение
             "density": {
                 "enable": false,
-                "value_area": 800
             }
         },
         "color": {
@@ -50,10 +49,10 @@ particlesJS('particles-js', {
         },
         "opacity": {
             "value": 0.7,
-            "random": false
+            "random": true
         },
         "size": {
-            "value": 5,
+            "value": 3,
             "random": true
         },
         "line_linked": {
@@ -66,7 +65,7 @@ particlesJS('particles-js', {
     "interactivity": {
         "events": {
             "onhover": {
-                "enable": true,
+                "enable": false,
                 "mode": "repulse"
             }
         }
