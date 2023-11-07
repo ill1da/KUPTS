@@ -9,7 +9,7 @@ canvas.height = window.innerHeight;
 
 context.lineWidth = 15;
 context.lineCap = 'round';
-context.strokeStyle = '#825937';
+context.strokeStyle = 'rgba(217, 163, 102, 0.7)';
 
 function startPosition(e) {
     painting = true;
