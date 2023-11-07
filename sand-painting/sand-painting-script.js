@@ -67,7 +67,7 @@ particlesJS('particles-js', {
             }
         },
         "color": {
-            "value": ["#fcdd76", "#e3c087", "#e6c16d", "#e0d0a7"] // Дополнительные оттенки песка
+            "value": ["#F0C690", "#E3BA7B", "#CC9966", "#F5C896"] // Дополнительные оттенки песка
         },
         "shape": {
             "type": "circle"
