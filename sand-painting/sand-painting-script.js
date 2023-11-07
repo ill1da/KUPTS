@@ -1,6 +1,8 @@
 const canvas = document.getElementById('canvas');
 const context = canvas.getContext('2d');
 let painting = false;
+let lastX = 0;
+let lastY = 0;
 
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
@@ -11,6 +13,7 @@ context.strokeStyle = '#000';
 
 function startPosition(e) {
     painting = true;
+    [lastX, lastY] = [e.clientX, e.clientY];
     draw(e);
 }
 
@@ -22,19 +25,37 @@ function endPosition() {
 function draw(e) {
     if (!painting) return;
 
-    context.lineTo(e.clientX, e.clientY);
-    context.stroke();
-    context.beginPath();
-    context.moveTo(e.clientX, e.clientY);
+    if (e.type === 'mousemove' || e.type === 'mousedown') {
+        context.beginPath();
+        context.moveTo(lastX, lastY);
+        context.lineTo(e.clientX, e.clientY);
+        context.stroke();
+        [lastX, lastY] = [e.clientX, e.clientY];
+    } else if (e.type === 'touchmove' || e.type === 'touchstart') {
+        e.preventDefault();
+        const touch = e.touches[0];
+        context.beginPath();
+        context.moveTo(lastX, lastY);
+        context.lineTo(touch.clientX, touch.clientY);
+        context.stroke();
+        [lastX, lastY] = [touch.clientX, touch.clientY];
+    }
 }
 
 canvas.addEventListener('mousedown', startPosition);
 canvas.addEventListener('mouseup', endPosition);
 canvas.addEventListener('mousemove', draw);
 
-canvas.addEventListener('touchstart', startPosition);
+canvas.addEventListener('touchstart', (e) => {
+    e.preventDefault();
+    startPosition(e);
+});
+
 canvas.addEventListener('touchend', endPosition);
-canvas.addEventListener('touchmove', draw);
+canvas.addEventListener('touchmove', (e) => {
+    e.preventDefault();
+    draw(e);
+});
 
 // Настройка эффекта песчаных частиц
 particlesJS('particles-js', {
