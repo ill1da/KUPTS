@@ -3,11 +3,12 @@ const context = canvas.getContext('2d');
 let painting = false;
 let lastX = 0;
 let lastY = 0;
+let particles = []; // Массив для хранения частиц
 
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-context.lineWidth = 5;
+context.lineWidth = 15;
 context.lineCap = 'round';
 context.strokeStyle = '#825937';
 
@@ -40,7 +41,49 @@ function draw(e) {
         context.stroke();
         [lastX, lastY] = [touch.clientX, touch.clientY];
     }
+
+    // Создаем частицы на пути рисования
+    createParticles(e.clientX, e.clientY);
 }
+
+function createParticles(x, y) {
+    const particleCount = 10; // Количество частиц, которые будут созданы
+    for (let i = 0; i < particleCount; i++) {
+        const particle = {
+            x: x,
+            y: y,
+            size: Math.random() * 5 + 2, // Размер частицы
+            color: "#F0C690" // Цвет частицы
+        };
+        particles.push(particle);
+    }
+}
+
+function updateParticles() {
+    for (let i = 0; i < particles.length; i++) {
+        const particle = particles[i];
+        context.fillStyle = particle.color;
+        context.beginPath();
+        context.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+        context.fill();
+
+        // Двигаем частицы вверх, чтобы они постепенно исчезли
+        particle.y -= 1;
+        particle.size -= 0.1;
+
+        if (particle.size <= 0) {
+            particles.splice(i, 1); // Удаляем исчезшие частицы
+            i--;
+        }
+    }
+}
+
+function animate() {
+    requestAnimationFrame(animate);
+    updateParticles();
+}
+
+animate();
 
 canvas.addEventListener('mousedown', startPosition);
 canvas.addEventListener('mouseup', endPosition);
