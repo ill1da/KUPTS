@@ -3,18 +3,29 @@ const context = canvas.getContext('2d');
 let painting = false;
 let lastX = 0;
 let lastY = 0;
-let particles = []; // Массив для хранения частиц
 
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-context.lineWidth = 15;
-context.lineCap = 'round';
-context.strokeStyle = '#825937';
+const particles = []; // Массив для хранения частиц
+
+function createParticle(x, y) {
+    const particle = new Path2D();
+    particle.arc(x, y, 3, 0, Math.PI * 2);
+    particles.push(particle);
+}
+
+function drawParticles() {
+    context.fillStyle = 'rgba(194, 147, 97, 1)'; // Цвет песчаных частиц
+    for (const particle of particles) {
+        context.fill(particle);
+    }
+}
 
 function startPosition(e) {
     painting = true;
     [lastX, lastY] = [e.clientX, e.clientY];
+    createParticle(lastX, lastY);
     draw(e);
 }
 
@@ -26,68 +37,30 @@ function endPosition() {
 function draw(e) {
     if (!painting) return;
 
-    if (e.type === 'mousemove' || e.type === 'mousedown') {
-        context.beginPath();
-        context.moveTo(lastX, lastY);
-        context.lineTo(e.clientX, e.clientY);
-        context.stroke();
-        [lastX, lastY] = [e.clientX, e.clientY];
-    } else if (e.type === 'touchmove' || e.type === 'touchstart') {
-        e.preventDefault();
-        const touch = e.touches[0];
-        context.beginPath();
-        context.moveTo(lastX, lastY);
-        context.lineTo(touch.clientX, touch.clientY);
-        context.stroke();
-        [lastX, lastY] = [touch.clientX, touch.clientY];
+    const currentX = e.clientX;
+    const currentY = e.clientY;
+
+    for (let i = 0; i < 5; i++) { // Создаем несколько частиц на каждом шаге
+        const offsetX = (Math.random() - 0.5) * 20;
+        const offsetY = (Math.random() - 0.5) * 20;
+        const x = lastX + offsetX;
+        const y = lastY + offsetY;
+        createParticle(x, y);
     }
 
-    // Создаем частицы на пути рисования
-    createParticles(e.clientX, e.clientY);
+    drawParticles();
+    [lastX, lastY] = [currentX, currentY];
 }
-
-function createParticles(x, y) {
-    const particleCount = 10; // Количество частиц, которые будут созданы
-    for (let i = 0; i < particleCount; i++) {
-        const particle = {
-            x: x,
-            y: y,
-            size: Math.random() * 5 + 2, // Размер частицы
-            color: "#F0C690" // Цвет частицы
-        };
-        particles.push(particle);
-    }
-}
-
-function updateParticles() {
-    for (let i = 0; i < particles.length; i++) {
-        const particle = particles[i];
-        context.fillStyle = particle.color;
-        context.beginPath();
-        context.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
-        context.fill();
-
-        // Двигаем частицы вверх, чтобы они постепенно исчезли
-        particle.y -= 1;
-        particle.size -= 0.1;
-
-        if (particle.size <= 0) {
-            particles.splice(i, 1); // Удаляем исчезшие частицы
-            i--;
-        }
-    }
-}
-
-function animate() {
-    requestAnimationFrame(animate);
-    updateParticles();
-}
-
-animate();
 
 canvas.addEventListener('mousedown', startPosition);
 canvas.addEventListener('mouseup', endPosition);
 canvas.addEventListener('mousemove', draw);
+
+// Очистка холста
+function clearCanvas() {
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    particles.length = 0; // Очистка массива частиц
+}
 
 canvas.addEventListener('touchstart', (e) => {
     e.preventDefault();
