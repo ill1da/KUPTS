@@ -8,7 +8,22 @@
 </head>
 <body>
     <input type="range" id="line-width-slider" min="1" max="50" value="15" step="1">
-    <input type="number" id="line-width-value" min="1" max="50">
+    <span id="line-width-value">15</span>
+    <div class="bottom-menu">
+        <button class="button-bottom" id="brush">Кисть</button>
+        <button class="button-bottom" id="eraser">Ластик</button>
+        <button class="button-bottom" id="bucket">Ведро</button>
+        <button class="button-bottom" id="photo">Фото</button>
+    </div>
+
+    <!-- Добавляем модальное окно -->
+    <div id="confirm-modal" style="display: none;">
+        <div class="modal-content">
+            <p>Точно хотите все стереть?</p>
+            <button id="confirm-yes">Да</button>
+            <button id="confirm-no">Нет</button>
+        </div>
+    </div>
 
     <div id="particles-js"></div>
     <canvas id="canvas"></canvas>
