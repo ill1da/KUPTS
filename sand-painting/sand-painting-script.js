@@ -1,6 +1,6 @@
 const canvas = document.getElementById('canvas');
 const context = canvas.getContext('2d');
-let lineWidthSlider = document.getElementById('line-width-slider');
+let lineWidthSlider = document.getElementById('line-width-slider'); 
 let painting = false;
 let lastX = 0;
 let lastY = 0;
@@ -8,12 +8,13 @@ let lastY = 0;
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-
-lineWidthSlider.addEventListener('change', ()=> {
-    context.lineWidth = lineWidthSlider.value;
-})
+context.lineWidth = 15;
 context.lineCap = 'round';
 context.strokeStyle = '#825937';
+
+lineWidthSlider.addEventListener('input', () => {
+    context.lineWidth = lineWidthSlider.value;
+});
 
 function startPosition(e) {
     painting = true;
