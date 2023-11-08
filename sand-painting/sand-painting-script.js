@@ -17,9 +17,8 @@ context.lineCap = 'round';
 context.strokeStyle = '#825937';
 
 lineWidthSlider.addEventListener('input', () => {
-    const value = Math.min(lineWidthValue.value, 50);
+    const value = Math.min(lineWidthSlider.value, 50);
     context.lineWidth = value;
-    lineWidthSlider.value = value;
     lineWidthValue.value = value;
 });
 
