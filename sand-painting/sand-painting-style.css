@@ -34,7 +34,8 @@ body{
     background-color: rgba(221, 172, 117, 1);
 }
 
-canvas {
+#canvas {
+    height: 100dvh; width: 100%;
     position: relative;
     z-index: 1;
     border: 1px solid #000;
@@ -44,10 +45,22 @@ canvas {
 /* - - - - - Настройки элементов для рисования - - - - - */
 /* - - - Ползунок - - - */
 #line-width-slider {
-    position: relative;
-    bottom: 100px; 
-    width: 50px; height: max-content;
     appearance: slider-vertical;
     position: absolute;
+    bottom: 100px; 
+    width: 50px; height: 200px;
+    position: absolute;
     z-index: 999;
+}
+
+#line-width-value, #line-width-value:focus {
+    position: absolute;
+    width: 30px; height: max-content;
+    bottom: 70px; left: 10px;
+    z-index: 999;
+
+    text-align: center;
+    background: none;
+    border: 0;
+    outline: 0;
 }

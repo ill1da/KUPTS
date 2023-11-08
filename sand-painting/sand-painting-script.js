@@ -1,6 +1,8 @@
 const canvas = document.getElementById('canvas');
 const context = canvas.getContext('2d');
-let lineWidthSlider = document.getElementById('line-width-slider'); 
+const lineWidthSlider = document.getElementById('line-width-slider');
+const lineWidthValue = document.getElementById('line-width-value');
+
 let painting = false;
 let lastX = 0;
 let lastY = 0;
@@ -8,12 +10,24 @@ let lastY = 0;
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-context.lineWidth = 15;
+lineWidthValue.value = lineWidthSlider.value; // Установите начальное значение input type="number"
+
+context.lineWidth = lineWidthSlider.value;
 context.lineCap = 'round';
 context.strokeStyle = '#825937';
 
 lineWidthSlider.addEventListener('input', () => {
-    context.lineWidth = lineWidthSlider.value;
+    const value = Math.min(lineWidthValue.value, 50);
+    context.lineWidth = value;
+    lineWidthSlider.value = value;
+    lineWidthValue.value = value;
+});
+
+lineWidthValue.addEventListener('input', () => {
+    const value = Math.min(lineWidthValue.value, 50);
+    context.lineWidth = value;
+    lineWidthSlider.value = value;
+    lineWidthValue.value = value;
 });
 
 function startPosition(e) {
