@@ -44,7 +44,6 @@ brushButton.addEventListener('click', () => {
     setButtonInactive(eraserButton);
     setButtonInactive(document.getElementById('bucket'));
     context.globalCompositeOperation = 'source-over'; // Возвращаем режим кисти
-    makeInterfaceElementsTransparent(); // Делаем элементы интерфейса полупрозрачными при рисовании
 });
 
 // Обработчик события для кнопки "Ластик"
@@ -56,7 +55,6 @@ eraserButton.addEventListener('click', () => {
     setButtonInactive(document.getElementById('brush'));
     setButtonInactive(document.getElementById('bucket'));
     context.globalCompositeOperation = 'destination-out'; // Устанавливаем режим ластика
-    makeInterfaceElementsTransparent(); // Делаем элементы интерфейса полупрозрачными при рисовании
 });
 
 // Обработчик события для кнопки "Ведро"
@@ -93,6 +91,7 @@ cancelButton.addEventListener('click', () => {
 });
 
 function startPosition(e) {
+    makeInterfaceElementsTransparent();
     if (bucketMode) {
         // Если режим "Ведро", то отображаем модальное окно
         const confirmModal = document.getElementById('confirm-modal');
@@ -105,6 +104,7 @@ function startPosition(e) {
 }
 
 function endPosition() {
+    restoreInterfaceElementsOpacity();
     painting = false;
     context.beginPath();
     // Сохраняем текущее состояние канвы в массив действий
@@ -178,11 +178,13 @@ if (isTouchDevice) {
         startPosition(e);
         cursorCircle.style.display = 'block'; // Показываем круг при касании
         updateCursorCirclePosition(e.touches[0].clientX, e.touches[0].clientY); // Обновляем позицию круга под пальцем
+        makeInterfaceElementsTransparent();
     });
 
     canvas.addEventListener('touchend', () => {
         endPosition();
         cursorCircle.style.display = 'none'; // Скрываем круг после окончания касания
+        restoreInterfaceElementsOpacity();
     });
 }
 

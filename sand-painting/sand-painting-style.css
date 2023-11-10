@@ -16,6 +16,7 @@
     font-size: 18px;
     font-weight: 700;
     color: rgba(23, 25, 29, 1);
+    user-select: none;
 }
 
 html{
@@ -42,6 +43,10 @@ body{
 }
 
 /* - - - - - Настройки элементов для рисования - - - - - */
+.interface-element {
+    opacity: 1; /* Начальная непрозрачность */
+}
+
 .active {
     background: yellow;
 }
