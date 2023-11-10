@@ -8,7 +8,7 @@
     src: url(./Sand-painting-source/font/Rubik-VariableFont_wght.ttf);
 }
 
-/* - - - - - Крестики-Нолики - - - - - */
+/* - - - - - Сенддроу - - - - - */
 *{
     box-sizing: border-box;
     margin: 0; padding: 0;
@@ -42,6 +42,10 @@ body{
 }
 
 /* - - - - - Настройки элементов для рисования - - - - - */
+.active {
+    background: yellow;
+}
+
 /* - - - Ползунок - - - */
 #line-width-slider {
     appearance: slider-vertical;
@@ -105,4 +109,14 @@ body{
 .modal-content button {
     margin: 10px;
     padding: 5px 10px;
+}
+
+/* - - - Круг-курсор - - - */
+#cursor-circle {
+    position: absolute;
+    border: 1px solid black;
+    border-radius: 50%;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    z-index: 900;
 }
