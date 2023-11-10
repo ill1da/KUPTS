@@ -25,7 +25,7 @@ function makeInterfaceElementsTransparent() {
     const interfaceElements = document.querySelectorAll('.interface-element');
     interfaceElements.forEach(element => {
         element.style.transition = 'opacity 0.16s ease-in-out'; // Добавляем плавный переход
-        element.style.opacity = 0.5; // Устанавливаем желаемую прозрачность (от 0 - полностью прозрачный до 1 - непрозрачный)
+        element.style.opacity = 0.2; // Устанавливаем желаемую прозрачность (от 0 - полностью прозрачный до 1 - непрозрачный)
         element.style.pointerEvents = 'none';
     });
 }
