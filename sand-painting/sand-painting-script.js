@@ -24,6 +24,7 @@ lineWidthSlider.addEventListener('input', () => {
 function makeInterfaceElementsTransparent() {
     const interfaceElements = document.querySelectorAll('.interface-element');
     interfaceElements.forEach(element => {
+        element.style.transition = 'opacity 0.16s ease-in-out'; // Добавляем плавный переход
         element.style.opacity = 0.5; // Устанавливаем желаемую прозрачность (от 0 - полностью прозрачный до 1 - непрозрачный)
         element.style.pointerEvents = 'none';
     });
@@ -32,6 +33,7 @@ function makeInterfaceElementsTransparent() {
 function restoreInterfaceElementsOpacity() {
     const interfaceElements = document.querySelectorAll('.interface-element');
     interfaceElements.forEach(element => {
+        element.style.transition = 'opacity 0.16s ease-in-out'; // Добавляем плавный переход
         element.style.opacity = 1; // Восстанавливаем полную непрозрачность
         element.style.pointerEvents = 'auto';
     });
