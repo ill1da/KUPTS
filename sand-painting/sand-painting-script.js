@@ -21,12 +21,10 @@ lineWidthSlider.addEventListener('input', () => {
     lineWidthValue.textContent = lineWidthSlider.value;
 });
 
-
 function makeInterfaceElementsTransparent() {
     const interfaceElements = document.querySelectorAll('.interface-element');
     interfaceElements.forEach(element => {
-        element.style.transition = 'opacity 0.16s ease-in-out'; // Добавляем плавный переход
-        element.style.opacity = 0.2; // Устанавливаем желаемую прозрачность (от 0 - полностью прозрачный до 1 - непрозрачный)
+        element.style.opacity = 0.5; // Устанавливаем желаемую прозрачность (от 0 - полностью прозрачный до 1 - непрозрачный)
         element.style.pointerEvents = 'none';
     });
 }
@@ -34,7 +32,6 @@ function makeInterfaceElementsTransparent() {
 function restoreInterfaceElementsOpacity() {
     const interfaceElements = document.querySelectorAll('.interface-element');
     interfaceElements.forEach(element => {
-        element.style.transition = 'opacity 0.16s ease-in-out'; // Добавляем плавный переход
         element.style.opacity = 1; // Восстанавливаем полную непрозрачность
         element.style.pointerEvents = 'auto';
     });
@@ -49,6 +46,8 @@ brushButton.addEventListener('click', () => {
     setButtonInactive(eraserButton);
     setButtonInactive(document.getElementById('bucket'));
     context.globalCompositeOperation = 'source-over'; // Возвращаем режим кисти
+    cursorCircle.style.borderStyle = 'solid'; // Тонкий круг становится сплошным
+    cursorCircle.style.borderColor = '#17191D'; // И черным
 });
 
 // Обработчик события для кнопки "Ластик"
@@ -60,6 +59,8 @@ eraserButton.addEventListener('click', () => {
     setButtonInactive(document.getElementById('brush'));
     setButtonInactive(document.getElementById('bucket'));
     context.globalCompositeOperation = 'destination-out'; // Устанавливаем режим ластика
+    cursorCircle.style.borderStyle = 'dashed'; // Тонкий круг становится пунктирным
+    cursorCircle.style.borderColor = '#17191D'; // И черным
 });
 
 // Обработчик события для кнопки "Ведро"
