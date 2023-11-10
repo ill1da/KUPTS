@@ -21,6 +21,7 @@ lineWidthSlider.addEventListener('input', () => {
     lineWidthValue.textContent = lineWidthSlider.value;
 });
 
+
 function makeInterfaceElementsTransparent() {
     const interfaceElements = document.querySelectorAll('.interface-element');
     interfaceElements.forEach(element => {
@@ -145,6 +146,11 @@ function updateCursorCirclePosition(x, y) {
     cursorCircle.style.left = `${x}px`;
     cursorCircle.style.top = `${y}px`;
 }
+
+// Добавлен код для отслеживания перемещения курсора на всей странице
+document.addEventListener('mousemove', (e) => {
+    updateCursorCirclePosition(e.clientX, e.clientY);
+});
 
 // Обновление размера и позиции круга при изменении размера кисти
 lineWidthSlider.addEventListener('input', () => {
