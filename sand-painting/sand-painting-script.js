@@ -130,12 +130,14 @@ function draw(e) {
         [lastX, lastY] = [e.clientX, e.clientY];
     } else if (e.type === 'touchmove' || e.type === 'touchstart') {
         e.preventDefault();
-        const touch = e.touches[0];
-        context.beginPath();
-        context.moveTo(lastX, lastY);
-        context.lineTo(touch.clientX, touch.clientY);
-        context.stroke();
-        [lastX, lastY] = [touch.clientX, touch.clientY];
+        for (let i = 0; i < e.touches.length; i++) {
+            const touch = e.touches[i];
+            context.beginPath();
+            context.moveTo(lastX, lastY);
+            context.lineTo(touch.clientX, touch.clientY);
+            context.stroke();
+            [lastX, lastY] = [touch.clientX, touch.clientY];
+        }
     }
 }
 
@@ -169,8 +171,10 @@ canvas.addEventListener('mousemove', (e) => {
 });
 
 canvas.addEventListener('touchmove', (e) => {
-    const touch = e.touches[0];
-    updateCursorCirclePosition(touch.clientX, touch.clientY);
+    for (let i = 0; i < e.touches.length; i++) {
+        const touch = e.touches[i];
+        updateCursorCirclePosition(touch.clientX, touch.clientY);
+    }
 });
 
 // При старте устанавливаем начальный размер круга
@@ -188,10 +192,13 @@ if (isTouchDevice) {
 
     canvas.addEventListener('touchstart', (e) => {
         e.preventDefault();
-        startPosition(e);
-        cursorCircle.style.display = 'block'; // Показываем круг при касании
-        updateCursorCirclePosition(e.touches[0].clientX, e.touches[0].clientY); // Обновляем позицию круга под пальцем
-        makeInterfaceElementsTransparent();
+        for (let i = 0; i < e.touches.length; i++) {
+            const touch = e.touches[i];
+            startPosition(touch);
+            cursorCircle.style.display = 'block'; // Показываем круг при касании
+            updateCursorCirclePosition(touch.clientX, touch.clientY); // Обновляем позицию круга под пальцем
+            makeInterfaceElementsTransparent();
+        }
     });
 
     canvas.addEventListener('touchend', () => {
@@ -203,8 +210,11 @@ if (isTouchDevice) {
 
 canvas.addEventListener('touchmove', (e) => {
     e.preventDefault();
-    draw(e);
-    updateCursorCirclePosition(e.touches[0].clientX, e.touches[0].clientY); // Обновляем позицию круга при перемещении пальца
+    for (let i = 0; i < e.touches.length; i++) {
+        const touch = e.touches[i];
+        draw(touch);
+        updateCursorCirclePosition(touch.clientX, touch.clientY); // Обновляем позицию круга при перемещении пальца
+    }
 });
 
 // Функция для установки активной кнопки
