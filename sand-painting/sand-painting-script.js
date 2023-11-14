@@ -106,7 +106,7 @@ function startPosition(e) {
         confirmModal.style.display = 'block';
     } else {
         painting = true;
-        updateTouchCoordinates(e);
+        [lastX, lastY] = [e.clientX, e.clientY];
         draw(e);
     }
 }
@@ -124,31 +124,19 @@ function draw(e) {
 
     if (e.type === 'mousemove' || e.type === 'mousedown') {
         context.beginPath();
-        context.moveTo(lastX.mouse, lastY.mouse);
+        context.moveTo(lastX, lastY);
         context.lineTo(e.clientX, e.clientY);
         context.stroke();
-        updateMouseCoordinates(e);
+        [lastX, lastY] = [e.clientX, e.clientY];
     } else if (e.type === 'touchmove' || e.type === 'touchstart') {
         e.preventDefault();
-        const touches = e.touches;
-        for (let i = 0; i < touches.length; i++) {
-            context.beginPath();
-            context.moveTo(lastX[touches[i].identifier], lastY[touches[i].identifier]);
-            context.lineTo(touches[i].clientX, touches[i].clientY);
-            context.stroke();
-            updateTouchCoordinates(touches[i]);
-        }
+        const touch = e.touches[0];
+        context.beginPath();
+        context.moveTo(lastX, lastY);
+        context.lineTo(touch.clientX, touch.clientY);
+        context.stroke();
+        [lastX, lastY] = [touch.clientX, touch.clientY];
     }
-}
-
-function updateMouseCoordinates(e) {
-    lastX.mouse = e.clientX;
-    lastY.mouse = e.clientY;
-}
-
-function updateTouchCoordinates(touch) {
-    lastX[touch.identifier] = touch.clientX;
-    lastY[touch.identifier] = touch.clientY;
 }
 
 const cursorCircle = document.getElementById('cursor-circle');
@@ -202,9 +190,7 @@ if (isTouchDevice) {
         e.preventDefault();
         startPosition(e);
         cursorCircle.style.display = 'block'; // Показываем круг при касании
-        for (let i = 0; i < e.touches.length; i++) {
-            updateTouchCoordinates(e.touches[i]);
-        }
+        updateCursorCirclePosition(e.touches[0].clientX, e.touches[0].clientY); // Обновляем позицию круга под пальцем
         makeInterfaceElementsTransparent();
     });
 
@@ -213,15 +199,13 @@ if (isTouchDevice) {
         cursorCircle.style.display = 'none'; // Скрываем круг после окончания касания
         restoreInterfaceElementsOpacity();
     });
-
-    canvas.addEventListener('touchmove', (e) => {
-        e.preventDefault();
-        draw(e);
-        for (let i = 0; i < e.touches.length; i++) {
-            updateTouchCoordinates(e.touches[i]);
-        }
-    });
 }
+
+canvas.addEventListener('touchmove', (e) => {
+    e.preventDefault();
+    draw(e);
+    updateCursorCirclePosition(e.touches[0].clientX, e.touches[0].clientY); // Обновляем позицию круга при перемещении пальца
+});
 
 // Функция для установки активной кнопки
 function setButtonActive(button) {
