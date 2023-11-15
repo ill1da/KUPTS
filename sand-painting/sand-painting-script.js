@@ -109,7 +109,6 @@ function startPosition(e) {
         draw(e);
     }
 }
-}
 
 function endPosition() {
     restoreInterfaceElementsOpacity();
