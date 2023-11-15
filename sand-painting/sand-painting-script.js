@@ -106,7 +106,7 @@ function startPosition(e) {
         confirmModal.style.display = 'block';
     } else {
         painting = true;
-        updateTouchCoordinates(e);
+        updateCoordinates(e);
         draw(e);
     }
 }
@@ -127,7 +127,7 @@ function draw(e) {
         context.stroke();
         context.beginPath();
         context.moveTo(e.clientX, e.clientY);
-        updateMouseCoordinates(e);
+        updateCoordinates(e);
     } else if (e.type === 'touchmove' || e.type === 'touchstart') {
         e.preventDefault();
         const touches = e.touches;
@@ -136,9 +136,15 @@ function draw(e) {
             context.stroke();
             context.beginPath();
             context.moveTo(touches[i].clientX, touches[i].clientY);
-            updateTouchCoordinates(touches[i]);
+            updateCoordinates(touches[i]);
         }
     }
+}
+
+function updateCoordinates(e) {
+    const id = e.identifier || 'mouse'; // Используем 'mouse' для мыши
+    lastX[id] = e.clientX;
+    lastY[id] = e.clientY;
 }
 
 function updateMouseCoordinates(e) {
