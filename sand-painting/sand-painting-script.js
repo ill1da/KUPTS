@@ -151,9 +151,7 @@ canvas.addEventListener('touchmove', handleTouchMove);
 canvas.addEventListener('touchend', handleTouchEnd);
 
 function startPosition(e) {
-    makeInterfaceElementsTransparent();
     if (bucketMode) {
-        // Если режим "Ведро", то отображаем модальное окно
         const confirmModal = document.getElementById('confirm-modal');
         confirmModal.style.display = 'block';
     } else {
@@ -167,7 +165,6 @@ function endPosition() {
     restoreInterfaceElementsOpacity();
     painting = false;
     context.beginPath();
-    // Сохраняем текущее состояние канвы в массив действий
     actions.push(context.getImageData(0, 0, canvas.width, canvas.height));
 }
 
@@ -236,28 +233,28 @@ canvas.addEventListener('mousemove', draw);
 let isTouchDevice = ('ontouchstart' in window || navigator.maxTouchPoints > 0 || navigator.msMaxTouchPoints > 0);
 
 if (isTouchDevice) {
-    cursorCircle.style.display = 'none'; // Скрываем круг по умолчанию на телефонах
+    cursorCircle.style.display = 'none';
 
     canvas.addEventListener('touchstart', (e) => {
         e.preventDefault();
         startPosition(e);
-        cursorCircle.style.display = 'block'; // Показываем круг при касании
-        updateCursorCirclePosition(e.touches[0].clientX, e.touches[0].clientY); // Обновляем позицию круга под пальцем
+        cursorCircle.style.display = 'block';
+        updateCursorCirclePosition(e.touches[0].clientX, e.touches[0].clientY);
         makeInterfaceElementsTransparent();
     });
 
     canvas.addEventListener('touchend', () => {
         endPosition();
-        cursorCircle.style.display = 'none'; // Скрываем круг после окончания касания
+        cursorCircle.style.display = 'none';
         restoreInterfaceElementsOpacity();
     });
-}
 
-canvas.addEventListener('touchmove', (e) => {
-    e.preventDefault();
-    draw(e);
-    updateCursorCirclePosition(e.touches[0].clientX, e.touches[0].clientY); // Обновляем позицию круга при перемещении пальца
-});
+    canvas.addEventListener('touchmove', (e) => {
+        e.preventDefault();
+        draw(e);
+        updateCursorCirclePosition(e.touches[0].clientX, e.touches[0].clientY);
+    });
+}
 
 // Функция для установки активной кнопки
 function setButtonActive(button) {
