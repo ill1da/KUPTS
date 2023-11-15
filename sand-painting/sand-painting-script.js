@@ -8,6 +8,7 @@ let bucketMode = false;
 let lastX = 0;
 let lastY = 0;
 let actions = []; // Массив для хранения действий
+let touches = []; // Массив для хранения информации о касаниях
 
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
@@ -97,6 +98,57 @@ cancelButton.addEventListener('click', () => {
     }
     restoreInterfaceElementsOpacity(); // Восстанавливаем непрозрачность элементов интерфейса
 });
+
+function handleTouchStart(e) {
+    e.preventDefault();
+    makeInterfaceElementsTransparent();
+
+    for (let i = 0; i < e.changedTouches.length; i++) {
+        const touch = e.changedTouches[i];
+        touches.push({ id: touch.identifier, x: touch.clientX, y: touch.clientY });
+        startPosition(touch);
+    }
+
+    cursorCircle.style.display = 'block';
+    updateCursorCirclePosition(touches[0].x, touches[0].y);
+}
+
+function handleTouchMove(e) {
+    e.preventDefault();
+
+    for (let i = 0; i < e.changedTouches.length; i++) {
+        const touch = e.changedTouches[i];
+        const storedTouch = touches.find(t => t.id === touch.identifier);
+
+        if (storedTouch) {
+            draw({ type: 'touchmove', touches: [{ clientX: storedTouch.x, clientY: storedTouch.y }] });
+            storedTouch.x = touch.clientX;
+            storedTouch.y = touch.clientY;
+            updateCursorCirclePosition(touch.clientX, touch.clientY);
+        }
+    }
+}
+
+function handleTouchEnd(e) {
+    for (let i = 0; i < e.changedTouches.length; i++) {
+        const touch = e.changedTouches[i];
+        const storedTouchIndex = touches.findIndex(t => t.id === touch.identifier);
+
+        if (storedTouchIndex !== -1) {
+            touches.splice(storedTouchIndex, 1);
+            endPosition();
+        }
+    }
+
+    if (touches.length === 0) {
+        cursorCircle.style.display = 'none';
+        restoreInterfaceElementsOpacity();
+    }
+}
+
+canvas.addEventListener('touchstart', handleTouchStart);
+canvas.addEventListener('touchmove', handleTouchMove);
+canvas.addEventListener('touchend', handleTouchEnd);
 
 function startPosition(e) {
     makeInterfaceElementsTransparent();
