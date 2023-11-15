@@ -101,7 +101,6 @@ cancelButton.addEventListener('click', () => {
 function startPosition(e) {
     makeInterfaceElementsTransparent();
     if (bucketMode) {
-        // Если режим "Ведро", то отображаем модальное окно
         const confirmModal = document.getElementById('confirm-modal');
         confirmModal.style.display = 'block';
     } else {
@@ -110,12 +109,12 @@ function startPosition(e) {
         draw(e);
     }
 }
+}
 
 function endPosition() {
     restoreInterfaceElementsOpacity();
     painting = false;
     context.beginPath();
-    // Сохраняем текущее состояние канвы в массив действий
     actions.push(context.getImageData(0, 0, canvas.width, canvas.height));
 }
 
@@ -132,19 +131,20 @@ function draw(e) {
         e.preventDefault();
         const touches = e.touches;
         for (let i = 0; i < touches.length; i++) {
-            context.lineTo(touches[i].clientX, touches[i].clientY);
+            const id = touches[i].identifier;
+            context.lineTo(touchX[id], touchY[id]);
             context.stroke();
             context.beginPath();
-            context.moveTo(touches[i].clientX, touches[i].clientY);
+            context.moveTo(touchX[id], touchY[id]);
             updateCoordinates(touches[i]);
         }
     }
 }
 
 function updateCoordinates(e) {
-    const id = e.identifier || 'mouse'; // Используем 'mouse' для мыши
-    lastX[id] = e.clientX;
-    lastY[id] = e.clientY;
+    const id = e.identifier || 'mouse';
+    touchX[id] = e.clientX;
+    touchY[id] = e.clientY;
 }
 
 function updateMouseCoordinates(e) {
