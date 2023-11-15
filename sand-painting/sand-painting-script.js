@@ -123,19 +123,19 @@ function draw(e) {
     if (!painting) return;
 
     if (e.type === 'mousemove' || e.type === 'mousedown') {
-        context.beginPath();
-        context.moveTo(lastX.mouse, lastY.mouse);
         context.lineTo(e.clientX, e.clientY);
         context.stroke();
+        context.beginPath();
+        context.moveTo(e.clientX, e.clientY);
         updateMouseCoordinates(e);
     } else if (e.type === 'touchmove' || e.type === 'touchstart') {
         e.preventDefault();
         const touches = e.touches;
         for (let i = 0; i < touches.length; i++) {
-            context.beginPath();
-            context.moveTo(lastX[touches[i].identifier], lastY[touches[i].identifier]);
             context.lineTo(touches[i].clientX, touches[i].clientY);
             context.stroke();
+            context.beginPath();
+            context.moveTo(touches[i].clientX, touches[i].clientY);
             updateTouchCoordinates(touches[i]);
         }
     }
