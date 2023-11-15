@@ -210,6 +210,10 @@ if (isTouchDevice) {
 
     canvas.addEventListener('touchstart', (e) => {
         e.preventDefault();
+        // Проверяем количество пальцев и отменяем действие по умолчанию при 3 или 4 пальцах
+        if (e.touches.length === 3 || e.touches.length === 4) {
+            return;
+        }
         startPosition(e);
         cursorCircle.style.display = 'block'; // Показываем круг при касании
         updateCursorCirclePosition(e.touches[0].clientX, e.touches[0].clientY); // Обновляем позицию круга под пальцем
