@@ -8,6 +8,7 @@ let bucketMode = false;
 let lastX = 0;
 let lastY = 0;
 let actions = []; // Массив для хранения действий
+let touchCoordinates = {};
 
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
@@ -108,10 +109,15 @@ function startPosition(e) {
         painting = true;
 
         if (e.touches) {
-            // Если это событие мультитача, то берем первый же touch
-            [lastX, lastY] = [e.touches[0].clientX, e.touches[0].clientY];
+            // Если это событие мультитача, то для каждого touch хранить свои координаты
+            for (let i = 0; i < e.touches.length; i++) {
+                const touch = e.touches[i];
+                touchCoordinates[touch.identifier] = {
+                    lastX: touch.clientX,
+                    lastY: touch.clientY,
+                };
+            }
         } else {
-            // Иначе обычные координаты мыши
             [lastX, lastY] = [e.clientX, e.clientY];
         }
 
@@ -123,8 +129,8 @@ function endPosition() {
     restoreInterfaceElementsOpacity();
     painting = false;
     context.beginPath();
-    // Сохраняем текущее состояние канвы в массив действий
     actions.push(context.getImageData(0, 0, canvas.width, canvas.height));
+    touchCoordinates = {}; // Очищаем координаты для мультитача
 }
 
 function draw(e) {
@@ -133,16 +139,21 @@ function draw(e) {
     context.beginPath();
 
     if (e.touches && e.touches.length > 0) {
-        // Если это событие мультитача, то рисуем для всех touch'ей
+        // Если это событие мультитача, то рисуем для каждого touch'а независимо
         for (let i = 0; i < e.touches.length; i++) {
             const touch = e.touches[i];
-            context.moveTo(lastX, lastY);
+            const touchCoord = touchCoordinates[touch.identifier];
+            
+            context.moveTo(touchCoord.lastX, touchCoord.lastY);
             context.lineTo(touch.clientX, touch.clientY);
             context.stroke();
-            [lastX, lastY] = [touch.clientX, touch.clientY];
+
+            touchCoordinates[touch.identifier] = {
+                lastX: touch.clientX,
+                lastY: touch.clientY,
+            };
         }
     } else {
-        // Иначе рисуем для обычных координат мыши
         context.moveTo(lastX, lastY);
         context.lineTo(e.clientX, e.clientY);
         context.stroke();
