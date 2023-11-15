@@ -99,6 +99,47 @@ cancelButton.addEventListener('click', () => {
     restoreInterfaceElementsOpacity(); // Восстанавливаем непрозрачность элементов интерфейса
 });
 
+function startPosition(e) {
+    makeInterfaceElementsTransparent();
+    if (bucketMode) {
+        // Если режим "Ведро", то отображаем модальное окно
+        const confirmModal = document.getElementById('confirm-modal');
+        confirmModal.style.display = 'block';
+    } else {
+        painting = true;
+        [lastX, lastY] = [e.clientX, e.clientY];
+        draw(e);
+    }
+}
+
+function endPosition() {
+    restoreInterfaceElementsOpacity();
+    painting = false;
+    context.beginPath();
+    // Сохраняем текущее состояние канвы в массив действий
+    actions.push(context.getImageData(0, 0, canvas.width, canvas.height));
+}
+
+function draw(e) {
+    if (!painting) return;
+
+    if (e.type === 'mousemove' || e.type === 'mousedown') {
+        context.beginPath();
+        context.moveTo(lastX, lastY);
+        context.lineTo(e.clientX, e.clientY);
+        context.stroke();
+        [lastX, lastY] = [e.clientX, e.clientY];
+    } else if (e.type === 'touchmove' || e.type === 'touchstart') {
+        e.preventDefault();
+        const touch = e.touches[0];
+        context.beginPath();
+        context.moveTo(lastX, lastY);
+        context.lineTo(touch.clientX, touch.clientY);
+        context.stroke();
+        [lastX, lastY] = [touch.clientX, touch.clientY];
+    }
+}
+
 function handleTouchStart(e) {
     e.preventDefault();
     makeInterfaceElementsTransparent();
@@ -150,44 +191,6 @@ canvas.addEventListener('touchstart', handleTouchStart);
 canvas.addEventListener('touchmove', handleTouchMove);
 canvas.addEventListener('touchend', handleTouchEnd);
 
-function startPosition(e) {
-    if (bucketMode) {
-        const confirmModal = document.getElementById('confirm-modal');
-        confirmModal.style.display = 'block';
-    } else {
-        painting = true;
-        [lastX, lastY] = [e.clientX, e.clientY];
-        draw(e);
-    }
-}
-
-function endPosition() {
-    restoreInterfaceElementsOpacity();
-    painting = false;
-    context.beginPath();
-    actions.push(context.getImageData(0, 0, canvas.width, canvas.height));
-}
-
-function draw(e) {
-    if (!painting) return;
-
-    if (e.type === 'mousemove' || e.type === 'mousedown') {
-        context.beginPath();
-        context.moveTo(lastX, lastY);
-        context.lineTo(e.clientX, e.clientY);
-        context.stroke();
-        [lastX, lastY] = [e.clientX, e.clientY];
-    } else if (e.type === 'touchmove' || e.type === 'touchstart') {
-        e.preventDefault();
-        const touch = e.touches[0];
-        context.beginPath();
-        context.moveTo(lastX, lastY);
-        context.lineTo(touch.clientX, touch.clientY);
-        context.stroke();
-        [lastX, lastY] = [touch.clientX, touch.clientY];
-    }
-}
-
 const cursorCircle = document.getElementById('cursor-circle');
 
 function updateCursorCircleSize() {
@@ -233,28 +236,28 @@ canvas.addEventListener('mousemove', draw);
 let isTouchDevice = ('ontouchstart' in window || navigator.maxTouchPoints > 0 || navigator.msMaxTouchPoints > 0);
 
 if (isTouchDevice) {
-    cursorCircle.style.display = 'none';
+    cursorCircle.style.display = 'none'; // Скрываем круг по умолчанию на телефонах
 
     canvas.addEventListener('touchstart', (e) => {
         e.preventDefault();
         startPosition(e);
-        cursorCircle.style.display = 'block';
-        updateCursorCirclePosition(e.touches[0].clientX, e.touches[0].clientY);
+        cursorCircle.style.display = 'block'; // Показываем круг при касании
+        updateCursorCirclePosition(e.touches[0].clientX, e.touches[0].clientY); // Обновляем позицию круга под пальцем
         makeInterfaceElementsTransparent();
     });
 
     canvas.addEventListener('touchend', () => {
         endPosition();
-        cursorCircle.style.display = 'none';
+        cursorCircle.style.display = 'none'; // Скрываем круг после окончания касания
         restoreInterfaceElementsOpacity();
     });
-
-    canvas.addEventListener('touchmove', (e) => {
-        e.preventDefault();
-        draw(e);
-        updateCursorCirclePosition(e.touches[0].clientX, e.touches[0].clientY);
-    });
 }
+
+canvas.addEventListener('touchmove', (e) => {
+    e.preventDefault();
+    draw(e);
+    updateCursorCirclePosition(e.touches[0].clientX, e.touches[0].clientY); // Обновляем позицию круга при перемещении пальца
+});
 
 // Функция для установки активной кнопки
 function setButtonActive(button) {
