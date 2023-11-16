@@ -8,6 +8,7 @@ let bucketMode = false;
 let lastX = 0;
 let lastY = 0;
 let actions = []; // Массив для хранения действий
+let currentMultitouchAction = null;
 let touchCoordinates = {};
 
 canvas.width = window.innerWidth;
@@ -109,13 +110,17 @@ function startPosition(e) {
         painting = true;
 
         if (e.touches) {
-            // Если это событие мультитача, то для каждого touch хранить свои координаты
+            // Если это событие мультитача, то создаем новый объект для текущего мультитача
+            currentMultitouchAction = {
+                points: [],
+            };
+
             for (let i = 0; i < e.touches.length; i++) {
                 const touch = e.touches[i];
-                touchCoordinates[touch.identifier] = {
-                    lastX: touch.clientX,
-                    lastY: touch.clientY,
-                };
+                currentMultitouchAction.points.push({
+                    x: touch.clientX,
+                    y: touch.clientY,
+                });
             }
         } else {
             [lastX, lastY] = [e.clientX, e.clientY];
@@ -128,9 +133,15 @@ function startPosition(e) {
 function endPosition() {
     restoreInterfaceElementsOpacity();
     painting = false;
-    context.beginPath();
-    actions.push(context.getImageData(0, 0, canvas.width, canvas.height));
-    touchCoordinates = {}; // Очищаем координаты для мультитача
+
+    if (currentMultitouchAction) {
+        // Завершаем мультитач, объединяем его в одно действие и добавляем в массив
+        actions.push(currentMultitouchAction);
+        currentMultitouchAction = null;
+    } else {
+        context.beginPath();
+        actions.push(context.getImageData(0, 0, canvas.width, canvas.height));
+    }
 }
 
 function draw(e) {
@@ -140,19 +151,27 @@ function draw(e) {
 
     if (e.touches && e.touches.length > 0) {
         // Если это событие мультитача, то рисуем для каждого touch'а независимо
+        currentMultitouchAction.points = [];
+
         for (let i = 0; i < e.touches.length; i++) {
             const touch = e.touches[i];
-            const touchCoord = touchCoordinates[touch.identifier];
-            
-            context.moveTo(touchCoord.lastX, touchCoord.lastY);
-            context.lineTo(touch.clientX, touch.clientY);
-            context.stroke();
-
-            touchCoordinates[touch.identifier] = {
-                lastX: touch.clientX,
-                lastY: touch.clientY,
-            };
+            currentMultitouchAction.points.push({
+                x: touch.clientX,
+                y: touch.clientY,
+            });
         }
+
+        for (let i = 0; i < currentMultitouchAction.points.length; i++) {
+            const point = currentMultitouchAction.points[i];
+
+            if (i === 0) {
+                context.moveTo(point.x, point.y);
+            } else {
+                context.lineTo(point.x, point.y);
+            }
+        }
+
+        context.stroke();
     } else {
         context.moveTo(lastX, lastY);
         context.lineTo(e.clientX, e.clientY);
