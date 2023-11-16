@@ -209,14 +209,8 @@ if (isTouchDevice) {
     cursorCircle.style.display = 'none'; // Скрываем круг по умолчанию на телефонах
 
     canvas.addEventListener('touchstart', (e) => {
-        // Проверяем, проводятся ли три пальца вниз
-        if (e.touches.length === 3) {
-            e.preventDefault();
-            // Тут вы можете добавить код, который выполнится, когда проводятся три пальца вниз
-            // Например, можно не делать ничего, или выполнить какие-то другие действия.
-        } else {
-            startPosition(e);
-        }
+        e.preventDefault();
+        startPosition(e);
         cursorCircle.style.display = 'block'; // Показываем круг при касании
         updateCursorCirclePosition(e.touches[0].clientX, e.touches[0].clientY); // Обновляем позицию круга под пальцем
         makeInterfaceElementsTransparent();
