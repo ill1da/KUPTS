@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Цветное завоевание</title>
+    <link rel="stylesheet" href="./color-conquest-style.css">
+</head>
+<body>
+<div class="container">
+    <canvas id="battlefield" width="500" height="500"></canvas>
+
+    <div class="progress-container">
+        <progress id="progress" class="progress" max="100"></progress>
+        <div class="percentage-text">
+            <span class="percentage" id="percentage1"></span>
+            <span class="percentage" id="percentage2"></span>
+        </div>
+    </div>
+    <span id="progress-text"></span>
+
+
+    <div class="select-color">
+        <label for="color1">Цвет 1:</label>
+        <input type="color" id="color1">
+    
+        <label for="color2">Цвет 2:</label>
+        <input type="color" id="color2">
+    </div>
+</div>
+</body>
+<script src="./color-conquest-script.js"></script>
+</html>

@@ -18,17 +18,7 @@
     font-size: 20px;
     line-height: 24px;
     font-weight: 500;
-    color: rgba(23, 25, 29, 1);
-}
-
-::selection {
-    background: rgba(251, 4, 255, 1);
-    color: rgba(255, 255, 255, 1);
-}
-
-::-moz-selection {
-    background: rgba(251, 4, 255, 1);
-    color: rgba(255, 255, 255, 1);
+    color: #17191D;
 }
 
 html {
@@ -38,7 +28,7 @@ html {
 body {
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 189, 166, 1);
+    background-color: #FDE680;
     transition: background 0.3s;
 }
 
@@ -65,12 +55,12 @@ body {
 .logo-text h1 {
     font-family: PressStart2P;
     font-size: 40px;
-    color: #F5F5F5;
+    color: #37255F;
 }
 
 .ill1da-title {
     opacity: 0.6;
-    color: #F5F5F5;
+    color: #37255F;
 }
 
 /* - - - - - Посты - - - - - */
@@ -136,15 +126,6 @@ body {
     justify-self: center;
 }
 
-/* .posts a:hover {
-    width: 260px;
-    height: 346.66px;
-    background-color: rgba(255, 255, 255, 1);
-    box-shadow: 5px 5px 0 0 rgba(37, 37, 37, 1);
-    transition: 0.2s;
-    background-color: rgba(255, 230, 255, 1);
-} */
-
 .posts a:active {
     transition: 0.3s;
     box-shadow: 0px 0px 0 0 rgba(37, 37, 37, 1);
@@ -152,7 +133,10 @@ body {
 
 /* - - - - - Подвал - - - - - */
 .padding {
-    padding: 25px 20px 20px;
+    width: 100%;
+    background: #00BDA6;
+    margin-top: 50px;
+    padding: 50px 20px 50px 20px;
     text-align: center;
     display: flex;
     flex-direction: column;
@@ -180,7 +164,7 @@ body {
     border: 3px solid #17191D;
     display: flex;
     text-decoration: none;
-    background: rgba(245, 245, 245, 1);
+    background: #F5F5F5;
     color: rgba(23, 25, 29, 1);
     justify-items: center;
     align-items: center;
@@ -193,7 +177,7 @@ body {
 }
 
 .padding-buttons a:hover {
-    background: rgba(243, 184, 12, 1);
+    background: #F3B80C;
     transition: 0.2s;
 }
 
@@ -290,90 +274,82 @@ body {
     background-size: cover;
 }
 #Tic-Tac-Toe:hover {
-    background-image: url(./MAIN-source/card/Tic-Tac-Toe-card2.svg);
     background-color: rgba(47, 87, 224, 1);
 }
 
 #Life-checklist {
-    background-image: url(./MAIN-source/card/Life-checklist-card.svg);
+    background: url(./MAIN-source/card/Life-checklist-card.svg);
     background-color: rgba(245, 132, 180, 1);
     background-position: center center;
     background-repeat: no-repeat;
     background-size: cover;
 }
 #Life-checklist:hover {
-    background-image: url(./MAIN-source/card/Life-checklist-card2.svg);
     background-color: rgba(246, 144, 187, 1);
 }
 
 #Chronometer {
-    background-image: url(./MAIN-source/card/Chronometer-card.svg);
+    background: url(./MAIN-source/card/Chronometer-card.svg);
     background-color: rgba(0, 185, 75, 1);
     background-position: center center;
     background-repeat: no-repeat;
     background-size: cover;
 }
 #Chronometer:hover {
-    background-image: url(./MAIN-source/card/Chronometer-card2.svg);
     background-color: rgba(25, 192, 93, 1);
 }
 
 #Swipe-facts {
-    background-image: url(./MAIN-source/card/Swipe-facts-card.svg);
+    background: url(./MAIN-source/card/Swipe-facts-card.svg);
     background-color: rgba(255, 204, 0, 1);
     background-position: center center;
     background-repeat: no-repeat;
     background-size: cover;
 }
 #Swipe-facts:hover {
-    background-image: url(./MAIN-source/card/Swipe-facts-card2.svg);
     background-color: rgba(255, 209, 25, 1);
 }
 
 #Press-the-button {
-    background-image: url(./MAIN-source/card/Press-the-button-card.svg);
+    background: url(./MAIN-source/card/Press-the-button-card.svg);
     background-color: rgba(239, 85, 43, 1);
     background-position: center center;
     background-repeat: no-repeat;
     background-size: cover;
 }
 #Press-the-button:hover {
-    background-image: url(./MAIN-source/card/Press-the-button-card2.svg);
     background-color: rgba(241, 102, 64, 1);
 }
 
 #Percentage {
-    background-image: url(./MAIN-source/card/Percentage-card.svg);
+    background: url(./MAIN-source/card/Percentage-card.svg);
     background-color: rgba(51, 153, 255, 1);
     background-position: center center;
     background-repeat: no-repeat;
     background-size: cover;
 }
 #Percentage:hover {
-    background-image: url(./MAIN-source/card/Percentage-card2.svg);
     background-color: rgba(71, 163, 255, 1);
 }
 
+#Color-conquest {
+    background-image: url(./MAIN-source/card/Color-conquest-card.svg);
+    background-color: rgba(128, 128, 255, 1);
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+#Color-conquest:hover {
+    background-color: rgba(141, 141, 255, 1);
+}
+
 #Sand-painting {
-    background-image: url(./MAIN-source/card/Sand-painting-card.svg);
+    background: url(./MAIN-source/card/Sand-painting-card.svg);
     background-color: rgba(217, 163, 102, 1);
     background-position: center center;
     background-repeat: no-repeat;
     background-size: cover;
 }
 #Sand-painting:hover {
-    background-image: url(./MAIN-source/card/Sand-painting-card2.svg);
     background-color: rgba(221, 172, 117, 1);
-}
-
-#Pixel-battle {
-    background-image: url(./MAIN-source/card/Pixel-battle-card.svg);
-    background-color: rgba(128, 128, 255, 1);
-    background-position: center center;
-    background-repeat: no-repeat;
-    background-size: cover;
-}
-#Pixel-battle:hover {
-    background-image: url(./MAIN-source/card/Pixel-battle-card2.svg);
-    background-color: rgba(141, 141, 255, 1);
 }

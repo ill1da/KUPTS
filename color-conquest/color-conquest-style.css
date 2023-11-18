@@ -1,0 +1,84 @@
+*{
+    box-sizing: border-box;
+}
+
+body {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+
+
+.container {
+    max-width: 500px;
+}
+
+
+.progress {
+    width: 100%;
+    height: 50px;
+}
+
+.progress::-webkit-progress-value {
+    background: var(--progress-color);
+}
+
+.progress::-webkit-progress-bar {
+    background: var(--progress-bar-color);
+}
+
+/* Добавьте этот блок в ваш CSS-файл, после стилей для .progress */
+.progress-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+}
+
+.percentage-text {
+    position: absolute;
+    width: 500px; height: 50px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0 10px;
+}
+#percentage2 {
+    text-align: right;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+canvas {
+    max-width: 500px; max-height: 500px;
+    border: 1px solid black;
+}
+
+
