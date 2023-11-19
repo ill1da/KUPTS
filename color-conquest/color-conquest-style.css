@@ -1,29 +1,143 @@
+/* - - - - - Шрифты - - - - - */
+@font-face {
+    font-family: PressStart2P;
+    src: url(./Color-conquest-source/font/PressStart2P-Regular.ttf);
+}
+@font-face {
+    font-family: Rubik;
+    src: url(./Color-conquest-source/font/Rubik-VariableFont_wght.ttf);
+}
+@font-face {
+    font-family: SpaceMono;
+    src: url(./Color-conquest-source/font/SpaceMono-Regular.ttf);
+}
+
+/* - - - - - Цветное завоевание - - - - - */
 *{
     box-sizing: border-box;
+    margin: 0; padding: 0;
+    font-family: Rubik;
+    font-size: 18px;
+    font-weight: 700;
+    color: #17191D;
+}
+
+html{
+    height: fit-content;
 }
 
 body {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+    width: 100dvw; height: 100dvh;
 }
-
-
 
 .container {
-    max-width: 500px;
+    height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 30px;
+    gap: 20px;
 }
 
+/*- - - - - Логотип - - - - -*/
+.ill1da-logo{
+    width: 100%; height: max-content;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    gap: 20px;
+}
+
+.ill1da-logo h1{
+    font-size: 30px;
+    font-weight: 800;
+    color: #FFFFFF;
+    text-shadow: 1px 1px 1px #17191D, 2px 2px 1px #17191D, 3px 3px 1px #17191D;
+}
+
+.logo-text{
+    width: max-content;
+    background-color: #FFFFFF;
+    box-shadow: 3px 3px 0 0 #17191D;
+    font-family: PressStart2P;
+    font-size: 20px;
+    color: #17191D;
+    padding: 8px 24px 8px 16px;
+    text-decoration: none;
+    align-self: center;
+    transition: 0.2s;
+ }
+ .logo-text:hover{
+    box-shadow: 5px 5px 0 0 #17191D;
+    padding: 8px 26px 8px 18px;
+    transition: 0.2s;
+ }
+.logo-text:active{
+    box-shadow: 0px 0px 0 0 #17191D;
+    border: 0px;
+    transition: 0.2s;
+}
+
+/*- - - - - Поле боя - - - - -*/
+.battlefield-content {
+    box-sizing: border-box;
+    width: fit-content; height: auto;
+    background: rgba(254, 254, 254, 0.8);
+    padding-top: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+}
+
+@media only screen and (max-width:501px) {
+    #battlefield {
+        width: 400px; height: 400px;
+    }    
+}
+@media only screen and (max-width:401px) {
+    #battlefield {
+        width: 300px; height: 300px;
+    }    
+}
 
 .progress {
-    width: 100%;
-    height: 50px;
-    border: 1px solid black;
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: -10;
+}
+.progress::after {
+    content: "";
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(64, 64, 64, 1);
+    backdrop-filter: blur(27.184999465942383px);
+    opacity: 0.4;
+    z-index: -9;
+}
+
+.percentage {
+    position: absolute;
+    font-family: SpaceMono;
+    font-size: 10dvw;
+    z-index:-8;
+}
+#percentage1 {
+    width: 410px;
+    bottom: 0; left: 10px;
+    text-align: left;
+}
+#percentage2 {
+    width: 410px;
+    bottom: 0; right: 10px;
+    text-align: right;
 }
 
 .progress::-webkit-progress-value {
     background: var(--progress-color);
+    transition: width 0.5s ease;
 }
 
 .progress::-webkit-progress-bar {
@@ -38,14 +152,6 @@ body {
     margin-top: 10px;
 }
 
-.percentage-text {
-    position: absolute;
-    width: 500px; height: 50px;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    padding: 0 10px;
-}
 #percentage2 {
     text-align: right;
 }
@@ -83,3 +189,27 @@ canvas {
 }
 
 
+
+
+
+
+
+
+/*- - - - - Медиа-запрос - - - - -*/
+@media only screen and (max-width:450px) {
+    .ill1da-logo h1{
+        font-size: 32px;
+    }   
+}
+
+@media only screen and (max-width: 426px) {
+    .ill1da-logo h1{
+        font-size: 32px;
+    }
+}
+
+@media only screen and (max-width: 376px) {
+    .ill1da-logo h1{
+        font-size: 24px;
+    }
+}

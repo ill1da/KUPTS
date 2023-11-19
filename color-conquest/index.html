@@ -8,25 +8,27 @@
 </head>
 <body>
 <div class="container">
-    <canvas id="battlefield" width="500px" height="500px"></canvas>
+    <div class="ill1da-logo">
+        <a class="logo-text" href="https://ill1da.space">ILL1DA.SPACE</a>
+        <h1>ЦВЕТНОЕ ЗАВОЕВАНИЕ</h1>
+    </div>
 
-    <div class="progress-container">
-        <progress id="progress" class="progress" max="100"></progress>
-        <div class="percentage-text">
-            <span class="percentage" id="percentage1"></span>
-            <span class="percentage" id="percentage2"></span>
+    <div class="battlefield-content">
+        <canvas id="battlefield" width="500px" height="500px"></canvas>
+
+        <div class="select-color">
+            <label for="color1">Цвет 1:</label>
+            <input type="color" id="color1">
+        
+            <label for="color2">Цвет 2:</label>
+            <input type="color" id="color2">
         </div>
     </div>
-    <span id="progress-text"></span>
 
+    <progress id="progress" class="progress" max="100"></progress>
 
-    <div class="select-color">
-        <label for="color1">Цвет 1:</label>
-        <input type="color" id="color1">
-    
-        <label for="color2">Цвет 2:</label>
-        <input type="color" id="color2">
-    </div>
+    <span class="percentage" id="percentage1"></span>
+    <span class="percentage" id="percentage2"></span>
 </div>
 </body>
 <script src="./color-conquest-script.js"></script>
