@@ -144,9 +144,6 @@ document.addEventListener('DOMContentLoaded', () => {
         // Цвет текста
         document.getElementById("percentage1").style.color = cellColor2;
         document.getElementById("percentage2").style.color = cellColor1;
-        
-        document.getElementById("percentage1").style.width = `${percentage}%`;
-        document.getElementById("percentage2").style.width = `${100 - percentage}%`;
     
         document.getElementById("percentage1").textContent = percentage;
         document.getElementById("percentage2").textContent = 100 - percentage;

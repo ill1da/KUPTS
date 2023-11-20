@@ -120,18 +120,19 @@ body {
 
 .percentage {
     position: absolute;
+    width: max-content;
+    display:inline-block;
     font-family: SpaceMono;
     font-size: 10dvw;
-    z-index:-8;
 }
 #percentage1 {
-    width: 410px;
-    bottom: 0; left: 10px;
+    width: max-content;
+    bottom: 0px; left: 20px;
     text-align: left;
 }
 #percentage2 {
-    width: 410px;
-    bottom: 0; right: 10px;
+    width: max-content;
+    bottom: 0px; right: 20px;
     text-align: right;
 }
 
