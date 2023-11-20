@@ -165,14 +165,14 @@ body {
     display: flex;
     text-decoration: none;
     background: #F5F5F5;
-    color: rgba(23, 25, 29, 1);
+    color: #17191D;
     justify-items: center;
     align-items: center;
     transition: 0.2s;
     box-shadow: 1px 1px 0px 0px #17191D, 2px 2px 0px 0px #17191D, 3px 3px 0px 0px #17191D, 4px 4px 0px 0px #17191D, 5px 5px 0px 0px #17191D;
 }
 .animated-button-vk span, .animated-button-cup span{
-    color: rgba(23, 25, 29, 1);
+    color: #17191D;
     display: inline-block;
 }
 
@@ -268,88 +268,88 @@ body {
 /* - - - - - Карточки - - - - -*/
 #Tic-Tac-Toe {
     background-image: url(./MAIN-source/card/Tic-Tac-Toe-card.svg);
-    background-color: rgba(24, 68, 220, 1);
+    background-color: #1844DC;
     background-position: center center;
     background-repeat: no-repeat;
     background-size: cover;
 }
 #Tic-Tac-Toe:hover {
-    background-color: rgba(47, 87, 224, 1);
+    background-color: #3B60E1;
 }
 
 #Life-checklist {
     background: url(./MAIN-source/card/Life-checklist-card.svg);
-    background-color: rgba(245, 132, 180, 1);
+    background-color: #F584B4;
     background-position: center center;
     background-repeat: no-repeat;
     background-size: cover;
 }
 #Life-checklist:hover {
-    background-color: rgba(246, 144, 187, 1);
+    background-color: #F696BF;
 }
 
 #Chronometer {
     background: url(./MAIN-source/card/Chronometer-card.svg);
-    background-color: rgba(0, 185, 75, 1);
+    background-color: #00B94B;
     background-position: center center;
     background-repeat: no-repeat;
     background-size: cover;
 }
 #Chronometer:hover {
-    background-color: rgba(25, 192, 93, 1);
+    background-color: #26C466;
 }
 
 #Swipe-facts {
     background: url(./MAIN-source/card/Swipe-facts-card.svg);
-    background-color: rgba(255, 204, 0, 1);
+    background-color: #FFCC00;
     background-position: center center;
     background-repeat: no-repeat;
     background-size: cover;
 }
 #Swipe-facts:hover {
-    background-color: rgba(255, 209, 25, 1);
+    background-color: #FFD426;
 }
 
 #Press-the-button {
     background: url(./MAIN-source/card/Press-the-button-card.svg);
-    background-color: rgba(239, 85, 43, 1);
+    background-color: #EF552B;
     background-position: center center;
     background-repeat: no-repeat;
     background-size: cover;
 }
 #Press-the-button:hover {
-    background-color: rgba(241, 102, 64, 1);
+    background-color: #F16E4B;
 }
 
 #Percentage {
     background: url(./MAIN-source/card/Percentage-card.svg);
-    background-color: rgba(51, 153, 255, 1);
+    background-color: #3399FF;
     background-position: center center;
     background-repeat: no-repeat;
     background-size: cover;
 }
 #Percentage:hover {
-    background-color: rgba(71, 163, 255, 1);
+    background-color: #52A8FF;
 }
 
 #Color-conquest {
     background-image: url(./MAIN-source/card/Color-conquest-card.svg);
-    background-color: rgba(128, 128, 255, 1);
+    background-color: #8080FF;
     background-position: center center;
     background-repeat: no-repeat;
     background-size: cover;
 }
 #Color-conquest:hover {
-    background-color: rgba(141, 141, 255, 1);
+    background-color: #9393FF;
 }
 
 #Sand-painting {
     background: url(./MAIN-source/card/Sand-painting-card.svg);
-    background-color: rgba(217, 163, 102, 1);
+    background-color: #D9A366;
     background-position: center center;
     background-repeat: no-repeat;
     background-size: cover;
 }
 #Sand-painting:hover {
-    background-color: rgba(221, 172, 117, 1);
+    background-color: #DFB17D;
 }

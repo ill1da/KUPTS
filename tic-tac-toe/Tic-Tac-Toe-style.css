@@ -15,7 +15,7 @@
     font-family: Rubik;
     font-size: 18px;
     font-weight: 700;
-    color: rgba(37, 37, 37, 1);
+    color: #17191D;
 }
 
 html{
@@ -49,29 +49,29 @@ body{
 .ill1da-logo h1{
     font-size: 40px;
     font-weight: 800;
-    color: rgba(255, 255, 255, 1);
-    text-shadow: 1px 1px 1px rgba(37, 37, 37, 1), 2px 2px 1px rgba(37, 37, 37, 1), 3px 3px 1px rgba(37, 37, 37, 1);
+    color: #FFFFFF;
+    text-shadow: 1px 1px 1px #17191D, 2px 2px 1px #17191D, 3px 3px 1px #17191D;
 }
 
 .logo-text{
     width: max-content;
-    background-color: rgba(255, 255, 255, 1);
-    box-shadow: 3px 3px 0 0 rgba(37, 37, 37, 1);
+    background-color: #FFFFFF;
+    box-shadow: 3px 3px 0 0 #17191D;
     font-family: PressStart2P;
     font-size: 20px;
-    color: rgba(37, 37, 37, 1);
+    color: #17191D;
     padding: 8px 24px 8px 16px;
     text-decoration: none;
     align-self: center;
     transition: 0.2s;
  }
  .logo-text:hover{
-    box-shadow: 5px 5px 0 0 rgba(37, 37, 37, 1);
+    box-shadow: 5px 5px 0 0 #17191D;
     padding: 8px 26px 8px 18px;
     transition: 0.2s;
  }
 .logo-text:active{
-    box-shadow: 0px 0px 0 0 rgba(37, 37, 37, 1);
+    box-shadow: 0px 0px 0 0 #17191D;
     border: 0px;
     transition: 0.2s;
 }
@@ -79,16 +79,16 @@ body{
 /*- - - - - Игровая карточка - - - - -*/
 .game-content{
     width: max-content; height: max-content;
-    background-color: rgba(255, 255, 255, 1);
+    background-color: #FFFFFF;
     padding: 0px 30px;
-    box-shadow: 3px 3px 0 0 rgba(37, 37, 37, 1);
+    box-shadow: 3px 3px 0 0 #17191D;
 }
 
 
 .game-settings{
     box-sizing: border-box;
     width: 100%; height: auto;
-    background-color: rgba(255, 255, 255, 1);
+    background-color: #FFFFFF;
     padding-top: 10px;
     display: flex;
     flex-direction: column;
@@ -99,23 +99,23 @@ body{
     width: max-content; height: max-content;
     padding: 10px 30px 10px 10px;
     margin-top: 5px;
-    outline: 0px solid rgba(37, 37, 37, 1);
+    outline: 0px solid #17191D;
     background-color: rgba(240, 240, 240, 1);
-    box-shadow: 3px 3px 0 0 rgba(37, 37, 37, 1);
+    box-shadow: 3px 3px 0 0 #17191D;
     -webkit-appearance: none;
     background-image: url(./Tic-Tac-Toe-source/img/appearance_down.svg);
     background-repeat: no-repeat;
     background-position: 264px 19px;
-    border: 1px solid rgba(37, 37, 37, 1);
+    border: 1px solid #17191D;
     cursor: pointer;
     transition: 0.2s;
 }
 .player-mode:focus{
-    outline: 0px solid rgba(37, 37, 37, 1);
+    outline: 0px solid #17191D;
 }
 .player-mode:hover{
-    outline: 0px solid rgba(37, 37, 37, 1);
-    box-shadow: 4px 4px 0 0 rgba(37, 37, 37, 1);
+    outline: 0px solid #17191D;
+    box-shadow: 4px 4px 0 0 #17191D;
     transition: 0.2s;    
 
 }
@@ -137,20 +137,20 @@ body{
 }
 .radio-text{
     width: max-content; height: auto;
-    background-color: rgba(240, 240, 240, 1);
-    color: rgba(37, 37, 37, 1);
-    border: 1px solid rgba(37, 37, 37, 1);
+    background-color: #F0F0F0;
+    color: #17191D;
+    border: 1px solid #17191D;
     padding: 5px 15px;
-    box-shadow: 3px 3px 0 0 rgba(37, 37, 37, 1);
+    box-shadow: 3px 3px 0 0 #17191D;
     transition: 0.2s;
 }
 .radio-text:hover{
-    box-shadow: 4px 4px 0 0 rgba(37, 37, 37, 1);
+    box-shadow: 4px 4px 0 0 #17191D;
     cursor: pointer;
     transition: 0.2s;
 }
 .radio-text:active{
-    box-shadow: 0px 0px 0 0 rgba(37, 37, 37, 1);
+    box-shadow: 0px 0px 0 0 #17191D;
     border: 0px;
     transition: 0.2s;
 }
@@ -161,29 +161,29 @@ body{
     width: 1px;
 }
 .difficulty-value:checked + .radio-text{
-    background-color: rgba(38, 184, 181, 0.5);
-    color: rgba(37, 37, 37, 1);
-    box-shadow: 3px 3px 0 0 rgba(37, 37, 37, 1);
+    background-color: #26B8B580;
+    color: #17191D;
+    box-shadow: 3px 3px 0 0 #17191D;
 }
 
 /*- - - - - Кнопка новая игра - - - - -*/
 .new-game{
     width: max-content; height: auto;
     padding: 5px 15px;
-    background-color: rgba(154, 197, 48, 1);
-    color: rgba(37, 37, 37, 1);
+    background-color: #9AC530;
+    color: #17191D;
     padding: 5px 15px;
-    box-shadow: 3px 3px 0 0 rgba(37, 37, 37, 1);
+    box-shadow: 3px 3px 0 0 #17191D;
     margin: 10px 0px;
     transition: 0.2s;
 }
 .new-game:hover{
-    box-shadow: 4px 4px 0 0 rgba(37, 37, 37, 1);
+    box-shadow: 4px 4px 0 0 #17191D;
     transition: 0.2s;
     cursor: pointer;
 }
 .new-game:active{
-    box-shadow: 0px 0px 0 0 rgba(37, 37, 37, 1);
+    box-shadow: 0px 0px 0 0 #17191D;
     border: 0px;
     transition: 0.2s;
 }
@@ -197,7 +197,7 @@ body{
 /*- - - - - Игровое поле - - - - -*/
 .game-container{
     width: 300px; height: 300px;
-    background-color: rgba(240, 240, 240, 1);
+    background-color: #F0F0F0;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -211,25 +211,25 @@ svg.cross, svg.circle{
     display: flex;
     flex-wrap: wrap;
     width: 300px; height: 300px;
-    outline: 2px solid rgba(37, 37, 37, 1);
+    outline: 2px solid #17191D;
 }
 
 .field{
     width: 100px; height: 100px;
-    border: 2px solid rgba(37, 37, 37, 1);
+    border: 2px solid #17191D;
     text-align: center;
 }
 .field:hover{
-    background-color: rgba(220, 220, 220, 1);
+    background-color: #DCDCDC;
     cursor: pointer;
 }
 .o{
     font-size: 76px;
-    color: rgba(134, 81, 162, 1);
+    color: #8651A2;
 }
 .x{
     font-size: 76px;
-    color: rgba(255, 136, 0, 1);
+    color: #FF8800;
 }
 
 /*- - - - - Результат - победа - - - - -*/
@@ -237,12 +237,12 @@ svg.cross, svg.circle{
     width: 100%; height: 22px;
     display: block;
     text-align: center;
-    color: rgba(154, 197, 48, 1);
+    color: #9AC530;
     margin: 15px 0px 10px 0px;
 }
 .active{
-    background-color: rgba(154, 197, 48, 0.5);
-    color: rgba(102, 133, 25, 1);
+    background-color: #9AC53080;
+    color: #668519;
     transition: background-color 0.3s ease;
     transition: color 0.3s ease;
 }
@@ -278,7 +278,7 @@ svg.cross, svg.circle{
     .player-mode{
         padding: 8px 24px 8px 8px;
         font-size: 14px;
-        box-shadow: 3px 3px 0 0 rgba(37, 37, 37, 1);
+        box-shadow: 3px 3px 0 0 #17191D;
         background-position: 205px 15px;
     }
     
@@ -291,11 +291,11 @@ svg.cross, svg.circle{
     }
     .o{
         font-size: 64px;
-        color: rgba(134, 81, 162, 1);
+        color: #8651A2;
     }
     .x{
         font-size: 64px;
-        color: rgba(255, 136, 0, 1);
+        color: #FF8800;
     }
     .radio-text{
         font-size: 14px;

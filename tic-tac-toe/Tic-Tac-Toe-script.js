@@ -303,4 +303,3 @@ document.getElementById("player-mode").addEventListener("change", function() {
         difficultySelect.style.display = "none";
     }
 });
-

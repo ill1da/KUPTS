@@ -15,7 +15,7 @@
     font-family: Rubik;
     font-size: 18px;
     font-weight: 700;
-    color: rgba(118, 79, 217, 1);
+    color: #764FD9;
 }
 
 html{
@@ -24,7 +24,7 @@ html{
 
 body{
     width: 100%; height: 100%;
-    background-color: rgba(239, 181, 255, 1);
+    background-color: #EFB5FF;
 }
 
 .container{
@@ -50,29 +50,29 @@ body{
 .ill1da-logo h1{
     font-size: 40px;
     font-weight: 800;
-    color: rgba(255, 255, 255, 1);
-    text-shadow: 1px 1px 1px rgba(118, 79, 217, 1), 2px 2px 1px rgba(118, 79, 217, 1), 3px 3px 1px rgba(118, 79, 217, 1);
+    color: #FFFFFF;
+    text-shadow: 1px 1px 1px #764FD9, 2px 2px 1px #764FD9, 3px 3px 1px #764FD9;
 }
 
 .logo-text{
     width: max-content;
-    background-color: rgba(255, 255, 255, 1);
-    box-shadow: 3px 3px 0 0 rgba(118, 79, 217, 1);
+    background-color: #FFFFFF;
+    box-shadow: 3px 3px 0 0 #764FD9;
     font-family: PressStart2P;
     font-size: 20px;
-    color: rgba(118, 79, 217, 1);
+    color: #764FD9;
     padding: 8px 24px 8px 16px;
     text-decoration: none;
     align-self: center;
     transition: 0.2s;
  }
  .logo-text:hover{
-    box-shadow: 5px 5px 0 0 rgba(118, 79, 217, 1);
+    box-shadow: 5px 5px 0 0 #764FD9;
     padding: 8px 26px 8px 18px;
     transition: 0.2s;
  }
 .logo-text:active{
-    box-shadow: 0px 0px 0 0 rgba(118, 79, 217, 1);
+    box-shadow: 0px 0px 0 0 #764FD9;
     border: 0px;
     transition: 0.2s;
 }
@@ -85,14 +85,14 @@ body{
 .progress-bar{
     box-sizing: border-box;
     width: 1356px; min-height: max-content;
-    background-color: rgba(255, 255, 255, 1);
+    background-color: #FFFFFF;
     padding: 25px 45px;
-    box-shadow: 3px 3px 0 0 rgba(118, 79, 217, 1);
+    box-shadow: 3px 3px 0 0 #764FD9;
 }
 .progress{
     width: 100%; height: 32px;
     margin-top: 10px;
-    background-color: rgba(240, 240, 240, 1);
+    background-color: #F0F0F0;
 }
 input{
     position: absolute;
@@ -101,20 +101,20 @@ input{
     width: 1px;
 }
 .progress::-webkit-progress-value {
-    background-color: rgba(118, 79, 217, 1); 
+    background-color: #764FD9; 
     transition: 0.5s;
 }
 .progress::-webkit-progress-bar {
-    background-color: rgba(225, 219, 239, 0.4);    
+    background-color: #E1DBEF66;    
 }
 
 /* - - - - - Контейнер - - - - - */
 .check-list-content{
     box-sizing: border-box;
     width: max-content; height: auto;
-    background-color: rgba(255, 255, 255, 1);
+    background-color: #FFFFFF;
     padding: 30px 20px;
-    box-shadow: 3px 3px 0 0 rgba(118, 79, 217, 1);
+    box-shadow: 3px 3px 0 0 #764FD9;
 }
 .labels{
     box-sizing: border-box;
@@ -133,7 +133,7 @@ input{
 label{
     box-sizing: border-box;
     width: 300px; height: 65px;
-    background-color: rgba(225, 219, 239, 0.4);
+    background-color: #E1DBEF66;
     background-image: url(./Life-Checklist-source/img/checkbox-n.svg);
     background-repeat: no-repeat;
     background-position: 25px center;
@@ -146,17 +146,17 @@ label{
     transition: 0.2s;
 }
 label:hover{
-    box-shadow: -3px -3px 0 0 rgba(239, 178, 255, 1), 3px 3px 0 0 rgba(206, 195, 252, 1);
+    box-shadow: -3px -3px 0 0 #EFB2FF, 3px 3px 0 0 #CEC3FC;
     transition: 0.2s;
 }
 label:active{
-    box-shadow: 0px 0px 0 0 rgba(239, 178, 255, 1), 0px 0px 0 0 rgba(206, 195, 252, 1);
+    box-shadow: 0px 0px 0 0 #EFB2FF, 0px 0px 0 0 #CEC3FC;
     transition: 0.2s;
 
 }
 
 .active {
-    background-color: rgba(195, 255, 192, 1);
+    background-color: #C3FFC0;
     background-image: url(./Life-Checklist-source/img/checkbox-y.svg);
     background-repeat: no-repeat;
     background-position: 25px center;

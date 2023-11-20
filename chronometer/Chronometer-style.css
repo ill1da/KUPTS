@@ -15,7 +15,7 @@
     font-family: Rubik;
     font-size: 18px;
     font-weight: 700;
-    color: rgba(37, 37, 37, 1);
+    color: #17191D;
 }
 
 html{
@@ -24,7 +24,7 @@ html{
 
 body{
     width: 100%; height: 100%;
-    background-color: rgba(0, 185, 75, 1);
+    background-color: #00B94B;
 }
 
 .container{
@@ -48,29 +48,29 @@ body{
 .ill1da-logo h1{
     font-size: 40px;
     font-weight: 800;
-    color: rgba(255, 255, 255, 1);
-    text-shadow: 1px 1px 1px rgba(37, 37, 37, 1), 2px 2px 1px rgba(37, 37, 37, 1), 3px 3px 1px rgba(37, 37, 37, 1);
+    color: #FFFFFF;
+    text-shadow: 1px 1px 1px #17191D, 2px 2px 1px #17191D, 3px 3px 1px #17191D;
 }
 
 .logo-text{
     width: max-content;
-    background-color: rgba(255, 255, 255, 1);
-    box-shadow: 3px 3px 0 0 rgba(37, 37, 37, 1);
+    background-color: #FFFFFF;
+    box-shadow: 3px 3px 0 0 #17191D;
     font-family: PressStart2P;
     font-size: 20px;
-    color: rgba(37, 37, 37, 1);
+    color: #17191D;
     padding: 8px 24px 8px 16px;
     text-decoration: none;
     align-self: center;
     transition: 0.2s;
  }
  .logo-text:hover{
-    box-shadow: 5px 5px 0 0 rgba(37, 37, 37, 1);
+    box-shadow: 5px 5px 0 0 #17191D;
     padding: 8px 26px 8px 18px;
     transition: 0.2s;
  }
 .logo-text:active{
-    box-shadow: 0px 0px 0 0 rgba(37, 37, 37, 1);
+    box-shadow: 0px 0px 0 0 #17191D;
     border: 0px;
     transition: 0.2s;
 }
@@ -79,15 +79,15 @@ body{
 /* - - - - - Прогресс-бары - - - - - */
 progress{
     width: 100%; height: 24px;
-    background-color: rgba(240, 240, 240, 1);
+    background-color: #F0F0F0;
     margin-top: 10px; margin-bottom: 10px;
 }
 progress::-webkit-progress-value {
-    background-color: rgba(0, 185, 75, 1);
+    background-color: #00B94B;
     transition: 0.5s;
 }
 progress::-webkit-progress-bar {
-    background-color: rgba(240, 240, 240, 1);    
+    background-color: #F0F0F0;    
 }
 
 .chronometer-content{
@@ -97,7 +97,7 @@ progress::-webkit-progress-bar {
 }
 h3{
     font-family: Rubik;
-    color: rgba(0, 185, 75, 1);
+    color: #00B94B;
     font-size: 28px;
     font-weight: 600;
     text-align: center;
@@ -110,9 +110,9 @@ h6{
 .chronometer-holiday-content{
     box-sizing: border-box;
     width: 432px; height: auto;
-    background-color: rgba(255, 255, 255, 1);
+    background-color: #FFFFFF;
     padding: 30px 45px;
-    box-shadow: 3px 3px 0 0 rgba(37, 37, 37, 1);
+    box-shadow: 3px 3px 0 0 #17191D;
     margin-bottom: 70px;
 }
 
@@ -127,9 +127,9 @@ h6{
 .user-date{
     box-sizing: border-box;
     width: 100%; height: 100%;
-    background-color: rgba(255, 255, 255, 1);
+    background-color: #FFFFFF;
     padding: 30px 45px;
-    box-shadow: 3px 3px 0 0 rgba(37, 37, 37, 1);
+    box-shadow: 3px 3px 0 0 #17191D;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -138,7 +138,7 @@ h6{
     box-sizing: border-box;
     overflow-y: auto;
     width: 100%; height: 100%; max-height: 640px;
-    background-color: rgba(240, 240, 240, 1);
+    background-color: #F0F0F0;
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -157,14 +157,14 @@ h6{
     box-sizing: border-box;
     width: 250px; height: 35px;
     padding: 0px 10px;
-    background-color: rgba(240, 240, 240, 1);
-    outline: 1px rgba(37, 37, 37, 1);
+    background-color: #F0F0F0;
+    outline: 1px #17191D;
     border-radius: 10px;
     transition: background-color 0.3s ease;
 }
 #userText:hover{
     cursor: pointer;
-    background-color: rgba(215, 215, 215, 1);
+    background-color: #D7D7D7;
     transition: background-color 0.3s ease;
 }
 
@@ -172,14 +172,14 @@ h6{
     box-sizing: border-box;
     width: 250px; height: 35px;
     padding: 0px 10px;
-    background-color: rgba(240, 240, 240, 1);
-    outline: 1px rgba(37, 37, 37, 1);
+    background-color: #F0F0F0;
+    outline: 1px #17191D;
     border-radius: 10px;
     transition: background-color 0.3s ease;
 }
 #userDate:hover{
     cursor: pointer;
-    background-color: rgba(215, 215, 215, 1);
+    background-color: #D7D7D7;
     transition: background-color 0.3s ease;
 }
 
@@ -187,23 +187,23 @@ h6{
     box-sizing: border-box;
     width: 250px; height: 35px;
     padding: 0px 10px;
-    background-color: rgba(0, 185, 75, 1);
-    color: rgba(255, 255, 255, 1);
+    background-color: #00B94B;
+    color: #FFFFFF;
     border: 0px;
     border-radius: 10px;
     transition: background-color 0.3s ease;
 }
 #addBtn:hover{
     cursor: pointer;
-    background-color: rgba(0, 185, 75, 0.7);
+    background-color: #00B94BB2;
     transition: background-color 0.3s ease;
 }
 
 .counter{
     box-sizing: border-box;
     width: 100%; min-height: 80px;
-    background-color: rgba(255, 255, 255, 1);
-    border-left: 5px solid rgba(0, 185, 75, 1);
+    background-color: #FFFFFF;
+    border-left: 5px solid #00B94B;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -219,7 +219,7 @@ h6{
 }
 .counter-title h4{
     font-family: Rubik;
-    color: rgba(37, 37, 37, 1);
+    color: #17191D;
     font-size: 24px;
     font-weight: 700;
 }
@@ -227,7 +227,7 @@ h6{
     width: 32px; height: 32px;
     border: 0px;
     background-image: url(./Chronometer-source/img/bin\ 0.svg);
-    background-color: rgba(255, 255, 255, 1);
+    background-color: #FFFFFF;
     background-position: center center;
     background-repeat: no-repeat;
     transition: 0.2s;
@@ -247,9 +247,9 @@ h6{
 .date-calculator{
     box-sizing: border-box;
     width: 100%; height: auto;
-    background-color: rgba(255, 255, 255, 1);
+    background-color: #FFFFFF;
     padding: 30px 45px;
-    box-shadow: 3px 3px 0 0 rgba(37, 37, 37, 1);
+    box-shadow: 3px 3px 0 0 #17191D;
     display: flex;
     flex-direction: column;
     margin-bottom: 70px;
@@ -272,14 +272,14 @@ h6{
     width: 363px; height: 35px;
     padding: 0px 20px;
     margin-top: 10px;
-    outline: 1px rgba(37, 37, 37, 1);
-    background-color: rgba(240, 240, 240, 1);
+    outline: 1px #17191D;
+    background-color: #F0F0F0;
     border-radius: 10px;
     transition: background-color 0.3s ease;
 }
 .dateInput:hover{
     cursor: pointer;
-    background-color: rgba(215, 215, 215, 1);
+    background-color: #D7D7D7;
     transition: background-color 0.3s ease;
 }
 
@@ -300,7 +300,7 @@ h6{
 }
 .dateOut{
     width: max-content; height: auto;
-    color: rgba(0, 185, 75, 1);
+    color: #00B94B;
     font-size: 24px;
 }
 .progress-title{
