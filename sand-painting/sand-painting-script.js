@@ -278,3 +278,47 @@ particlesJS('particles-js', {
         }
     }
 });
+
+const waveButton = document.getElementById('wave');
+waveButton.addEventListener('click', () => {
+    waveEffect();
+    createWave();
+});
+
+function waveEffect() {
+    const animationDuration = 1050; // Продолжительность анимации в миллисекундах
+    const framesPerSecond = 60;
+    const totalFrames = framesPerSecond * (animationDuration / 1000);
+    const frameWidth = canvas.width / totalFrames;
+    let currentFrame = 0;
+
+    function animate() {
+        context.clearRect(Math.floor(canvas.width - (currentFrame + 1) * frameWidth), 0, Math.ceil(frameWidth), canvas.height);
+        context.globalAlpha = 1 - (currentFrame / totalFrames);
+        currentFrame++;
+
+        if (currentFrame <= totalFrames) {
+            requestAnimationFrame(animate);
+        } else {
+            context.globalAlpha = 1;
+            restoreInterfaceElementsOpacity(); // Восстанавливаем непрозрачность элементов интерфейса
+        }
+    }
+
+    makeInterfaceElementsTransparent(); // Делаем элементы интерфейса прозрачными перед анимацией
+    animate();
+}
+
+function createWave() {
+    // Создаем элемент волны и добавляем его в body
+    const waveElement = document.createElement('div');
+    waveElement.classList.add('wave');
+    document.body.appendChild(waveElement);
+
+    // Устанавливаем таймаут для удаления элемента волны и очистки канвы через некоторое время
+    setTimeout(() => {
+        document.body.removeChild(waveElement);
+        clearCanvas();
+        restoreInterfaceElementsOpacity();
+    }, 4000); // Уменьшено время для соответствия анимации волны
+}
