@@ -8,8 +8,8 @@
     src: url(./Color-conquest-source/font/Rubik-VariableFont_wght.ttf);
 }
 @font-face {
-    font-family: SpaceMono;
-    src: url(./Color-conquest-source/font/SpaceMono-Regular.ttf);
+    font-family: RubikMonoOne;
+    src: url(./Color-conquest-source/font/RubikMonoOne-Regular.ttf);
 }
 
 /* - - - - - Цветное завоевание - - - - - */
@@ -27,11 +27,11 @@ html{
 }
 
 body {
-    width: 100dvw; height: 100dvh;
+    width: 100vw; height: 100vh;
 }
 
 .container {
-    height: 100dvh;
+    height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -88,17 +88,56 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
+    padding: 10px;
 }
 
-@media only screen and (max-width:501px) {
+@media only screen and (max-height:700px) {
     #battlefield {
         width: 400px; height: 400px;
-    }    
+    }
+    .percentage {
+        font-size: 50px;
+    }
 }
-@media only screen and (max-width:401px) {
+@media only screen and (max-width:551px) {
+    #battlefield {
+        width: 400px; height: 400px;
+    }
+    .percentage {
+        font-size: 50px;
+    }
+}
+@media only screen and (max-height:600px) {
     #battlefield {
         width: 300px; height: 300px;
-    }    
+    }
+    .percentage {
+        font-size: 40px;
+    }
+}
+@media only screen and (max-width:451px) {
+    #battlefield {
+        width: 300px; height: 300px;
+    }
+    .percentage {
+        font-size: 40px;
+    } 
+}
+@media only screen and (max-height:500px) {
+    #battlefield {
+        width: 200px; height: 200px;
+    }
+    .percentage {
+        font-size: 30px;
+    }
+}
+@media only screen and (max-width:351px) {
+    #battlefield {
+        width: 200px; height: 200px;
+    }
+    .percentage {
+        font-size: 30px;
+    }
 }
 
 .progress {
@@ -122,8 +161,9 @@ body {
     position: absolute;
     width: max-content;
     display:inline-block;
-    font-family: SpaceMono;
-    font-size: 10dvw;
+    font-family: RubikMonoOne;
+    font-weight: 100;
+    font-size: 60px;
 }
 #percentage1 {
     width: max-content;
