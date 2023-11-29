@@ -136,27 +136,73 @@ function endPosition() {
 function draw(e) {
     if (!painting) return;
 
-    const sprayDensity = context.lineWidth / 50; // Плотность спрея (количество точек)
-    const sprayRadius = context.lineWidth / 2; // Радиус спрея
+    context.beginPath();
 
-    for (let i = 0; i < sprayDensity; i++) {
-        const angle = Math.random() * 2 * Math.PI;
-        const distance = Math.random() * sprayRadius;
+    if (erasing) {
+        // Ластик (сплошная линия)
+        if (e.touches && e.touches.length > 0) {
+            for (let i = 0; i < e.touches.length; i++) {
+                const touch = e.touches[i];
+                const touchCoord = touchCoordinates[touch.identifier];
+                
+                context.moveTo(touchCoord.lastX, touchCoord.lastY);
+                context.lineTo(touch.clientX, touch.clientY);
+                context.stroke();
 
-        const offsetX = distance * Math.cos(angle);
-        const offsetY = distance * Math.sin(angle);
+                touchCoordinates[touch.identifier] = {
+                    lastX: touch.clientX,
+                    lastY: touch.clientY,
+                };
+            }
+        } else {
+            context.moveTo(lastX, lastY);
+            context.lineTo(e.clientX, e.clientY);
+            context.stroke();
+            [lastX, lastY] = [e.clientX, e.clientY];
+        }
+    } else {
+        // Кисть (точки)
+        const sprayDensity = 15;
+        const sprayRadius = context.lineWidth / 2;
 
-        const sandColor = getRandomSandColor();
+        if (e.touches && e.touches.length > 0) {
+            for (let i = 0; i < e.touches.length; i++) {
+                const touch = e.touches[i];
+                const sandColor = getRandomSandColor();
 
-        context.beginPath();
-        context.arc(e.clientX + offsetX, e.clientY + offsetY, 1, 0, 2 * Math.PI);
-        context.fillStyle = sandColor;
-        context.fill();
+                for (let j = 0; j < sprayDensity; j++) {
+                    const angle = Math.random() * 2 * Math.PI;
+                    const distance = Math.random() * sprayRadius;
+
+                    const offsetX = distance * Math.cos(angle);
+                    const offsetY = distance * Math.sin(angle);
+
+                    context.fillStyle = sandColor;
+                    context.beginPath();
+                    context.arc(touch.clientX + offsetX, touch.clientY + offsetY, 1, 0, 2 * Math.PI);
+                    context.fill();
+                }
+            }
+        } else {
+            const sandColor = getRandomSandColor();
+
+            for (let i = 0; i < sprayDensity; i++) {
+                const angle = Math.random() * 2 * Math.PI;
+                const distance = Math.random() * sprayRadius;
+
+                const offsetX = distance * Math.cos(angle);
+                const offsetY = distance * Math.sin(angle);
+
+                context.fillStyle = sandColor;
+                context.beginPath();
+                context.arc(e.clientX + offsetX, e.clientY + offsetY, 1, 0, 2 * Math.PI);
+                context.fill();
+            }
+
+            requestAnimationFrame(() => draw(e));
+        }
     }
-
-    requestAnimationFrame(() => draw(e)); // Запрос на следующий кадр анимации
 }
-
 
 function drawSpray(x, y, density, radius) {
     for (let i = 0; i < density; i++) {
