@@ -125,32 +125,3 @@ body{
     transform: translate(-50%, -50%);
     z-index: 900;
 }
-
-/* - - - - - Эффект волны - - - - - */
-.wave {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: linear-gradient(to right, #87CEFA, #5F9EA0);
-    animation: waveAnimation 4s linear forwards;
-    opacity: 0.5;
-    z-index: 800;
-    transform-origin: top right; /* Изменено начальное положение слева сверху */
-}
-
-@keyframes waveAnimation {
-    0% {
-        transform: scaleX(0);
-        opacity: 0.9;
-    }
-    30% {
-        transform: scaleX(1.2);
-        opacity: 0.3;
-    }
-    100% {
-        transform: scaleX(0);
-        opacity: 0.8;
-    }
-}

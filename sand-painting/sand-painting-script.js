@@ -136,29 +136,68 @@ function endPosition() {
 function draw(e) {
     if (!painting) return;
 
-    context.beginPath();
+    const sprayDensity = context.lineWidth / 50; // Плотность спрея (количество точек)
+    const sprayRadius = context.lineWidth / 2; // Радиус спрея
 
-    if (e.touches && e.touches.length > 0) {
-        // Если это событие мультитача, то рисуем для каждого touch'а независимо
-        for (let i = 0; i < e.touches.length; i++) {
-            const touch = e.touches[i];
-            const touchCoord = touchCoordinates[touch.identifier];
-            
-            context.moveTo(touchCoord.lastX, touchCoord.lastY);
-            context.lineTo(touch.clientX, touch.clientY);
-            context.stroke();
+    for (let i = 0; i < sprayDensity; i++) {
+        const angle = Math.random() * 2 * Math.PI;
+        const distance = Math.random() * sprayRadius;
 
-            touchCoordinates[touch.identifier] = {
-                lastX: touch.clientX,
-                lastY: touch.clientY,
-            };
-        }
-    } else {
-        context.moveTo(lastX, lastY);
-        context.lineTo(e.clientX, e.clientY);
-        context.stroke();
-        [lastX, lastY] = [e.clientX, e.clientY];
+        const offsetX = distance * Math.cos(angle);
+        const offsetY = distance * Math.sin(angle);
+
+        const sandColor = getRandomSandColor();
+
+        context.beginPath();
+        context.arc(e.clientX + offsetX, e.clientY + offsetY, 1, 0, 2 * Math.PI);
+        context.fillStyle = sandColor;
+        context.fill();
     }
+
+    requestAnimationFrame(() => draw(e)); // Запрос на следующий кадр анимации
+}
+
+
+function drawSpray(x, y, density, radius) {
+    for (let i = 0; i < density; i++) {
+        const angle = Math.random() * 2 * Math.PI; // Случайный угол
+        const distance = Math.random() * radius; // Случайное расстояние от центра
+
+        const offsetX = distance * Math.cos(angle);
+        const offsetY = distance * Math.sin(angle);
+
+        const sandColor = getRandomSandColor(); // Получаем случайный оттенок песочного цвета
+
+        context.beginPath();
+        context.arc(x + offsetX, y + offsetY, 1, 0, 2 * Math.PI);
+        context.fillStyle = sandColor;
+        context.fill();
+    }
+}
+
+function getRandomSandColor() {
+    const baseColor = "#8C6343"; // Базовый цвет песка
+
+    // Генерация случайных отклонений для компонент R, G, B
+    const deviation = 30;
+    const deltaR = Math.floor(Math.random() * deviation) - deviation / 2;
+    const deltaG = Math.floor(Math.random() * deviation) - deviation / 2;
+    const deltaB = Math.floor(Math.random() * deviation) - deviation / 2;
+
+    // Применение отклонений к базовому цвету
+    const r = Math.max(0, Math.min(255, parseInt(baseColor.slice(1, 3), 16) + deltaR));
+    const g = Math.max(0, Math.min(255, parseInt(baseColor.slice(3, 5), 16) + deltaG));
+    const b = Math.max(0, Math.min(255, parseInt(baseColor.slice(5, 7), 16) + deltaB));
+
+    // Формирование нового цвета
+    const darkSandColor = `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`;
+
+    return darkSandColor;
+}
+
+
+function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
 const cursorCircle = document.getElementById('cursor-circle');
@@ -177,7 +216,7 @@ function updateCursorCirclePosition(x, y) {
 // Добавлен код для отслеживания перемещения курсора на всей странице
 document.addEventListener('mousemove', (e) => {
     updateCursorCirclePosition(e.clientX, e.clientY);
-});
+}, { passive: false });
 
 // Обновление размера и позиции круга при изменении размера кисти
 lineWidthSlider.addEventListener('input', () => {
@@ -210,23 +249,23 @@ if (isTouchDevice) {
 
     canvas.addEventListener('touchstart', (e) => {
         e.preventDefault();
-        startPosition(e);
-        cursorCircle.style.display = 'block'; // Показываем круг при касании
-        updateCursorCirclePosition(e.touches[0].clientX, e.touches[0].clientY); // Обновляем позицию круга под пальцем
+        startPosition(e.touches[0]);
+        cursorCircle.style.display = 'block';
+        updateCursorCirclePosition(e.touches[0].clientX, e.touches[0].clientY);
         makeInterfaceElementsTransparent();
     });
 
     canvas.addEventListener('touchend', () => {
         endPosition();
-        cursorCircle.style.display = 'none'; // Скрываем круг после окончания касания
+        cursorCircle.style.display = 'none';
         restoreInterfaceElementsOpacity();
     });
 }
 
 canvas.addEventListener('touchmove', (e) => {
     e.preventDefault();
-    draw(e);
-    updateCursorCirclePosition(e.touches[0].clientX, e.touches[0].clientY); // Обновляем позицию круга при перемещении пальца
+    draw(e.touches[0]);
+    updateCursorCirclePosition(e.touches[0].clientX, e.touches[0].clientY);
 });
 
 // Функция для установки активной кнопки
@@ -278,47 +317,3 @@ particlesJS('particles-js', {
         }
     }
 });
-
-const waveButton = document.getElementById('wave');
-waveButton.addEventListener('click', () => {
-    waveEffect();
-    createWave();
-});
-
-function waveEffect() {
-    const animationDuration = 1050; // Продолжительность анимации в миллисекундах
-    const framesPerSecond = 60;
-    const totalFrames = framesPerSecond * (animationDuration / 1000);
-    const frameWidth = canvas.width / totalFrames;
-    let currentFrame = 0;
-
-    function animate() {
-        context.clearRect(Math.floor(canvas.width - (currentFrame + 1) * frameWidth), 0, Math.ceil(frameWidth), canvas.height);
-        context.globalAlpha = 1 - (currentFrame / totalFrames);
-        currentFrame++;
-
-        if (currentFrame <= totalFrames) {
-            requestAnimationFrame(animate);
-        } else {
-            context.globalAlpha = 1;
-            restoreInterfaceElementsOpacity(); // Восстанавливаем непрозрачность элементов интерфейса
-        }
-    }
-
-    makeInterfaceElementsTransparent(); // Делаем элементы интерфейса прозрачными перед анимацией
-    animate();
-}
-
-function createWave() {
-    // Создаем элемент волны и добавляем его в body
-    const waveElement = document.createElement('div');
-    waveElement.classList.add('wave');
-    document.body.appendChild(waveElement);
-
-    // Устанавливаем таймаут для удаления элемента волны и очистки канвы через некоторое время
-    setTimeout(() => {
-        document.body.removeChild(waveElement);
-        clearCanvas();
-        restoreInterfaceElementsOpacity();
-    }, 4000); // Уменьшено время для соответствия анимации волны
-}
