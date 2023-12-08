@@ -133,6 +133,9 @@ function endPosition() {
     touchCoordinates = {}; // Очищаем координаты для мультитача
 }
 
+let spraying = false;
+let sprayStartTime;
+
 function draw(e) {
     if (!painting) return;
 
@@ -144,7 +147,7 @@ function draw(e) {
             for (let i = 0; i < e.touches.length; i++) {
                 const touch = e.touches[i];
                 const touchCoord = touchCoordinates[touch.identifier];
-                
+
                 context.moveTo(touchCoord.lastX, touchCoord.lastY);
                 context.lineTo(touch.clientX, touch.clientY);
                 context.stroke();
@@ -161,65 +164,80 @@ function draw(e) {
             [lastX, lastY] = [e.clientX, e.clientY];
         }
     } else {
-        // Кисть (точки)
-        const sprayDensity = 15;
+        // Кисть (эффект плавного заполнения линии)
+        const sprayDensity = context.lineWidth / 10;
         const sprayRadius = context.lineWidth / 2;
+        const sprayDuration = 500;
+        const sandColor = getRandomSandColor();
 
         if (e.touches && e.touches.length > 0) {
             for (let i = 0; i < e.touches.length; i++) {
                 const touch = e.touches[i];
-                const sandColor = getRandomSandColor();
 
-                for (let j = 0; j < sprayDensity; j++) {
-                    const angle = Math.random() * 2 * Math.PI;
-                    const distance = Math.random() * sprayRadius;
+                if (painting) {
+                    const sprayStartTime = Date.now();
 
-                    const offsetX = distance * Math.cos(angle);
-                    const offsetY = distance * Math.sin(angle);
+                    function spray() {
+                        if (!painting) return; // Проверка, активно ли рисование
 
-                    context.fillStyle = sandColor;
-                    context.beginPath();
-                    context.arc(touch.clientX + offsetX, touch.clientY + offsetY, 1, 0, 2 * Math.PI);
-                    context.fill();
+                        const elapsedTime = Date.now() - sprayStartTime;
+                        const progress = Math.min(elapsedTime / sprayDuration, 1);
+
+                        if (progress < 1) {
+                            for (let j = 0; j < sprayDensity; j++) {
+                                const angle = Math.random() * 2 * Math.PI;
+                                const distance = Math.random() * sprayRadius;
+
+                                const offsetX = distance * Math.cos(angle);
+                                const offsetY = distance * Math.sin(angle);
+
+                                context.fillStyle = sandColor;
+                                context.beginPath();
+                                context.arc(touch.clientX + offsetX, touch.clientY + offsetY, 1, 0, 2 * Math.PI);
+                                context.fill();
+                            }
+
+                            requestAnimationFrame(spray);
+                        }
+                    }
+
+                    spray();
                 }
             }
         } else {
-            const sandColor = getRandomSandColor();
+            if (painting) {
+                const sprayStartTime = Date.now();
 
-            for (let i = 0; i < sprayDensity; i++) {
-                const angle = Math.random() * 2 * Math.PI;
-                const distance = Math.random() * sprayRadius;
+                function spray() {
+                    if (!painting) return; // Проверка, активно ли рисование
 
-                const offsetX = distance * Math.cos(angle);
-                const offsetY = distance * Math.sin(angle);
+                    const elapsedTime = Date.now() - sprayStartTime;
+                    const progress = Math.min(elapsedTime / sprayDuration, 1);
 
-                context.fillStyle = sandColor;
-                context.beginPath();
-                context.arc(e.clientX + offsetX, e.clientY + offsetY, 1, 0, 2 * Math.PI);
-                context.fill();
+                    if (progress < 1) {
+                        for (let i = 0; i < sprayDensity; i++) {
+                            const angle = Math.random() * 2 * Math.PI;
+                            const distance = Math.random() * sprayRadius;
+
+                            const offsetX = distance * Math.cos(angle);
+                            const offsetY = distance * Math.sin(angle);
+
+                            context.fillStyle = sandColor;
+                            context.beginPath();
+                            context.arc(e.clientX + offsetX, e.clientY + offsetY, 1, 0, 2 * Math.PI);
+                            context.fill();
+                        }
+
+                        requestAnimationFrame(spray);
+                    }
+                }
+
+                spray();
             }
-
-            requestAnimationFrame(() => draw(e));
         }
     }
 }
 
-function drawSpray(x, y, density, radius) {
-    for (let i = 0; i < density; i++) {
-        const angle = Math.random() * 2 * Math.PI; // Случайный угол
-        const distance = Math.random() * radius; // Случайное расстояние от центра
-
-        const offsetX = distance * Math.cos(angle);
-        const offsetY = distance * Math.sin(angle);
-
-        const sandColor = getRandomSandColor(); // Получаем случайный оттенок песочного цвета
-
-        context.beginPath();
-        context.arc(x + offsetX, y + offsetY, 1, 0, 2 * Math.PI);
-        context.fillStyle = sandColor;
-        context.fill();
-    }
-}
 
 function getRandomSandColor() {
     const baseColor = "#8C6343"; // Базовый цвет песка
