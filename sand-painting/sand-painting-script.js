@@ -5,9 +5,10 @@ let lineWidthValue = document.getElementById('line-width-value');
 let painting = false;
 let erasing = false;
 let bucketMode = false;
+let lastX = 0;
+let lastY = 0;
 let actions = []; // Массив для хранения действий
 let touchCoordinates = {};
-let sprayStartTime;
 
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
@@ -98,7 +99,6 @@ cancelButton.addEventListener('click', () => {
     restoreInterfaceElementsOpacity(); // Восстанавливаем непрозрачность элементов интерфейса
 });
 
-// Обновленные обработчики событий
 function startPosition(e) {
     makeInterfaceElementsTransparent();
 
@@ -133,8 +133,13 @@ function endPosition() {
     touchCoordinates = {}; // Очищаем координаты для мультитача
 }
 
+let spraying = false;
+let sprayStartTime;
+
 function draw(e) {
     if (!painting) return;
+
+    context.beginPath();
 
     if (erasing) {
         // Ластик (сплошная линия)
@@ -143,7 +148,6 @@ function draw(e) {
                 const touch = e.touches[i];
                 const touchCoord = touchCoordinates[touch.identifier];
 
-                context.beginPath();
                 context.moveTo(touchCoord.lastX, touchCoord.lastY);
                 context.lineTo(touch.clientX, touch.clientY);
                 context.stroke();
@@ -154,7 +158,6 @@ function draw(e) {
                 };
             }
         } else {
-            context.beginPath();
             context.moveTo(lastX, lastY);
             context.lineTo(e.clientX, e.clientY);
             context.stroke();
@@ -236,6 +239,8 @@ function draw(e) {
     }
 }
 
+
+
 function getRandomSandColor() {
     const baseColor = "#BC9167"; // Базовый цвет песка
 
@@ -314,18 +319,12 @@ if (isTouchDevice) {
         cursorCircle.style.display = 'block';
         updateCursorCirclePosition(e.touches[0].clientX, e.touches[0].clientY);
         makeInterfaceElementsTransparent();
-        for (let i = 0; i < e.touches.length; i++) {
-            startPosition(e.touches[i]);
-        }
     });
 
-    canvas.addEventListener('touchend', (e) => {
+    canvas.addEventListener('touchend', () => {
         endPosition();
         cursorCircle.style.display = 'none';
         restoreInterfaceElementsOpacity();
-        for (let i = 0; i < e.changedTouches.length; i++) {
-            endPosition();
-        }
     });
 }
 
@@ -333,9 +332,6 @@ canvas.addEventListener('touchmove', (e) => {
     e.preventDefault();
     draw(e.touches[0]);
     updateCursorCirclePosition(e.touches[0].clientX, e.touches[0].clientY);
-    for (let i = 0; i < e.touches.length; i++) {
-        draw(e.touches[i]);
-    }
 });
 
 // Функция для установки активной кнопки
