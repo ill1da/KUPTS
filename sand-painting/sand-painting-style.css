@@ -32,7 +32,7 @@ body{
     position: absolute;
     width: 100%;
     height: 100%;
-    background-color: rgba(221, 172, 117, 1);
+    background-color: #DDAC75;
 }
 
 #canvas {

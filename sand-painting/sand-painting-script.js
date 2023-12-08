@@ -242,10 +242,10 @@ function draw(e) {
 
 
 function getRandomSandColor() {
-    const baseColor = "#8C6343"; // Базовый цвет песка
+    const baseColor = "#BC9167"; // Базовый цвет песка
 
-    // Генерация случайных отклонений для компонент R, G, B
-    const deviation = 30;
+    // Уменьшенный диапазон отклонений для более мягких оттенков
+    const deviation = 20;
     const deltaR = Math.floor(Math.random() * deviation) - deviation / 2;
     const deltaG = Math.floor(Math.random() * deviation) - deviation / 2;
     const deltaB = Math.floor(Math.random() * deviation) - deviation / 2;
@@ -256,9 +256,9 @@ function getRandomSandColor() {
     const b = Math.max(0, Math.min(255, parseInt(baseColor.slice(5, 7), 16) + deltaB));
 
     // Формирование нового цвета
-    const darkSandColor = `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`;
+    const sandColor = `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`;
 
-    return darkSandColor;
+    return sandColor;
 }
 
 
