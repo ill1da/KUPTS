@@ -239,10 +239,8 @@ function draw(e) {
     }
 }
 
-
-
 function getRandomSandColor() {
-    const baseColor = "#BC9167"; // Базовый цвет песка
+    const baseColor = "#8C5531"; // Базовый цвет песка
 
     // Уменьшенный диапазон отклонений для более мягких оттенков
     const deviation = 20;
@@ -354,7 +352,7 @@ particlesJS('particles-js', {
             }
         },
         "color": {
-            "value": ["#F0C690", "#E3BA7B", "#CC9966", "#F5C896"]
+            "value": ["#DC9E70", "#E2A77F", "#D59972", "#B57E52"]
         },
         "shape": {
             "type": "circle"
