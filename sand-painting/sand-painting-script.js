@@ -136,8 +136,6 @@ function endPosition() {
 function draw(e) {
     if (!painting) return;
 
-    context.beginPath();
-
     if (erasing) {
         // Ластик (сплошная линия)
         if (e.touches && e.touches.length > 0) {
@@ -145,6 +143,7 @@ function draw(e) {
                 const touch = e.touches[i];
                 const touchCoord = touchCoordinates[touch.identifier];
 
+                context.beginPath();
                 context.moveTo(touchCoord.lastX, touchCoord.lastY);
                 context.lineTo(touch.clientX, touch.clientY);
                 context.stroke();
@@ -155,6 +154,7 @@ function draw(e) {
                 };
             }
         } else {
+            context.beginPath();
             context.moveTo(lastX, lastY);
             context.lineTo(e.clientX, e.clientY);
             context.stroke();
