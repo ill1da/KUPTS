@@ -15,7 +15,7 @@ canvas.height = window.innerHeight;
 
 context.lineWidth = 15;
 context.lineCap = 'round';
-context.strokeStyle = '#D2B48C'; // Цвет кисти
+context.strokeStyle = '#825937';
 
 lineWidthSlider.addEventListener('input', () => {
     context.lineWidth = lineWidthSlider.value;
@@ -133,27 +133,6 @@ function endPosition() {
     touchCoordinates = {}; // Очищаем координаты для мультитача
 }
 
-function updateTouchCoordinates(touches) {
-    for (let i = 0; i < touches.length; i++) {
-        const touch = touches[i];
-        touchCoordinates[touch.identifier] = {
-            lastX: touch.clientX,
-            lastY: touch.clientY,
-        };
-    }
-}
-
-function removeTouchIdentifier(touches) {
-    const activeIdentifiers = Array.from(touches).map(touch => touch.identifier);
-    const storedIdentifiers = Object.keys(touchCoordinates);
-
-    for (const storedIdentifier of storedIdentifiers) {
-        if (!activeIdentifiers.includes(parseInt(storedIdentifier))) {
-            delete touchCoordinates[storedIdentifier];
-        }
-    }
-}
-
 let spraying = false;
 let sprayStartTime;
 
@@ -260,10 +239,12 @@ function draw(e) {
     }
 }
 
+
+
 function getRandomSandColor() {
     const baseColor = "#BC9167"; // Базовый цвет песка
 
-    // Уменьшенный диапазон отклонений для более темных оттенков
+    // Уменьшенный диапазон отклонений для более мягких оттенков
     const deviation = 20;
     const deltaR = Math.floor(Math.random() * deviation) - deviation / 2;
     const deltaG = Math.floor(Math.random() * deviation) - deviation / 2;
@@ -275,10 +256,11 @@ function getRandomSandColor() {
     const b = Math.max(0, Math.min(255, parseInt(baseColor.slice(5, 7), 16) + deltaB));
 
     // Формирование нового цвета
-    const darkSandColor = `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`;
+    const sandColor = `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`;
 
-    return darkSandColor;
+    return sandColor;
 }
+
 
 function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min);
@@ -337,18 +319,6 @@ if (isTouchDevice) {
         cursorCircle.style.display = 'block';
         updateCursorCirclePosition(e.touches[0].clientX, e.touches[0].clientY);
         makeInterfaceElementsTransparent();
-
-        if (bucketMode) {
-            const confirmModal = document.getElementById('confirm-modal');
-            confirmModal.style.display = 'block';
-        } else {
-            updateTouchCoordinates(e.touches);
-    
-            // Вызываем startPosition для каждого касания
-            for (let i = 0; i < e.touches.length; i++) {
-                startPosition(e.touches[i]);
-            }
-        }
     });
 
     canvas.addEventListener('touchend', () => {
@@ -360,15 +330,7 @@ if (isTouchDevice) {
 
 canvas.addEventListener('touchmove', (e) => {
     e.preventDefault();
-    // Вызываем draw для каждого касания
-    for (let i = 0; i < e.touches.length; i++) {
-        draw(e.touches[i]);
-    }
-    // Устанавливаем текущие координаты касаний
-    updateTouchCoordinates(e.touches);
-
-    // Удаляем информацию о тех касаниях, которые закончились
-    removeTouchIdentifier(e.touches);
+    draw(e.touches[0]);
     updateCursorCirclePosition(e.touches[0].clientX, e.touches[0].clientY);
 });
 
