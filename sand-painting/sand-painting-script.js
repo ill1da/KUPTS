@@ -167,8 +167,7 @@ function draw(e) {
         // Кисть (эффект плавного заполнения линии)
         const sprayDensity = context.lineWidth / 10;
         const sprayRadius = context.lineWidth / 2;
-        const sprayDuration = 500;
-        const sandColor = getRandomSandColor();
+        const sprayDuration = 500; // 1 секунда
 
         if (e.touches && e.touches.length > 0) {
             for (let i = 0; i < e.touches.length; i++) {
@@ -185,6 +184,7 @@ function draw(e) {
 
                         if (progress < 1) {
                             for (let j = 0; j < sprayDensity; j++) {
+                                const sandColor = getRandomSandColor();
                                 const angle = Math.random() * 2 * Math.PI;
                                 const distance = Math.random() * sprayRadius;
 
@@ -216,6 +216,7 @@ function draw(e) {
 
                     if (progress < 1) {
                         for (let i = 0; i < sprayDensity; i++) {
+                            const sandColor = getRandomSandColor();
                             const angle = Math.random() * 2 * Math.PI;
                             const distance = Math.random() * sprayRadius;
 
@@ -237,6 +238,7 @@ function draw(e) {
         }
     }
 }
+
 
 
 function getRandomSandColor() {
