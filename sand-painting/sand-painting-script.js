@@ -109,7 +109,6 @@ function startPosition(e) {
         painting = true;
 
         if (e.touches) {
-            // Если это событие мультитача, то для каждого touch хранить свои координаты
             for (let i = 0; i < e.touches.length; i++) {
                 const touch = e.touches[i];
                 touchCoordinates[touch.identifier] = {
@@ -142,7 +141,6 @@ function draw(e) {
     context.beginPath();
 
     if (erasing) {
-        // Ластик (сплошная линия)
         if (e.touches && e.touches.length > 0) {
             for (let i = 0; i < e.touches.length; i++) {
                 const touch = e.touches[i];
@@ -164,7 +162,6 @@ function draw(e) {
             [lastX, lastY] = [e.clientX, e.clientY];
         }
     } else {
-        // Кисть (эффект плавного заполнения линии)
         const sprayDensity = context.lineWidth / 10;
         const sprayRadius = context.lineWidth / 2;
         const sprayDuration = 500; // 1 секунда
@@ -177,7 +174,7 @@ function draw(e) {
                     const sprayStartTime = Date.now();
 
                     function spray() {
-                        if (!painting) return; // Проверка, активно ли рисование
+                        if (!painting) return;
 
                         const elapsedTime = Date.now() - sprayStartTime;
                         const progress = Math.min(elapsedTime / sprayDuration, 1);
@@ -209,7 +206,7 @@ function draw(e) {
                 const sprayStartTime = Date.now();
 
                 function spray() {
-                    if (!painting) return; // Проверка, активно ли рисование
+                    if (!painting) return;
 
                     const elapsedTime = Date.now() - sprayStartTime;
                     const progress = Math.min(elapsedTime / sprayDuration, 1);
@@ -238,8 +235,6 @@ function draw(e) {
         }
     }
 }
-
-
 
 function getRandomSandColor() {
     const baseColor = "#BC9167"; // Базовый цвет песка
