@@ -99,17 +99,6 @@ cancelButton.addEventListener('click', () => {
     restoreInterfaceElementsOpacity(); // Восстанавливаем непрозрачность элементов интерфейса
 });
 
-function getTouchCoordinates(touch) {
-    return {
-        lastX: touch.clientX,
-        lastY: touch.clientY,
-    };
-}
-
-function updateTouchCoordinates(touch) {
-    touchCoordinates[touch.identifier] = getTouchCoordinates(touch);
-}
-
 function startPosition(e) {
     makeInterfaceElementsTransparent();
 
@@ -120,10 +109,13 @@ function startPosition(e) {
         painting = true;
 
         if (e.touches) {
+            // If it's a multi-touch event, store coordinates for each touch
             for (let i = 0; i < e.touches.length; i++) {
                 const touch = e.touches[i];
-                touchCoordinates[touch.identifier] = getTouchCoordinates(touch);
-                touchErasing[touch.identifier] = erasing; // Новый массив для флагов стирания
+                touchCoordinates[touch.identifier] = {
+                    lastX: touch.clientX,
+                    lastY: touch.clientY,
+                };
             }
         } else {
             [lastX, lastY] = [e.clientX, e.clientY];
@@ -149,25 +141,37 @@ function draw(e) {
 
     context.beginPath();
 
-    if (e.touches && e.touches.length > 0) {
-        for (let i = 0; i < e.touches.length; i++) {
-            const touch = e.touches[i];
-            const touchCoord = touchCoordinates[touch.identifier];
+    if (erasing) {
+        // Eraser (solid line)
+        if (e.touches && e.touches.length > 0) {
+            for (let i = 0; i < e.touches.length; i++) {
+                const touch = e.touches[i];
+                const touchCoord = touchCoordinates[touch.identifier];
 
-            context.beginPath();
-
-            if (touchErasing[touch.identifier]) {
-                // Ластик
-                context.globalCompositeOperation = 'destination-out';
                 context.moveTo(touchCoord.lastX, touchCoord.lastY);
                 context.lineTo(touch.clientX, touch.clientY);
                 context.stroke();
-            } else {
-                // Кисть
-                context.globalCompositeOperation = 'source-over';
-                const sprayDensity = context.lineWidth / 3;
-                const sprayRadius = context.lineWidth / 2;
-                const sprayDuration = 160;
+
+                touchCoordinates[touch.identifier] = {
+                    lastX: touch.clientX,
+                    lastY: touch.clientY,
+                };
+            }
+        } else {
+            context.moveTo(lastX, lastY);
+            context.lineTo(e.clientX, e.clientY);
+            context.stroke();
+            [lastX, lastY] = [e.clientX, e.clientY];
+        }
+    } else {
+        // Кисть (эффект плавного заполнения линии)
+        const sprayDensity = context.lineWidth / 3;
+        const sprayRadius = context.lineWidth / 2;
+        const sprayDuration = 160; // 1 секунда
+
+        if (e.touches && e.touches.length > 0) {
+            for (let i = 0; i < e.touches.length; i++) {
+                const touch = e.touches[i];
 
                 if (painting) {
                     const sprayStartTime = Date.now();
@@ -179,6 +183,7 @@ function draw(e) {
                         const progress = Math.min(elapsedTime / sprayDuration, 1);
 
                         if (progress < 1) {
+                            // Handle brush drawing for each touch independently
                             for (let j = 0; j < sprayDensity; j++) {
                                 const sandColor = getRandomSandColor();
                                 const angle = Math.random() * 2 * Math.PI;
@@ -200,23 +205,8 @@ function draw(e) {
                     spray();
                 }
             }
-
-            touchCoordinates[touch.identifier] = getTouchCoordinates(touch);
-        }
-    } else {
-        // Код для обычного режима кисти (без мультитача)
-        context.globalCompositeOperation = erasing ? 'destination-out' : 'source-over';
-
-        if (erasing) {
-            context.moveTo(lastX, lastY);
-            context.lineTo(e.clientX, e.clientY);
-            context.stroke();
-            [lastX, lastY] = [e.clientX, e.clientY];
         } else {
-            const sprayDensity = context.lineWidth / 3;
-            const sprayRadius = context.lineWidth / 2;
-            const sprayDuration = 160;
-
+            // Handle brush drawing for single touch
             if (painting) {
                 const sprayStartTime = Date.now();
 
@@ -227,6 +217,7 @@ function draw(e) {
                     const progress = Math.min(elapsedTime / sprayDuration, 1);
 
                     if (progress < 1) {
+                        // Handle brush drawing for single touch
                         for (let i = 0; i < sprayDensity; i++) {
                             const sandColor = getRandomSandColor();
                             const angle = Math.random() * 2 * Math.PI;
@@ -248,11 +239,8 @@ function draw(e) {
                 spray();
             }
         }
-
-        [lastX, lastY] = [e.clientX, e.clientY];
     }
 }
-
 
 function getRandomSandColor() {
     const baseColor = "#8C5531"; // Базовый цвет песка
@@ -329,21 +317,14 @@ if (isTouchDevice) {
     canvas.addEventListener('touchstart', (e) => {
         e.preventDefault();
         for (let i = 0; i < e.touches.length; i++) {
-            const touch = e.touches[i];
-            startPosition(touch);
-            updateTouchCoordinates(touch);
-            makeInterfaceElementsTransparent();
+            startPosition(e.touches[i]);
         }
         cursorCircle.style.display = 'block';
+        makeInterfaceElementsTransparent();
     });
 
-    canvas.addEventListener('touchend', (e) => {
-        for (let i = 0; i < e.changedTouches.length; i++) {
-            const touch = e.changedTouches[i];
-            endPosition();
-            delete touchCoordinates[touch.identifier];
-            delete touchErasing[touch.identifier];
-        }
+    canvas.addEventListener('touchend', () => {
+        endPosition();
         cursorCircle.style.display = 'none';
         restoreInterfaceElementsOpacity();
     });
@@ -352,11 +333,9 @@ if (isTouchDevice) {
 canvas.addEventListener('touchmove', (e) => {
     e.preventDefault();
     for (let i = 0; i < e.touches.length; i++) {
-        const touch = e.touches[i];
-        draw(touch);
-        updateTouchCoordinates(touch);
+        draw(e.touches[i]);
+        updateCursorCirclePosition(e.touches[i].clientX, e.touches[i].clientY);
     }
-    updateCursorCirclePosition(e.touches[0].clientX, e.touches[0].clientY);
 });
 
 // Функция для установки активной кнопки
@@ -373,7 +352,7 @@ function setButtonInactive(button) {
 particlesJS('particles-js', {
     "particles": {
         "number": {
-            "value": window.innerWidth*120,
+            "value": window.innerWidth*100,
             "density": {
                 "enable": false,
             }
