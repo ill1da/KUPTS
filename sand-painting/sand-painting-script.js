@@ -130,7 +130,12 @@ function endPosition() {
     painting = false;
     context.beginPath();
     actions.push(context.getImageData(0, 0, canvas.width, canvas.height));
-    touchCoordinates = {}; // Очищаем координаты для мультитача
+    // Clear only the coordinates for touches that ended
+    for (const touchIdentifier in touchCoordinates) {
+        if (!Array.from(e.touches).find((touch) => touch.identifier === touchIdentifier)) {
+            delete touchCoordinates[touchIdentifier];
+        }
+    }
 }
 
 let spraying = false;
