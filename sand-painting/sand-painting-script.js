@@ -109,7 +109,7 @@ function startPosition(e) {
         painting = true;
 
         if (e.touches) {
-            // If it's a multi-touch event, store coordinates for each touch
+            // Если это событие мультитача, то для каждого touch хранить свои координаты
             for (let i = 0; i < e.touches.length; i++) {
                 const touch = e.touches[i];
                 touchCoordinates[touch.identifier] = {
@@ -125,18 +125,12 @@ function startPosition(e) {
     }
 }
 
-function endPosition(e) {
+function endPosition() {
     restoreInterfaceElementsOpacity();
     painting = false;
     context.beginPath();
     actions.push(context.getImageData(0, 0, canvas.width, canvas.height));
-
-    // Clear only the coordinates for touches that ended
-    if (e.touches) {
-        e.touches.forEach((touch) => {
-            delete touchCoordinates[touch.identifier];
-        });
-    }
+    touchCoordinates = {}; // Очищаем координаты для мультитача
 }
 
 let spraying = false;
@@ -148,22 +142,21 @@ function draw(e) {
     context.beginPath();
 
     if (erasing) {
-        // Eraser (solid line)
+        // Ластик (сплошная линия)
         if (e.touches && e.touches.length > 0) {
-            e.touches.forEach((touch) => {
+            for (let i = 0; i < e.touches.length; i++) {
+                const touch = e.touches[i];
                 const touchCoord = touchCoordinates[touch.identifier];
 
-                if (touchCoord) {
-                    context.moveTo(touchCoord.lastX, touchCoord.lastY);
-                    context.lineTo(touch.clientX, touch.clientY);
-                    context.stroke();
+                context.moveTo(touchCoord.lastX, touchCoord.lastY);
+                context.lineTo(touch.clientX, touch.clientY);
+                context.stroke();
 
-                    touchCoordinates[touch.identifier] = {
-                        lastX: touch.clientX,
-                        lastY: touch.clientY,
-                    };
-                }
-            });
+                touchCoordinates[touch.identifier] = {
+                    lastX: touch.clientX,
+                    lastY: touch.clientY,
+                };
+            }
         } else {
             context.moveTo(lastX, lastY);
             context.lineTo(e.clientX, e.clientY);
@@ -184,13 +177,12 @@ function draw(e) {
                     const sprayStartTime = Date.now();
 
                     function spray() {
-                        if (!painting) return;
+                        if (!painting) return; // Проверка, активно ли рисование
 
                         const elapsedTime = Date.now() - sprayStartTime;
                         const progress = Math.min(elapsedTime / sprayDuration, 1);
 
                         if (progress < 1) {
-                            // Handle brush drawing for each touch independently
                             for (let j = 0; j < sprayDensity; j++) {
                                 const sandColor = getRandomSandColor();
                                 const angle = Math.random() * 2 * Math.PI;
@@ -213,18 +205,16 @@ function draw(e) {
                 }
             }
         } else {
-            // Handle brush drawing for single touch
             if (painting) {
                 const sprayStartTime = Date.now();
 
                 function spray() {
-                    if (!painting) return;
+                    if (!painting) return; // Проверка, активно ли рисование
 
                     const elapsedTime = Date.now() - sprayStartTime;
                     const progress = Math.min(elapsedTime / sprayDuration, 1);
 
                     if (progress < 1) {
-                        // Handle brush drawing for single touch
                         for (let i = 0; i < sprayDensity; i++) {
                             const sandColor = getRandomSandColor();
                             const angle = Math.random() * 2 * Math.PI;
@@ -323,10 +313,9 @@ if (isTouchDevice) {
 
     canvas.addEventListener('touchstart', (e) => {
         e.preventDefault();
-        for (let i = 0; i < e.touches.length; i++) {
-            startPosition(e.touches[i]);
-        }
+        startPosition(e.touches[0]);
         cursorCircle.style.display = 'block';
+        updateCursorCirclePosition(e.touches[0].clientX, e.touches[0].clientY);
         makeInterfaceElementsTransparent();
     });
 
@@ -339,10 +328,8 @@ if (isTouchDevice) {
 
 canvas.addEventListener('touchmove', (e) => {
     e.preventDefault();
-    for (let i = 0; i < e.touches.length; i++) {
-        draw(e.touches[i]);
-        updateCursorCirclePosition(e.touches[i].clientX, e.touches[i].clientY);
-    }
+    draw(e.touches[0]);
+    updateCursorCirclePosition(e.touches[0].clientX, e.touches[0].clientY);
 });
 
 // Функция для установки активной кнопки
