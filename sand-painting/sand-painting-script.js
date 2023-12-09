@@ -155,8 +155,7 @@ function draw(e) {
     if (erasing) {
         // Eraser (solid line)
         if (e.touches && e.touches.length > 0) {
-            for (let i = 0; i < e.touches.length; i++) {
-                const touch = e.touches[i];
+            e.touches.forEach((touch) => {
                 const touchCoord = touchCoordinates[touch.identifier];
 
                 if (touchCoord) {
@@ -169,7 +168,7 @@ function draw(e) {
                         lastY: touch.clientY,
                     };
                 }
-            }
+            });
         } else {
             context.moveTo(lastX, lastY);
             context.lineTo(e.clientX, e.clientY);
