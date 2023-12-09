@@ -159,14 +159,16 @@ function draw(e) {
                 const touch = e.touches[i];
                 const touchCoord = touchCoordinates[touch.identifier];
 
-                context.moveTo(touchCoord.lastX, touchCoord.lastY);
-                context.lineTo(touch.clientX, touch.clientY);
-                context.stroke();
+                if (touchCoord) {
+                    context.moveTo(touchCoord.lastX, touchCoord.lastY);
+                    context.lineTo(touch.clientX, touch.clientY);
+                    context.stroke();
 
-                touchCoordinates[touch.identifier] = {
-                    lastX: touch.clientX,
-                    lastY: touch.clientY,
-                };
+                    touchCoordinates[touch.identifier] = {
+                        lastX: touch.clientX,
+                        lastY: touch.clientY,
+                    };
+                }
             }
         } else {
             context.moveTo(lastX, lastY);
