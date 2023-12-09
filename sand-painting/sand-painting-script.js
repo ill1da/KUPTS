@@ -125,7 +125,7 @@ function startPosition(e) {
     }
 }
 
-function endPosition() {
+function endPosition(e) {
     restoreInterfaceElementsOpacity();
     painting = false;
     context.beginPath();
@@ -133,6 +133,12 @@ function endPosition() {
     // Clear only the coordinates for touches that ended
     for (const touchIdentifier in touchCoordinates) {
         if (!Array.from(e.touches).find((touch) => touch.identifier === touchIdentifier)) {
+            delete touchCoordinates[touchIdentifier];
+        }
+    }
+    // Clear coordinates for touches that are no longer active
+    for (const touchIdentifier in touchCoordinates) {
+        if (!e.touches || !Array.from(e.touches).find((touch) => touch.identifier === touchIdentifier)) {
             delete touchCoordinates[touchIdentifier];
         }
     }
