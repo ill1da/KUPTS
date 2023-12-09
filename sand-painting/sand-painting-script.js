@@ -123,6 +123,7 @@ function startPosition(e) {
             for (let i = 0; i < e.touches.length; i++) {
                 const touch = e.touches[i];
                 touchCoordinates[touch.identifier] = getTouchCoordinates(touch);
+                touchErasing[touch.identifier] = erasing; // Новый массив для флагов стирания
             }
         } else {
             [lastX, lastY] = [e.clientX, e.clientY];
@@ -148,33 +149,25 @@ function draw(e) {
 
     context.beginPath();
 
-    if (erasing) {
-        if (e.touches && e.touches.length > 0) {
-            for (let i = 0; i < e.touches.length; i++) {
-                const touch = e.touches[i];
-                const touchCoord = touchCoordinates[touch.identifier];
+    if (e.touches && e.touches.length > 0) {
+        for (let i = 0; i < e.touches.length; i++) {
+            const touch = e.touches[i];
+            const touchCoord = touchCoordinates[touch.identifier];
 
+            context.beginPath();
+
+            if (touchErasing[touch.identifier]) {
+                // Ластик
+                context.globalCompositeOperation = 'destination-out';
                 context.moveTo(touchCoord.lastX, touchCoord.lastY);
                 context.lineTo(touch.clientX, touch.clientY);
                 context.stroke();
-
-                touchCoordinates[touch.identifier] = getTouchCoordinates(touch);
-            }
-        } else {
-            context.moveTo(lastX, lastY);
-            context.lineTo(e.clientX, e.clientY);
-            context.stroke();
-            [lastX, lastY] = [e.clientX, e.clientY];
-        }
-    } else {
-        // Brush code for multitouch
-        const sprayDensity = context.lineWidth / 3;
-        const sprayRadius = context.lineWidth / 2;
-        const sprayDuration = 160; // 1 second
-
-        if (e.touches && e.touches.length > 0) {
-            for (let i = 0; i < e.touches.length; i++) {
-                const touch = e.touches[i];
+            } else {
+                // Кисть
+                context.globalCompositeOperation = 'source-over';
+                const sprayDensity = context.lineWidth / 3;
+                const sprayRadius = context.lineWidth / 2;
+                const sprayDuration = 160;
 
                 if (painting) {
                     const sprayStartTime = Date.now();
@@ -207,8 +200,23 @@ function draw(e) {
                     spray();
                 }
             }
+
+            touchCoordinates[touch.identifier] = getTouchCoordinates(touch);
+        }
+    } else {
+        // Код для обычного режима кисти (без мультитача)
+        context.globalCompositeOperation = erasing ? 'destination-out' : 'source-over';
+
+        if (erasing) {
+            context.moveTo(lastX, lastY);
+            context.lineTo(e.clientX, e.clientY);
+            context.stroke();
+            [lastX, lastY] = [e.clientX, e.clientY];
         } else {
-            // Brush code for single touch
+            const sprayDensity = context.lineWidth / 3;
+            const sprayRadius = context.lineWidth / 2;
+            const sprayDuration = 160;
+
             if (painting) {
                 const sprayStartTime = Date.now();
 
@@ -240,8 +248,11 @@ function draw(e) {
                 spray();
             }
         }
+
+        [lastX, lastY] = [e.clientX, e.clientY];
     }
 }
+
 
 function getRandomSandColor() {
     const baseColor = "#8C5531"; // Базовый цвет песка
@@ -331,6 +342,7 @@ if (isTouchDevice) {
             const touch = e.changedTouches[i];
             endPosition();
             delete touchCoordinates[touch.identifier];
+            delete touchErasing[touch.identifier];
         }
         cursorCircle.style.display = 'none';
         restoreInterfaceElementsOpacity();
