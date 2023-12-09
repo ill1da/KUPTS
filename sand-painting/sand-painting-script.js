@@ -99,6 +99,17 @@ cancelButton.addEventListener('click', () => {
     restoreInterfaceElementsOpacity(); // Восстанавливаем непрозрачность элементов интерфейса
 });
 
+function getTouchCoordinates(touch) {
+    return {
+        lastX: touch.clientX,
+        lastY: touch.clientY,
+    };
+}
+
+function updateTouchCoordinates(touch) {
+    touchCoordinates[touch.identifier] = getTouchCoordinates(touch);
+}
+
 function startPosition(e) {
     makeInterfaceElementsTransparent();
 
@@ -109,13 +120,9 @@ function startPosition(e) {
         painting = true;
 
         if (e.touches) {
-            // Если это событие мультитача, то для каждого touch хранить свои координаты
             for (let i = 0; i < e.touches.length; i++) {
                 const touch = e.touches[i];
-                touchCoordinates[touch.identifier] = {
-                    lastX: touch.clientX,
-                    lastY: touch.clientY,
-                };
+                touchCoordinates[touch.identifier] = getTouchCoordinates(touch);
             }
         } else {
             [lastX, lastY] = [e.clientX, e.clientY];
@@ -142,7 +149,6 @@ function draw(e) {
     context.beginPath();
 
     if (erasing) {
-        // Ластик (сплошная линия)
         if (e.touches && e.touches.length > 0) {
             for (let i = 0; i < e.touches.length; i++) {
                 const touch = e.touches[i];
@@ -152,10 +158,7 @@ function draw(e) {
                 context.lineTo(touch.clientX, touch.clientY);
                 context.stroke();
 
-                touchCoordinates[touch.identifier] = {
-                    lastX: touch.clientX,
-                    lastY: touch.clientY,
-                };
+                touchCoordinates[touch.identifier] = getTouchCoordinates(touch);
             }
         } else {
             context.moveTo(lastX, lastY);
@@ -164,10 +167,10 @@ function draw(e) {
             [lastX, lastY] = [e.clientX, e.clientY];
         }
     } else {
-        // Кисть (эффект плавного заполнения линии)
-        const sprayDensity = context.lineWidth / 10;
+        // Brush code for multitouch
+        const sprayDensity = context.lineWidth / 3;
         const sprayRadius = context.lineWidth / 2;
-        const sprayDuration = 500; // 1 секунда
+        const sprayDuration = 160; // 1 second
 
         if (e.touches && e.touches.length > 0) {
             for (let i = 0; i < e.touches.length; i++) {
@@ -177,7 +180,7 @@ function draw(e) {
                     const sprayStartTime = Date.now();
 
                     function spray() {
-                        if (!painting) return; // Проверка, активно ли рисование
+                        if (!painting) return;
 
                         const elapsedTime = Date.now() - sprayStartTime;
                         const progress = Math.min(elapsedTime / sprayDuration, 1);
@@ -205,11 +208,12 @@ function draw(e) {
                 }
             }
         } else {
+            // Brush code for single touch
             if (painting) {
                 const sprayStartTime = Date.now();
 
                 function spray() {
-                    if (!painting) return; // Проверка, активно ли рисование
+                    if (!painting) return;
 
                     const elapsedTime = Date.now() - sprayStartTime;
                     const progress = Math.min(elapsedTime / sprayDuration, 1);
@@ -313,14 +317,21 @@ if (isTouchDevice) {
 
     canvas.addEventListener('touchstart', (e) => {
         e.preventDefault();
-        startPosition(e.touches[0]);
+        for (let i = 0; i < e.touches.length; i++) {
+            const touch = e.touches[i];
+            startPosition(touch);
+            updateTouchCoordinates(touch);
+            makeInterfaceElementsTransparent();
+        }
         cursorCircle.style.display = 'block';
-        updateCursorCirclePosition(e.touches[0].clientX, e.touches[0].clientY);
-        makeInterfaceElementsTransparent();
     });
 
-    canvas.addEventListener('touchend', () => {
-        endPosition();
+    canvas.addEventListener('touchend', (e) => {
+        for (let i = 0; i < e.changedTouches.length; i++) {
+            const touch = e.changedTouches[i];
+            endPosition();
+            delete touchCoordinates[touch.identifier];
+        }
         cursorCircle.style.display = 'none';
         restoreInterfaceElementsOpacity();
     });
@@ -328,7 +339,11 @@ if (isTouchDevice) {
 
 canvas.addEventListener('touchmove', (e) => {
     e.preventDefault();
-    draw(e.touches[0]);
+    for (let i = 0; i < e.touches.length; i++) {
+        const touch = e.touches[i];
+        draw(touch);
+        updateTouchCoordinates(touch);
+    }
     updateCursorCirclePosition(e.touches[0].clientX, e.touches[0].clientY);
 });
 
@@ -346,7 +361,7 @@ function setButtonInactive(button) {
 particlesJS('particles-js', {
     "particles": {
         "number": {
-            "value": 50000,
+            "value": window.innerWidth*120,
             "density": {
                 "enable": false,
             }
