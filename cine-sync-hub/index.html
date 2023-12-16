@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./cine-sync-hub-style.css">
+    <title>Cine Sync Hub</title>
+</head>
+<body>
+    <div id="app">
+        <h1>Cine Sync Hub</h1>
+        <label for="fileInput">Выберите файл для просмотра:</label>
+        <input type="file" id="fileInput" />
+        <button onclick="createRoom()">Создать комнату</button>
+        <div id="roomLink"></div>
+        <video id="videoPlayer" controls style="display:none;"></video>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.2/socket.io.js"></script>
+    <script src="./cine-sync-hub-script.js"></script>
+</body>
+</html>

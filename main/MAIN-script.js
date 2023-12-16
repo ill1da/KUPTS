@@ -1,33 +1,31 @@
-// Получаем все карточки на странице
-const cards = document.querySelectorAll('.card');
+// Анимация логотипа обложки
+document.addEventListener('DOMContentLoaded', () => {
+  let coverLogo = document.querySelector('.cover-logo');
+  coverLogo.classList.add('show');
+  setInterval(() => {
+      let coverUnderLogo = document.querySelector('.cover-under-logo');
+      coverUnderLogo.classList.add('ushow');            
+  }, 1000);
+});
 
-// Добавляем обработчики на каждую карточку
-cards.forEach(card => {
+// Смена эмоджи
+document.getElementById('emoji').addEventListener('click', () => {
+  let randomEmoji = Math.floor(Math.random() * (128586 - 128511 + 1)) + 128511;
+  document.getElementById('emoji').style.transform = 'scale(1.2) rotate(' + (Math.random() * 20 - 10) + 'deg)';
+  document.getElementById('emoji').innerHTML = `&#${randomEmoji}`; 
 
-  let defaultTransform = ''; 
+  // Сохранение выбранного эмодзи в локальное хранилище
+  localStorage.setItem('lastEmoji', `&#${randomEmoji}`);
 
-  card.addEventListener('mouseover', () => {
-    defaultTransform = card.style.transform; 
-  });
+  setTimeout(function () {
+      document.getElementById('emoji').style.transform = 'scale(1) rotate(0)';
+  }, 200);
+});
 
-  card.addEventListener('mousemove', e => {
-    
-    let rect = card.getBoundingClientRect();
-    let xCenter = rect.left + rect.width / 2;
-    let yCenter = rect.top + rect.height / 2;
-    
-    let dx = e.clientX - xCenter;
-    let dy = e.clientY - yCenter;
-    
-    let tiltX = dy / rect.height * -15;
-    let tiltY = dx / rect.width * 30;
-    
-    card.style.transform = `${defaultTransform} perspective(1000px) rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
-
-  });
-  
-  card.addEventListener('mouseout', () => {
-    card.style.transform = defaultTransform; 
-  });
-
+// Восстановление последнего выбранного эмодзи при загрузке страницы
+document.addEventListener('DOMContentLoaded', () => {
+  let lastEmoji = localStorage.getItem('lastEmoji');
+  if (lastEmoji) {
+      document.getElementById('emoji').innerHTML = lastEmoji;
+  }
 });
