@@ -11,27 +11,32 @@
 }
 
 body, html {
-    max-width: 100dvw; height: 100%;
+    max-width: 100dvw; height: fit-content;
+    
 }
 
 .content {
-    width: 100%; height: 100%;
+    width: 100%; height: fit-content;
 }
 
-/* - - Адаптивное меню - - */
+/* - ⚪ Адаптивное меню ⚪ - */
 header {
     width: 100%; height: 75px;
     background: #FFFFFF;
     position: fixed;
     top: 0; left: 0;
     border-bottom: 3px solid #17191D;
+    transition: background-color 0.3s ease;
     z-index: 99;
 }
+header.scrolled {
+    background-color: #FFA07A;
+  }
 
-/* - - Обложка - - */
+/* - 🟣 Обложка 🟣 - */
 .cover {
     position: fixed;
-    top: 0; left: 0;
+    top: 0; left: 0; bottom: 90vh;
     width: 100%; height: 90vh;
     display: flex;
     flex-direction: column;
@@ -86,7 +91,7 @@ header {
     transition: 0.2s ease-in-out;
 }
 
-/* - - О сайте - - */
+/* - 🔵 О сайте 🔵 - */
 .about-ill1da {
     width: 100%; height: min-content;
     position: relative;
@@ -96,7 +101,7 @@ header {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 3vmax 165px;
+    padding: 3vmax 6vmax;
     flex-direction: row;
     gap: 5vmax;
     z-index: 10;
@@ -109,33 +114,102 @@ header {
     align-items: flex-start;
     gap: 1vmax;
     padding-right: 5vmax;
+    padding-bottom: 0vmax;
     border-right: 0.3vmax solid #FFFFFF;
+    border-bottom: 0vmax solid #FFFFFF;
 }
-.about-ill1da-title h3 {
+.about-ill1da-title h3, .progect h3, .directions h3{
     font-size: calc(20px + 16 * (100vw - 320px) / 880);
     color: #FFFFFF;
 }
-.about-ill1da-title p {
+.about-ill1da-title p, .directions p, #progect-value {
     font-size: calc(12px + 10 * (100vw - 320px) / 880);
     text-align: justify;
+    color: #FFFFFF;
 }
 
 .about-ill1da-intelligence {
     display: flex;
-    padding: 50px 0px;
     flex-direction: column;
-    justify-content: center;
+    justify-content: space-around;
     align-items: center;
     gap: 50px;
     flex: 1 0 0;
     align-self: stretch;
 }
+.progect, .directions {
+    width: 100%; height: max-content;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 1vmax;
+}
+
+@media only screen and (max-width: 600px){
+    .about-ill1da {
+        flex-direction: column;
+    }
+    .about-ill1da-title {
+        padding-right: 0vmax;
+        padding-bottom: 5vmax;
+        border-right: 0vmax solid #FFFFFF;
+        border-bottom: 0.3vmax solid #FFFFFF;
+    }
+    .about-ill1da-intelligence {
+        flex-direction: row;
+        gap: 1vmax;
+        align-items: flex-start;
+    }
+}
+
+/* - 🟠 Промптер 🟠 - */
+.about-prompter {
+    width: auto; height: fit-content;
+    position: relative;
+    white-space: nowrap;
+    overflow-x: hidden;
+    padding: 1vmax 0;
+    top: 90vh;
+    background: #FFA07A;
+    border-top: 3px solid #17191D;
+    border-bottom: 3px solid #17191D;
+    z-index: 10;
+}
+#about-prompter-list {
+    color: #FFFFFF;
+    font-size: calc(20px + 10 * (100vw - 320px) / 880);
+    font-weight: 700;
+}
+
+/* - ⚪ Меню карточек ⚪ - */
+.card-menu {
+    width: 100%; height: 1000px;
+    background: #FFFFFF;
+    position: relative;
+    top: 90vh; left: 0;
+
+    z-index: 2;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 /* - - Ссылки - - */
 .links {
     position: relative;
-    top: 100%; left: 0;
+    top: 90vh; left: 0;
     width: 100%;
     height: max-content;
     background: #FFFFFF;

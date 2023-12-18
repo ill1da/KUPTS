@@ -29,3 +29,23 @@ document.addEventListener('DOMContentLoaded', () => {
       document.getElementById('emoji').innerHTML = lastEmoji;
   }
 });
+
+// Прокрутка about-prompter
+let aboutPrompter = document.getElementById('about-prompter-list');
+let header = document.querySelector('header');
+
+// Событие при прокрутке страницы
+window.addEventListener('scroll', function () {
+  // Получение координат верхней границы блока about-prompter
+  let aboutPrompterTop = aboutPrompter.getBoundingClientRect().top;
+
+  // Настройка стилей для блока about-prompter в зависимости от прокрутки
+  aboutPrompter.style.transform = 'translateX(' + (-aboutPrompterTop / 4) + 'px)';
+
+  // Изменение цвета header после прохождения блока about-prompter
+  if (aboutPrompterTop < 0) {
+    header.classList.add('scrolled');
+  } else {
+    header.classList.remove('scrolled');
+  }
+});
