@@ -49,7 +49,7 @@ header.scrolled {
 }
 .cover-logo {
     text-align: center;
-    font-size: calc(24px + 32 * (100vw - 320px) / 880);
+    font-size: calc(30px + 32 * (100vw - 320px) / 880);
     font-weight: 900;
     letter-spacing: 6px;
     text-transform: uppercase;
@@ -61,7 +61,7 @@ header.scrolled {
 }
 .cover-under-logo {
     text-align: center;
-	font-size: calc(12px + 8 * (100vw - 320px) / 880);
+	font-size: calc(18px + 8 * (100vw - 320px) / 880);
     font-weight: 900;
     letter-spacing: 6px;
     text-transform: uppercase;
@@ -87,7 +87,7 @@ header.scrolled {
 #emoji:hover {
     cursor: pointer;
     text-align: right;
-    font-size: calc(14px + 8 * (100vw - 320px) / 880);
+    font-size: calc(22px + 8 * (100vw - 320px) / 880);
     transition: 0.2s ease-in-out;
 }
 
@@ -187,7 +187,6 @@ header.scrolled {
     background: #FFFFFF;
     position: relative;
     top: 90vh; left: 0;
-
     z-index: 2;
 }
 
