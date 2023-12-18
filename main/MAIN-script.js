@@ -30,6 +30,10 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
+//Счетчик проектов
+let cardValue = document.querySelectorAll('.card-menu a')
+document.getElementById('progect-value').textContent = cardValue.length;
+
 // Прокрутка about-prompter
 let aboutPrompter = document.getElementById('about-prompter-list');
 let header = document.querySelector('header');
