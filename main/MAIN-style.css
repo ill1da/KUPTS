@@ -167,7 +167,7 @@ header.scrolled {
     width: auto; height: fit-content;
     position: relative;
     white-space: nowrap;
-    overflow-x: hidden;
+    overflow: hidden;
     padding: 1vmax 0;
     top: 90vh;
     background: #FFA07A;
@@ -234,9 +234,38 @@ header.scrolled {
     }
 }
 
+.card-prompter {
+    width: auto; height: fit-content;
+    position: relative;
+    white-space: nowrap;
+    overflow: hidden;
+    padding: 1vmax 0;
+    top: 90vh;
+    background: #D8FF7C;
+    border-top: 3px solid #17191D;
+    border-bottom: 3px solid #17191D;
+    z-index: 10;
+}
+.card-prompter p {
+    position: relative;
+    display:inline-block;
+    white-space: nowrap;
+    color: #4D61F4;
+    font-size: calc(20px + 10 * (100vw - 320px) / 880);
+    font-weight: 700;
+    white-space: nowrap;
+    overflow: hidden;
+    animation: marquee linear 30s infinite;
+}
 
-
-
+@keyframes marquee {
+    0% {
+        transform: translateX(0%);
+    }
+    100% {
+        transform: translateX(-100%);
+    }
+}
 
 
 
@@ -287,3 +316,91 @@ header.scrolled {
 
 
 
+/* - - - - - Карточки - - - - -*/
+#Tic-Tac-Toe {
+    background-image: url(./MAIN-source/card/Tic-Tac-Toe-card.svg);
+    background-color: #1844DC;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+#Tic-Tac-Toe:hover {
+    background-color: #3B60E1;
+}
+
+#Life-checklist {
+    background: url(./MAIN-source/card/Life-checklist-card.svg);
+    background-color: #F584B4;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+#Life-checklist:hover {
+    background-color: #F696BF;
+}
+
+#Chronometer {
+    background: url(./MAIN-source/card/Chronometer-card.svg);
+    background-color: #00B94B;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+#Chronometer:hover {
+    background-color: #26C466;
+}
+
+#Swipe-facts {
+    background: url(./MAIN-source/card/Swipe-facts-card.svg);
+    background-color: #FFCC00;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+#Swipe-facts:hover {
+    background-color: #FFD426;
+}
+
+#Press-the-button {
+    background: url(./MAIN-source/card/Press-the-button-card.svg);
+    background-color: #EF552B;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+#Press-the-button:hover {
+    background-color: #F16E4B;
+}
+
+#Percentage {
+    background: url(./MAIN-source/card/Percentage-card.svg);
+    background-color: #3399FF;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+#Percentage:hover {
+    background-color: #52A8FF;
+}
+
+#Color-conquest {
+    background-image: url(./MAIN-source/card/Color-conquest-card.svg);
+    background-color: #8080FF;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+#Color-conquest:hover {
+    background-color: #9393FF;
+}
+
+#Sand-painting {
+    background: url(./MAIN-source/card/Sand-painting-card.svg);
+    background-color: #D9A366;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+#Sand-painting:hover {
+    background-color: #DFB17D;
+}
