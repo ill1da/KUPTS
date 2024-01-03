@@ -6,75 +6,125 @@
 *{
     margin: 0; padding: 0;
     font-family: Montserrat;
+    color: #131110;
+    text-transform: uppercase;
     box-sizing: border-box;
-    cursor: default;
 }
 
-body, html {
-    max-width: 100dvw; height: fit-content;
-    
+html, body {
+    width: 100%; height: 100%;
 }
 
-.content {
-    width: 100%; height: fit-content;
-}
-
-/* - ⚪ Адаптивное меню ⚪ - */
-header {
-    width: 100%; height: 75px;
-    background: #FFFFFF;
-    position: fixed;
-    top: 0; left: 0;
-    border-bottom: 3px solid #17191D;
-    transition: background-color 0.3s ease;
-    z-index: 99;
-}
-header.scrolled {
-    background-color: #FFA07A;
-  }
-
-/* - 🟣 Обложка 🟣 - */
-.cover {
-    position: fixed;
-    top: 0; left: 0; bottom: 90vh;
-    width: 100%; height: 90vh;
+.container {
     display: flex;
+    width: 100%;
+    min-height: 100%;    height: max-content;
+    padding: 0 1vmax 1vmax 1vmax;
     flex-direction: column;
-    justify-content: center; align-items: center;
-    background: #9370DB;
-    color: #FFD700;
-    gap: 10px;
-    transition: opacity 1s ease-in-out;
-    z-index: 0;
+    align-items: center;
+    gap: 2vmax;
+    background: #131110;
 }
-.cover-logo {
+
+/* - ⬜ Хедер ⬜ - */
+header {
+    position: sticky;
+    top: 0; left: 0;
+    width: 100%; height: 4vmax;
+    border-radius: 0px 0px 2vmin 2vmin;
+    outline: 1vmin solid #131110;
+    background: #E1E3E1;
+    z-index: 999;
+}
+
+/* - ⬜ Обложка ⬜ - */
+#cover {
+    display: flex;
+    width: 100%;
+    padding: 5vmax;
+    flex-direction: column;
+    align-items: center;
+    gap: 50px;
+    border-radius: 2vmin;
+    background: #E1E3E1;
+}
+/* - Кнопка "Идея" - */
+.cover-idea {
+    display: flex;
+    width: 100%; height: max-content;
+    justify-content: flex-end;
+}
+.idea-button {
+    position: relative;
+    display: flex;
+    width: max-content;
+    height: max-content;
+    justify-content: center;
+    align-items: center;
+    border-radius: 100%;
+    background-color: #131110;
+    user-select: none;
+    cursor: pointer;
+    aspect-ratio: 1 / 1;
+    padding: 1vmax;
+    transition: 0.2s ease-in-out;
+}
+.idea-button::before {
+    content: "";
+    position: absolute;
+    width: 100%; height: 100%;
+    top: 0; left: 0;
+    background-image: url(./MAIN-source/img/idea-star.svg);
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    animation: rotateBackground 10s linear infinite;
+}
+.idea-button:hover {
+    background-color: #13111000;
+    transition: 0.2s ease-in-out;
+}
+@keyframes rotateBackground {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+}
+.idea-button p {
+    transform: rotate(6deg);
+    color: #FFF;
     text-align: center;
-    font-size: calc(30px + 32 * (100vw - 320px) / 880);
-    font-weight: 900;
-    letter-spacing: 6px;
+    font-size: 1vw;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
     text-transform: uppercase;
-    opacity: 0;
-    transition: opacity 1s ease;
 }
-.cover-logo.show {
-    opacity: 1;
+/* - Логотипа и текст на сайте - */
+.cover-text {
+    display: flex;
+    height: fit-content;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 50px;
+    align-self: stretch;
+    margin-top: 8vmax;
+    text-wrap: nowrap;
 }
-.cover-under-logo {
-    text-align: center;
-	font-size: calc(18px + 8 * (100vw - 320px) / 880);
+.text-logo h1 {
     font-weight: 900;
-    letter-spacing: 6px;
-    text-transform: uppercase;
-    opacity: 0;
-    transition: opacity 1.6s ease;
+    font-size: 6.2vw;
 }
-.cover-under-logo.ushow {
-    opacity: 1;
+.text-logo h3, .cover-text h4 {
+    font-weight: 700;
+    font-size: 1.6vw;
 }
+
 /* - - Эмоджи - - */
 #emoji {
     position: absolute;
-    z-index: 99;
     color: #555;
 	-webkit-touch-callout: none;
 	-webkit-user-select: none;
@@ -87,320 +137,139 @@ header.scrolled {
 #emoji:hover {
     cursor: pointer;
     text-align: right;
-    font-size: calc(22px + 8 * (100vw - 320px) / 880);
+    font-size: 1.7vw;
     transition: 0.2s ease-in-out;
 }
 
-/* - 🔵 О сайте 🔵 - */
-.about-ill1da {
-    width: 100%; height: min-content;
-    position: relative;
-    top: 90vh; left: 0;
-    background: #4D61F4;
-    border-top: 3px solid #17191D;
+/* - Кнопки-ссылки - */
+.cover-button {
     display: flex;
+    width: 100%; height: 100%;
     align-items: center;
-    justify-content: center;
-    padding: 3vmax 6vmax;
-    flex-direction: row;
-    gap: 5vmax;
-    z-index: 10;
-}
-.about-ill1da-title {
-    width: 100%; height: fit-content;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: flex-start;
-    gap: 1vmax;
-    padding-right: 5vmax;
-    padding-bottom: 0vmax;
-    border-right: 0.3vmax solid #FFFFFF;
-    border-bottom: 0vmax solid #FFFFFF;
-}
-.about-ill1da-title h3, .progect h3, .directions h3{
-    font-size: calc(20px + 16 * (100vw - 320px) / 880);
-    color: #FFFFFF;
-}
-.about-ill1da-title p, .directions p, #progect-value {
-    font-size: calc(12px + 10 * (100vw - 320px) / 880);
-    text-align: justify;
-    color: #FFFFFF;
-}
-
-.about-ill1da-intelligence {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    align-items: center;
-    gap: 50px;
-    flex: 1 0 0;
     align-self: stretch;
+    gap: 2vmax;
 }
-.progect, .directions {
-    width: 100%; height: max-content;
+.about-me-link {
     display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    gap: 1vmax;
-}
-
-@media only screen and (max-width: 600px){
-    .about-ill1da {
-        flex-direction: column;
-    }
-    .about-ill1da-title {
-        padding-right: 0vmax;
-        padding-bottom: 5vmax;
-        border-right: 0vmax solid #FFFFFF;
-        border-bottom: 0.3vmax solid #FFFFFF;
-    }
-    .about-ill1da-intelligence {
-        flex-direction: row;
-        gap: 1vmax;
-        align-items: flex-start;
-    }
-}
-
-/* - 🟠 Промптер 🟠 - */
-.about-prompter {
-    width: auto; height: fit-content;
-    position: relative;
-    white-space: nowrap;
-    overflow: hidden;
-    padding: 1vmax 0;
-    top: 90vh;
-    background: #FFA07A;
-    border-top: 3px solid #17191D;
-    border-bottom: 3px solid #17191D;
-    z-index: 10;
-}
-#about-prompter-list {
-    color: #FFFFFF;
-    font-size: calc(20px + 10 * (100vw - 320px) / 880);
-    font-weight: 700;
-}
-
-/* - ⚪ Меню карточек ⚪ - */
-.card-menu {
-    width: 100%; height: max-content;
-    top: 90vh; left: 0;
-    position: relative;
-    display: flex;
-    flex-direction: column;
+    padding: 1vmin 2vmax;
     align-items: center;
-    background: #FFFFFF;
-    padding-bottom: 5vmax;
-    z-index: 2;
-}
-.card-menu h2 {
-    width: fit-content; height: fit-content;
-    color: #17191D;
-    background: linear-gradient(180deg, #FFFFFF00 60%, #D0EEF9 60%);
-    font-size: calc(20px + 16 * (100vw - 320px) / 880);
+    align-self: stretch;
+    border-radius: 2vmin;
+    border: none;
+    background: #131110;
+    color: #E1E3E1;
+    font-size: 1.6vw;
+    font-style: normal;
+    text-decoration: none;
+    font-weight: 700;
+    line-height: normal;
     text-transform: uppercase;
-    margin: 5vmax 0;
+    transition: 0.3s ease-in-out;
 }
-.card-project {
+.about-me-link:hover {
+    background: #403F40;
+    transition: 0.3s ease-in-out;
+    cursor: pointer;
+}
+
+/* - 🟢 Разноцветный блок 🟢 - */
+.color-shape {
+    width: 100%; height: 20vh;
+    border-radius: 2vmin;
+    background: radial-gradient(100% 150% at 20% 70%, #F1D174 0%, #A0D1D4 52.5%, #E2EABF 100%);
+}
+
+/* - 🟨 Промптер 🟨 - */
+.prompter {
     width: 100%; height: fit-content;
-    display: flex;
-    flex-wrap: wrap;
-    padding: 0 5vmax;
-    justify-content: space-around;
-}
-
-.card-project a {
-    width: calc((346.66/260) * 15%);
-    aspect-ratio: 75/100;
-    border-radius: 1vmax;
-    margin: 2.5vmax 0.5vmax;
-    background: #F5F5F5;
-    box-shadow: 0px 0.6vmax 0px 0px #17191D;
-    border: 0.3vmax solid #17191D;
-    transition: 0.2s;
-    justify-self: center;
-}
-
-@media (max-width: 768px) {
-    .card-project a {
-        width: calc((346.66/260) * 35%);
-        padding-bottom: calc((260/346.66) * 90%);
-    }
-}
-  
-@media (max-width: 480px) {
-    .card-project a {
-        width: 70%; height: 100%;
-    }
-}
-
-.card-prompter {
-    width: auto; height: fit-content;
-    position: relative;
     white-space: nowrap;
     overflow: hidden;
     padding: 1vmax 0;
-    top: 90vh;
-    background: #D8FF7C;
-    border-top: 3px solid #17191D;
-    border-bottom: 3px solid #17191D;
-    z-index: 10;
+    border-radius: 2vmin;
+    background: #F7C65D;
 }
-.card-prompter p {
-    position: relative;
-    display:inline-block;
-    white-space: nowrap;
-    color: #4D61F4;
-    font-size: calc(20px + 10 * (100vw - 320px) / 880);
-    font-weight: 700;
-    white-space: nowrap;
-    overflow: hidden;
-    animation: marquee linear 30s infinite;
+#prompter-list {
+    color: #131110;
+    font-size: 1.6vw;
+    font-weight: 800;
 }
 
-@keyframes marquee {
-    0% {
-        transform: translateX(0%);
-    }
-    100% {
-        transform: translateX(-100%);
-    }
+/* - ⬛ Проекты ⬛ - */
+.projects {
+    width: 100%; height: max-content;
+    display: grid;
+    gap: 2vmax;
+    grid-template-columns : repeat(4, 1fr);
+    grid-template-rows: auto;
+    /* ! */
+    grid-template-areas:
+    "popular popular value go-up"
+    "popular popular value subscribe"
+    "Color-conquest Percentage Life-checklist subscribe"
 }
 
-
-
-
-
-
-
-
-
-/* - - Ссылки - - */
-.links {
-    position: relative;
-    top: 90vh; left: 0;
-    width: 100%;
-    height: max-content;
-    background: #FFFFFF;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    gap: 1vmax;
-    padding: 1vmax;
-    border-top: 3px solid #17191D;
-    border-bottom: 3px solid #17191D;
-    z-index: 10;
-}
-.links-card {
-    height: 100%; max-width: 350px;
+.card {
+    width: 100%; height: 100%;
     flex: 1 0 0;
-    aspect-ratio: 1 / 1;
+    aspect-ratio: 340 / 290;
     align-self: stretch;
+    border-radius: 2vmin;
 }
-#send-idea {
-    background: #17191D;
+#popular-project {
+    grid-area: popular;
+    width: 100%; height: 100%;
+    background: #FFA07A;
+    flex: 1 0 0;
+    aspect-ratio: 700 / 400;
+    align-self: stretch;
+    border-radius: 2vmin;
 }
-#about-me {
-    background: #17191D;
+#projects-value {
+    grid-area: value;
+    width: 100%; height: 100%;
+    background: #FFDAFF;
+    flex: 1 0 0;
+    aspect-ratio: 340 / 400;
+    align-self: stretch;
+    border-radius: 2vmin;
 }
-#support-me {
-    background: #17191D;
+#go-up {
+    grid-area: go-up;
+    width: 100%; height: 100%;
+    background: #BEEE3A;
+    flex: 1 0 0;
+    aspect-ratio: 340 / 200;
+    align-self: stretch;
+    border-radius: 2vmin;
+    cursor: pointer;
 }
-
-
-
-
-
-
-
-
-
-/* - - - - - Карточки - - - - -*/
-#Tic-Tac-Toe {
-    background-image: url(./MAIN-source/card/Tic-Tac-Toe-card.svg);
-    background-color: #1844DC;
-    background-position: center center;
-    background-repeat: no-repeat;
-    background-size: cover;
+#subscribe {
+    grid-area: subscribe;
+    width: 100%; height: 100%;
+    background: #2C28E4;
+    flex: 1 0 0;
+    aspect-ratio: 340 / 490;
+    align-self: stretch;
+    border-radius: 2vmin;
 }
-#Tic-Tac-Toe:hover {
-    background-color: #3B60E1;
-}
-
-#Life-checklist {
-    background: url(./MAIN-source/card/Life-checklist-card.svg);
-    background-color: #F584B4;
-    background-position: center center;
-    background-repeat: no-repeat;
-    background-size: cover;
-}
-#Life-checklist:hover {
-    background-color: #F696BF;
-}
-
-#Chronometer {
-    background: url(./MAIN-source/card/Chronometer-card.svg);
-    background-color: #00B94B;
-    background-position: center center;
-    background-repeat: no-repeat;
-    background-size: cover;
-}
-#Chronometer:hover {
-    background-color: #26C466;
-}
-
-#Swipe-facts {
-    background: url(./MAIN-source/card/Swipe-facts-card.svg);
-    background-color: #FFCC00;
-    background-position: center center;
-    background-repeat: no-repeat;
-    background-size: cover;
-}
-#Swipe-facts:hover {
-    background-color: #FFD426;
-}
-
-#Press-the-button {
-    background: url(./MAIN-source/card/Press-the-button-card.svg);
-    background-color: #EF552B;
-    background-position: center center;
-    background-repeat: no-repeat;
-    background-size: cover;
-}
-#Press-the-button:hover {
-    background-color: #F16E4B;
-}
-
-#Percentage {
-    background: url(./MAIN-source/card/Percentage-card.svg);
-    background-color: #3399FF;
-    background-position: center center;
-    background-repeat: no-repeat;
-    background-size: cover;
-}
-#Percentage:hover {
-    background-color: #52A8FF;
-}
-
 #Color-conquest {
-    background-image: url(./MAIN-source/card/Color-conquest-card.svg);
-    background-color: #8080FF;
-    background-position: center center;
-    background-repeat: no-repeat;
-    background-size: cover;
+    background: #CC88FF;
 }
-#Color-conquest:hover {
-    background-color: #9393FF;
+#Percentage {
+    background: #A6D8E2;
 }
-
+#Swipe-facts {
+    background: #FFEE4F;
+}
+#Chronometer {
+    background: #9ACD32;
+}
+#Life-checklist {
+    background: #F2B5FC;
+}
+#Tic-Tac-Toe {
+    background: #26B8B5;
+}
 #Sand-painting {
-    background: url(./MAIN-source/card/Sand-painting-card.svg);
-    background-color: #D9A366;
-    background-position: center center;
-    background-repeat: no-repeat;
-    background-size: cover;
-}
-#Sand-painting:hover {
-    background-color: #DFB17D;
+    background: #D9A366;
 }

@@ -1,24 +1,15 @@
-// Анимация логотипа обложки
-document.addEventListener('DOMContentLoaded', () => {
-  let coverLogo = document.querySelector('.cover-logo');
-  coverLogo.classList.add('show');
-  setInterval(() => {
-      let coverUnderLogo = document.querySelector('.cover-under-logo');
-      coverUnderLogo.classList.add('ushow');            
-  }, 1000);
-});
-
-// Смена эмоджи
-document.getElementById('emoji').addEventListener('click', () => {
+// 🟧 Смена эмоджи
+let emoji = document.getElementById('emoji');
+emoji.addEventListener('click', () => {
   let randomEmoji = Math.floor(Math.random() * (128586 - 128511 + 1)) + 128511;
-  document.getElementById('emoji').style.transform = 'scale(1.2) rotate(' + (Math.random() * 20 - 10) + 'deg)';
-  document.getElementById('emoji').innerHTML = `&#${randomEmoji}`; 
+  emoji.style.transform = 'scale(1.2) rotate(' + (Math.random() * 20 - 10) + 'deg)';
+  emoji.innerHTML = `&#${randomEmoji}`; 
 
   // Сохранение выбранного эмодзи в локальное хранилище
   localStorage.setItem('lastEmoji', `&#${randomEmoji}`);
 
   setTimeout(function () {
-      document.getElementById('emoji').style.transform = 'scale(1) rotate(0)';
+    emoji.style.transform = 'scale(1) rotate(0)';
   }, 200);
 });
 
@@ -26,69 +17,32 @@ document.getElementById('emoji').addEventListener('click', () => {
 document.addEventListener('DOMContentLoaded', () => {
   let lastEmoji = localStorage.getItem('lastEmoji');
   if (lastEmoji) {
-      document.getElementById('emoji').innerHTML = lastEmoji;
+    emoji.innerHTML = lastEmoji;
   }
 });
 
-//Счетчик проектов
-let cardValue = document.querySelectorAll('.card-menu a')
-document.getElementById('progect-value').textContent = cardValue.length;
-
-// Прокрутка about-prompter
-let aboutPrompter = document.getElementById('about-prompter-list');
-let header = document.querySelector('header');
+// 🟨 Прокрутка prompter
+let Prompter = document.getElementById('prompter-list');
 
 // Событие при прокрутке страницы
 window.addEventListener('scroll', function () {
-  // Получение координат верхней границы блока about-prompter
-  let aboutPrompterTop = aboutPrompter.getBoundingClientRect().top;
+  // Получение координат верхней границы блока prompter
+  let PrompterTop = Prompter.getBoundingClientRect().top;
 
-  // Настройка стилей для блока about-prompter в зависимости от прокрутки
-  aboutPrompter.style.transform = 'translateX(' + (-aboutPrompterTop / 4) + 'px)';
-
-  // Изменение цвета header после прохождения блока about-prompter
-  if (aboutPrompterTop < 0) {
-    header.classList.add('scrolled');
-  } else {
-    header.classList.remove('scrolled');
-  }
+  // Настройка стилей для блока prompter в зависимости от прокрутки
+  Prompter.style.transform = 'translateX(' + (-PrompterTop / 4) + 'px)';
 });
 
-// Получаем все карточки на странице
-const cards = document.querySelectorAll('.card');
+// // 🟪 Счетчик проектов
+// let cardValue = document.querySelectorAll('.card')
+// document.getElementById('progect-value').textContent = cardValue.length;
 
-// Добавляем обработчики на каждую карточку
-cards.forEach(card => {
-
-  let defaultTransform = ''; 
-
-  card.addEventListener('mouseover', () => {
-    defaultTransform = card.style.transform; 
-    defaultTransform = card.style.transform = 'scale(1.1)';
+// 🟩 Кнопка "наверх"
+let goUpButton = document.getElementById('go-up');
+let coverSection = document.getElementById('cover');
+goUpButton.addEventListener('click', () => {
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth'
   });
-
-  card.addEventListener('mousemove', e => {
-    
-    let rect = card.getBoundingClientRect();
-    let xCenter = rect.left + rect.width / 2;
-    let yCenter = rect.top + rect.height / 2;
-    
-    let dx = e.clientX - xCenter;
-    let dy = e.clientY - yCenter;
-    
-    let tiltX = dy / rect.height * -15;
-    let tiltY = dx / rect.width * 30;
-    
-    card.style.transform = `${defaultTransform} perspective(1000px) rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
-  });
-  
-  card.addEventListener('mouseout', () => {
-    card.style.transform = defaultTransform; 
-    defaultTransform = card.style.transform = 'scale(1)'
-  });
-
 });
-
-
-
-

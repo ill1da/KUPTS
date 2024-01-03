@@ -7,85 +7,59 @@
     <link rel="stylesheet" href="./main/MAIN-style.css">
 </head>
 <body>
-<div class="content">
+<div class="container">
     <!--Хедер-->
-    <header>
-
-    </header>
-
+    <header></header>
     <!--Обложка-->
-    <div class="cover">
-        <h1 class="cover-logo">ILL1DA.SPACE</h1>
-        <h2 class="cover-under-logo">я все еще учусь <span id="emoji">&#128512</span></h2>
-    </div>
-
-    <!--О сайте-->
-    <div class="about-ill1da">
-        <div class="about-ill1da-title">
-            <h3>О сайте</h3>
-            <p>
-                Добро пожаловать в мой креативный уголок в сети! Я создаю уникальные веб-сайты с особым вниманием к дизайну и функциональности.<br>
-                Каждый мой проект - результат вдумчивого проектирования и тщательной работы. Готов воплотить ваши идеи в онлайн-пространстве, отражающем ваш стиль и привлекающем внимание аудитории. Давайте создадим вместе уникальный веб-опыт. Свяжитесь со мной, и давайте превратим ваши креативные концепции в реальность!
-            </p>
+    <div id="cover">
+        <div class="cover-idea">
+            <div class="idea-button"><p>ИДЕЯ</p></div>
         </div>
 
-        <div class="about-ill1da-intelligence">
-            <div class="progect">
-                <h3>Проекты</h3>
-                <span id="progect-value">0</span>
+        <div class="cover-text">
+            <div class="text-logo">
+                <h1>ill1da.space</h1>
+                <h3>За гранью бесполезности</h3>
             </div>
-            <div class="directions">
-                <h3>Направления</h3>
-                <p>Веселье,<br> Креативность,<br> Необычность</p>
-            </div>
+                <h4>Здесь еще нет текста...<br>Как только идея поселится в<br>моей голове, она сразу же<br>заселится здесь! <span id="emoji">&#128517</span></h4>
         </div>
 
-    </div>
-    
-    <!--Промптер-->
-    <div class="about-prompter">
-        <p id="about-prompter-list">ILL1DA.SPACE ✱ ILL1DA.SPACE ✱ ILL1DA.SPACE ✱ ILL1DA.SPACE ✱ ILL1DA.SPACE ✱ ILL1DA.SPACE ✱ ILL1DA.SPACE ✱ ILL1DA.SPACE ✱ ILL1DA.SPACE ✱ ILL1DA.SPACE ✱ ILL1DA.SPACE ✱ ILL1DA.SPACE ✱ ILL1DA.SPACE ✱ ILL1DA.SPACE ✱ ILL1DA.SPACE ✱ ILL1DA.SPACE ✱ ILL1DA.SPACE ✱ ILL1DA.SPACE ✱ ILL1DA.SPACE ✱ ILL1DA.SPACE ✱ ILL1DA.SPACE ✱ ILL1DA.SPACE ✱ ILL1DA.SPACE ✱ ILL1DA.SPACE ✱ ILL1DA.SPACE</p>
+        <div class="cover-button">
+            <a class="about-me-link" href="./about-me/index.html">Обо мне</a>
+        </div>
     </div>
 
-    <!--Карточки сайтов-->
-    <div class="card-menu">
-        <h2>Проекты</h2>
-        <div class="card-project">
-            <a href="./color-conquest/index.html" id="Color-conquest" class="card"></a>
-            <a href="./press-the-button/index.html" id="Press-the-button" class="card"></a>
-            <a href="./percentage/index.html" id="Percentage" class="card"></a>
-            <a href="./life-checklist/index.html" id="Life-checklist" class="card"></a>
-            <a href="./swipe-facts/index.html" id="Swipe-facts" class="card"></a>
-            <a href="./chronometer/index.html" id="Chronometer" class="card"></a>
-            <a href="./tic-tac-toe/index.html" id="Tic-Tac-Toe" class="card"></a>
-        </div>
+    <!--Разноцветная штука-->
+    <div class="color-shape">
+        
     </div>
 
     <!--Промптер-->
-    <div class="card-prompter">
-        <p>дальше - больше ✱ ILL1DA.SPACE ✱ </p>
-        <p>дальше - больше ✱ ILL1DA.SPACE ✱ </p>
-        <p>дальше - больше ✱ ILL1DA.SPACE ✱ </p>
-        <p>дальше - больше ✱ ILL1DA.SPACE ✱ </p>
-        <p>дальше - больше ✱ ILL1DA.SPACE ✱ </p>
-        <p>дальше - больше ✱ ILL1DA.SPACE ✱ </p>
+    <div class="prompter">
+        <p id="prompter-list">ILL1DA.SPACE ✱ ILL1DA.SPACE ✱ ILL1DA.SPACE ✱ ILL1DA.SPACE ✱ ILL1DA.SPACE ✱ ILL1DA.SPACE ✱ ILL1DA.SPACE ✱ ILL1DA.SPACE ✱ ILL1DA.SPACE ✱ ILL1DA.SPACE ✱ ILL1DA.SPACE ✱ ILL1DA.SPACE ✱ ILL1DA.SPACE ✱ ILL1DA.SPACE ✱ ILL1DA.SPACE ✱ ILL1DA.SPACE ✱ ILL1DA.SPACE ✱ ILL1DA.SPACE ✱ ILL1DA.SPACE ✱ ILL1DA.SPACE ✱ ILL1DA.SPACE ✱ ILL1DA.SPACE ✱ ILL1DA.SPACE ✱ ILL1DA.SPACE ✱ ILL1DA.SPACE</p>
     </div>
 
-    <!--Ссылки-->
-    <div class="links" id="links">
-        <div id="send-idea" class="links-card">
+    <!--Проекты-->
+    <div class="projects">
+        <div id="popular-project"></div>
+        <div id="projects-value"></div>
+        <div id="go-up"></div>
+        <div id="subscribe"></div>
+        <!--Карточки проектов-->
+        <div id="Color-conquest" class="card"></div>
+        <div id="Percentage" class="card"></div>
+        <div id="Swipe-facts" class="card"></div>
+        <div id="Chronometer" class="card"></div>
+        <div id="Life-checklist" class="card"></div>       
+        <div id="Tic-Tac-Toe" class="card"></div>
+        <div id="Sand-painting" class="card"></div>
 
-        </div>
-        <div id="about-me" class="links-card">
-
-        </div>
-        <div id="support-me" class="links-card">
-            
-        </div>
     </div>
 
-
-
+    <!--Промптер-->
+    <div class="prompter">
+        <p id="prompter-list">ILL1DA.SPACE ✱ ILL1DA.SPACE ✱ ILL1DA.SPACE ✱ ILL1DA.SPACE ✱ ILL1DA.SPACE ✱ ILL1DA.SPACE ✱ ILL1DA.SPACE ✱ ILL1DA.SPACE ✱ ILL1DA.SPACE ✱ ILL1DA.SPACE ✱ ILL1DA.SPACE ✱ ILL1DA.SPACE ✱ ILL1DA.SPACE ✱ ILL1DA.SPACE ✱ ILL1DA.SPACE ✱ ILL1DA.SPACE ✱ ILL1DA.SPACE ✱ ILL1DA.SPACE ✱ ILL1DA.SPACE ✱ ILL1DA.SPACE ✱ ILL1DA.SPACE ✱ ILL1DA.SPACE ✱ ILL1DA.SPACE ✱ ILL1DA.SPACE ✱ ILL1DA.SPACE</p>
+    </div>
 
 </div>
 </body>
