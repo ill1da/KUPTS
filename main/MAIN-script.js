@@ -1,3 +1,36 @@
+// 💜 Вернитесь 😭
+let originalTitle = document.title;
+let originalFavicon = "./main/MAIN-source/logo/fav-logo.ico";
+// Врменной интервал
+let timeoutInterval = 2 * 60 * 1000 + 30 * 1000;
+
+// Обработка изменения названия вкладки 
+document.addEventListener('visibilitychange', () => {
+  if(document.hidden) {
+    // Пользователь ушел со вкладки
+    setTimeout(() => {
+      if(document.hidden) {
+        changeTabInfo("./main/MAIN-source/logo/💜.ico", "Вернитесь 😭");
+      }
+    }, timeoutInterval);
+  } else {
+    // Пользователь вернулся на вкладку
+    changeTabInfo(originalFavicon, originalTitle);
+  }
+});
+
+// Обработчик события фокуса на вкладке
+window.addEventListener("focus", function () {
+  // Пользователь активен на вкладке
+  changeTabInfo(originalFavicon, originalTitle);
+});
+
+// Функция для изменения логотипа и названия вкладки
+function changeTabInfo(favicon, title) {
+  document.getElementById("favicon").href = favicon;
+  document.title = title;
+}
+
 // 🟧 Смена эмоджи
 let emoji = document.getElementById('emoji');
 emoji.addEventListener('click', () => {
@@ -33,9 +66,9 @@ window.addEventListener('scroll', function () {
   Prompter.style.transform = 'translateX(' + (-PrompterTop / 4) + 'px)';
 });
 
-// // 🟪 Счетчик проектов
-// let cardValue = document.querySelectorAll('.card')
-// document.getElementById('progect-value').textContent = cardValue.length;
+// 🟪 Счетчик проектов
+let cardValue = document.querySelectorAll('.card')
+document.getElementById('progect-value').textContent = cardValue.length;
 
 // 🟩 Кнопка "наверх"
 let goUpButton = document.getElementById('go-up');

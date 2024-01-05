@@ -9,6 +9,7 @@
     color: #131110;
     text-transform: uppercase;
     box-sizing: border-box;
+    user-select: none;
 }
 
 html, body {
@@ -122,7 +123,7 @@ header {
     font-size: 1.6vw;
 }
 
-/* - - Эмоджи - - */
+/* - - Эмодзи - - */
 #emoji {
     position: absolute;
     color: #555;
@@ -190,7 +191,7 @@ header {
 }
 #prompter-list {
     color: #131110;
-    font-size: 1.6vw;
+    font-size: 2vw;
     font-weight: 800;
 }
 
@@ -224,15 +225,32 @@ header {
     align-self: stretch;
     border-radius: 2vmin;
 }
-#projects-value {
+#projects-num {
     grid-area: value;
     width: 100%; height: 100%;
     background: #FFDAFF;
     flex: 1 0 0;
     aspect-ratio: 340 / 400;
     align-self: stretch;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     border-radius: 2vmin;
+    padding: 2vmax;
 }
+#projects-num h3 {
+    color: #716170;
+    font-size: 2vw;
+    font-weight: 800;
+}
+#progect-value {
+    color: #716170;
+    font-size: 10vw;
+    font-weight: 800;
+    line-height: 80%;
+    text-align: right;
+}
+
 #go-up {
     grid-area: go-up;
     width: 100%; height: 100%;
@@ -240,8 +258,24 @@ header {
     flex: 1 0 0;
     aspect-ratio: 340 / 200;
     align-self: stretch;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     border-radius: 2vmin;
+    padding: 2vmax;
     cursor: pointer;
+}
+#go-up h3 {
+    color: #353D18;
+    font-size: 2vw;
+    font-weight: 800;
+}
+#go-up h4 {
+    text-align: right;
+    line-height: 80%;
+    color: #353D18;
+    font-size: 2vw;
+    font-weight: 800;
 }
 #subscribe {
     grid-area: subscribe;
