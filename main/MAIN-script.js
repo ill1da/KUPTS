@@ -2,7 +2,7 @@
 let originalTitle = document.title;
 let originalFavicon = "./main/MAIN-source/logo/fav-logo.ico";
 // Врменной интервал
-let timeoutInterval = 2 * 60 * 1000 + 30 * 1000;
+let timeoutInterval = 10 * 60 * 1000;
 
 // Обработка изменения названия вкладки 
 document.addEventListener('visibilitychange', () => {

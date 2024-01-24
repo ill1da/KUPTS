@@ -1,0 +1,12 @@
+body {
+    margin: 0;
+    overflow: hidden;
+  }
+  
+  .lawn {
+    width: 100vw;
+    height: 100vh;
+    background-color: #7cc76f; /* Цвет травы */
+    position: relative;
+  }
+  
