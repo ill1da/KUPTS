@@ -1,5 +1,4 @@
-// Без строки import * as THREE from 'https://threejs.org/build/three.module.js';
-
+// Создаем сцену, камеру и рендерер
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
 camera.position.set(0, 10, 0);
@@ -11,7 +10,10 @@ document.body.appendChild(renderer.domElement);
 
 // Создаем плоскость для поля
 const groundGeometry = new THREE.PlaneGeometry(20, 20);
-const groundMaterial = new THREE.MeshBasicMaterial({ color: 0xa4db76, side: THREE.DoubleSide });
+// Загрузка текстуры
+const textureLoader = new THREE.TextureLoader();
+const TEXgradient = textureLoader.load('./ac0fd73a762874aae2a41c419041f1c3_waifu2x_art_noise3_scale.png');
+const groundMaterial = new THREE.MeshBasicMaterial({ map: TEXgradient, side: THREE.DoubleSide });
 const ground = new THREE.Mesh(groundGeometry, groundMaterial);
 ground.rotation.x = -Math.PI / 2; // Поворачиваем поле, чтобы оно лежало на плоскости XZ
 ground.position.y = -0.5; // Опускаем плоскость вниз
@@ -37,7 +39,7 @@ for (let i = 0; i < 10000; i++) {
 
 scene.add(grassGroup);
 
-const cursorRadius = 1;
+const cursorRadius = 0.5;
 
 // Создаем геометрию для круглой области
 const circleGeometry = new THREE.CircleGeometry(cursorRadius, 32);
@@ -56,6 +58,29 @@ const mouseVector = new THREE.Vector2();
 
 const clock = new THREE.Clock();
 
+// Обработка событий касания на мобильных устройствах
+function onTouchMove(event) {
+  event.preventDefault();
+
+  const touch = event.touches[0];
+  const touchX = (touch.clientX / window.innerWidth) * 2 - 1;
+  const touchY = -(touch.clientY / window.innerHeight) * 2 + 1;
+
+  mouseVector.set(touchX, touchY);
+  raycaster.setFromCamera(mouseVector, camera);
+
+  const intersection = raycaster.intersectObject(ground);
+  if (intersection.length > 0) {
+    const point = intersection[0].point;
+    cursorCircle.position.set(point.x, point.y + 0.75, point.z);
+    cursorPosition.copy(point);
+    cursorPosition.y = cursorCircle.position.y;
+    cursorPosition.sub(cursorCircle.position);
+    cursorPosition.add(cursorCircle.position);
+  }
+}
+
+// Добавляем обработчики событий
 window.addEventListener('resize', () => {
   const newWidth = window.innerWidth;
   const newHeight = window.innerHeight;
@@ -73,13 +98,36 @@ window.addEventListener('mousemove', (event) => {
   mouseVector.set(mouseX, mouseY);
   raycaster.setFromCamera(mouseVector, camera);
 
+  const intersection = raycaster.intersectObject(ground);
+  if (intersection.length > 0) {
+    const point = intersection[0].point;
+    cursorCircle.position.set(point.x, point.y + 0.75, point.z);
+    cursorPosition.copy(point);
+    cursorPosition.y = cursorCircle.position.y;
+    cursorPosition.sub(cursorCircle.position);
+    cursorPosition.add(cursorCircle.position);
+  }
+});
+
+window.addEventListener('touchmove', onTouchMove, { passive: false }); // Поддержка обработки событий касания
+
+function handleInput(event) {
+  event.preventDefault();
+
+  const touches = event.touches;
+  const mouseX = (touches[0].clientX / window.innerWidth) * 2 - 1;
+  const mouseY = -(touches[0].clientY / window.innerHeight) * 2 + 1;
+
+  mouseVector.set(mouseX, mouseY);
+  raycaster.setFromCamera(mouseVector, camera);
+
   // Получаем координаты мыши в мировых координатах
   const intersection = raycaster.intersectObject(ground);
   if (intersection.length > 0) {
     const point = intersection[0].point;
 
     // Позиционируем круглую область по центру относительно позиции мыши
-    cursorCircle.position.set(point.x, point.y+0.75, point.z);
+    cursorCircle.position.set(point.x, point.y + 0.75, point.z);
 
     // Смещаем курсор относительно центра области
     cursorPosition.copy(point);
@@ -87,7 +135,47 @@ window.addEventListener('mousemove', (event) => {
     cursorPosition.sub(cursorCircle.position);
     cursorPosition.add(cursorCircle.position);
   }
-});
+}
+
+function handleMouseDown() {
+  isMousePressed = true;
+}
+
+function handleMouseUp() {
+  isMousePressed = false;
+}
+
+window.addEventListener('touchstart', handleInput);
+window.addEventListener('touchmove', handleInput);
+window.addEventListener('mousedown', handleMouseDown);
+window.addEventListener('mouseup', handleMouseUp);
+
+let isMousePressed = false;
+
+function updateGrassTilt() {
+  const cursorPositionXZ = new THREE.Vector2(cursorPosition.x, cursorPosition.z);
+  grassGroup.children.forEach((grassBlade) => {
+    const grassBladeXZ = new THREE.Vector2(grassBlade.position.x, grassBlade.position.z);
+
+    // Проверяем, находится ли травинка внутри области вокруг курсора
+    const distance = cursorPositionXZ.distanceTo(grassBladeXZ);
+    const radius = cursorRadius + 0.4; // увеличиваем радиус для более мягкого взаимодействия
+    if (distance < radius) {
+      const direction = new THREE.Vector2().subVectors(grassBladeXZ, cursorPositionXZ).normalize();
+      const angle = Math.atan2(direction.y, direction.x);
+
+      // Угол поворота для травинок в радиусе зависит от угла курсора
+      const cursorAngle = Math.atan2(cursorPosition.z, cursorPosition.x);
+      const relativeAngle = angle - cursorAngle;
+
+      // Отворачиваем травинки от центра радиуса курсора в разные стороны
+      const tiltAmount = 1.6; // Максимальный угол наклона
+      const tilt = Math.sin(relativeAngle * 1.6) * tiltAmount;
+
+      grassBlade.rotation.z = tilt;
+    }
+  });
+}
 
 function animate() {
   requestAnimationFrame(animate);
@@ -100,6 +188,11 @@ function animate() {
   grassGroup.children.forEach((grassBlade) => {
     grassBlade.rotation.z = Math.sin(grassBlade.position.x * 2 + grassBlade.position.z * 2 + clock.elapsedTime) * 0.1;
   });
+
+  // Обновляем наклон травинок в сторону курсора при зажатой кнопке мыши
+  if (isMousePressed) {
+    updateGrassTilt();
+  }
 
   renderer.render(scene, camera);
 }
