@@ -2,6 +2,10 @@
     font-family: Montserrat;
     src: url(./MAIN-source/font/Montserrat-VariableFont_wght.ttf);
 }
+@font-face {
+    font-family: MontserratAlt;
+    src: url(./MAIN-source/font/MontserratAlternates-Black.ttf);
+}
 
 *{
     margin: 0; padding: 0;
@@ -166,7 +170,7 @@ header {
     padding: 1vmin 2vmax;
     align-items: center;
     align-self: stretch;
-    border-radius: 2vmin;
+    border-radius: 4vmin;
     border: none;
     background: #131110;
     font-size: 1.6vw;
@@ -188,9 +192,123 @@ header {
 
 /* - 🟢 Разноцветный блок 🟢 - */
 .color-shape {
-    width: 100%; height: 20vh;
+    display: flex;
+    width: 100%; height: max-content;
+    padding: 8vmax 5vmax 4vmax 5vmax;
+    flex-direction: column;
+    justify-content: end;
+    align-items: center;
     border-radius: 2vmin;
-    background: radial-gradient(100% 150% at 20% 70%, #F1D174 0%, #A0D1D4 52.5%, #E2EABF 100%);
+    gap: 0;
+    background: linear-gradient(284deg, rgba(0, 0, 0, 0.00) 50%, #751848 71.67%, #01F5F9 100%), linear-gradient(63deg, #FF9A2D 33.02%, #D63032 54.56%, rgba(117, 26, 27, 0.50) 75.13%, #000 100%);
+}
+.color-shape h3 {
+    color: #FFFFFF;
+    text-align: center;
+    font-family: Montserrat;
+    font-size: 6.2vw;
+    font-style: normal;
+    font-weight: 900;
+    line-height: normal;
+    letter-spacing: 0.62vw;
+    z-index: 9;
+}
+.bottom-color {
+    display: grid;
+    grid-template-columns : repeat(5, 1fr);
+    grid-template-rows: repeat(1, 8vmax);
+    align-items: flex-end;
+    width: 100%;
+    grid-template-areas: "suggest-idea suggest-idea num-and-button num-and-button num-and-button";
+    z-index: 11;
+}
+#suggest-idea {
+    grid-area: suggest-idea;
+    display: flex;
+    width: max-content; height: max-content;
+    position: relative;
+    cursor: pointer;
+    color: #FFFFFF;
+    text-align: left;
+    flex-wrap: nowrap;
+    font-family: Montserrat;
+    font-size: 1.6vw;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    letter-spacing: 0.16vw;
+    padding: 1vmin 0;
+}
+#suggest-idea::after {
+    content: "";
+    display: block;
+    position: absolute;
+    right: 0; bottom: -0.3vmin;
+    width: 0; height: 0.5vmin;
+    background-color: #FFFFFF;
+    transition: width 0.5s;
+}
+#suggest-idea:hover::after {
+    content: "";
+    width: 100%;
+    display: block;
+    position: absolute;
+    left: 0; bottom: -0.3vmin;
+    height: 0.5vmin;
+    background-color: #FFFFFF;
+    transition: width 0.5s;    
+}
+.num-and-button {
+    grid-area: num-and-button;
+    display: grid;
+    position: relative;
+    bottom: -6.5vmax;
+    grid-template-columns : repeat(3, 1fr);
+    width: 100%; height: max-content;
+    align-items: center;
+    
+}
+
+#to-pojects {
+    color: #FFFFFF;
+    font-family: Montserrat;
+    font-size: 1.6vw;
+    letter-spacing: 0.16vw;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    text-transform: uppercase;
+    display: flex;
+    padding: 1vmin 2vmax;
+    justify-content: center;
+    align-items: center;
+    border-radius: 4vmin;
+    outline: 0.5vmin solid #FFFFFF;
+    transition: background 0.3s;
+}
+#to-pojects:hover {
+    cursor: pointer;
+    background: #FFFFFF30;
+    transition: background 0.3s;
+}
+.line-color {
+    width: 100%;
+    height: 0.5vmin;
+    background: #FFFFFF;
+    
+}
+#progect-value {
+    -webkit-text-stroke: 0.5vmin #FFFFFF;
+    -webkit-text-fill-color: transparent;
+    font-family: MontserratAlt;
+    font-size: 13vw;
+    font-style: normal;
+    font-weight: 900;
+    line-height: normal;   
+}
+canvas {
+    position: absolute;
+    z-index: 10;
 }
 
 /* - 🟨 Промптер до 🟨 - */
@@ -207,6 +325,7 @@ header {
     font-size: 2vw;
     font-weight: 800;
 }
+
 
 /* - ⬛ Проекты ⬛ - */
 .projects {
@@ -250,18 +369,6 @@ header {
     justify-content: space-between;
     border-radius: 2vmin;
     padding: 2vmax;
-}
-#projects-num h3 {
-    color: #716170;
-    font-size: 2vw;
-    font-weight: 800;
-}
-#progect-value {
-    color: #716170;
-    font-size: 10vw;
-    font-weight: 800;
-    line-height: 80%;
-    text-align: right;
 }
 
 #go-up {
