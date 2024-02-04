@@ -1,31 +1,35 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Общий счетчик</title>
+    <title>Жми на кнопку</title>
+    <link rel="stylesheet" href="./Press-The-Button-style.css">
+    <link rel="icon" href="./press-the-button-source/img/press-the-button-logo.svg">
 </head>
 <body>
+<div class="container">
+    <div class="ill1da-logo">
+       <a class="logo-text" href="https://ill1da.space">ILL1DA.SPACE</a>
+       <h1>ЖМИ НА КНОПКУ!</h1>
+       <div id="count-display" style="color: #FFF;">Нажатий: 0</div>
+    </div>
 
-    <h1>Общий счетчик нажатий</h1>
-    <button id="counterButton">Увеличить счетчик</button>
-    <p id="counterDisplay">Счетчик: <span id="countValue">0</span></p>
+    <button class="button" id="red-button"></button>
 
-    <script>
-        // JavaScript-код для обработки нажатия кнопки и обновления счетчика
-        const button = document.getElementById('counterButton');
-        const countValue = document.getElementById('countValue');
-
-        button.addEventListener('click', async () => {
-            try {
-                const response = await fetch('./increment_counter.php');
-                const data = await response.json();
-                countValue.textContent = data.count;
-            } catch (error) {
-                console.error('Ошибка при отправке данных на сервер', error);
-            }
-        });
-    </script>
-
+    <div class="buttons">
+        <form method="post" enctype="multipart/form-data">
+            <div class="input-file-row">
+                <label class="input-file">
+                    <input type="file" id="change-sound" name="file[]" multiple>
+                    <span>ВЫБЕРИТЕ ФАЙЛ</span>
+                </label>
+                <div class="input-file-list"></div> 
+            </div>
+        </form>
+        <button id="reset-btn">Сброс</button>
+    </div>
+</div>
 </body>
+<script src="./Press-The-Button-script.js" type="module"></script>
 </html>
