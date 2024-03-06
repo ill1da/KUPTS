@@ -1,204 +1,362 @@
-/* - - - - - Шрифты - - - - - */
+@font-face {
+    font-family: Montserrat;
+    src: url(./press-the-button-source/font/Montserrat-VariableFont_wght.ttf);
+}
 @font-face {
     font-family: PressStart2P;
     src: url(./press-the-button-source/font/PressStart2P-Regular.ttf);
 }
-@font-face {
-    font-family: Rubik;
-    src: url(./press-the-button-source/font/Rubik-VariableFont_wght.ttf);
-}
-
-/* - - - - - Жми на кнопку - - - - - */
-*{
+/* - - Жми на кнопку! - - */
+* {
     box-sizing: border-box;
+    font-family: Montserrat;
     margin: 0; padding: 0;
-    font-family: Rubik;
-    font-size: 18px;
-    font-weight: 700;
-    color: #FFFFFF;
     -webkit-tap-highlight-color: #000000;
     -webkit-tap-highlight-color: transparent;
+    outline: none;
 }
-html{
-    height: fit-content;
+
+html {
+    width: 100%; height: max-content;
 }
-body{
-    width: 100%; height: 100%;
-    background-color: #17191D;
+body {
+    width: 100vw; height: 100vh;
+    background: linear-gradient(180.00deg, rgb(230, 235, 233) 60%,rgb(255, 255, 255) 100%);    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 16vh auto;
+}
+
+/* логотип */
+.ill1da {
+    user-select: none;
+    font-family: PressStart2P;
+    color: #252525;
+    position: absolute;
+    top: 3vh;
+    font-style: normal;
+    font-size: calc(12px + 8 * (100vw - 320px) / 880);
+    font-weight: 500;
+    text-decoration: none;
+}
+
+/* ⬜⬛ - Контейнер - ⬛⬜*/
+.container {
+    width: auto; height: 84vh;
+    aspect-ratio: 1 / 1;
+    background: linear-gradient(#FFFFFF, #DEE6EA);
+    box-shadow: rgba(0, 0, 0, 0.45) 0px 25px 20px -20px;
+    border-radius: 5vmin;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+/* Шапка кнопки */
+.button-head {
+    width: 100%; height: 10%;
+    border-radius: 5vmin 5vmin 0 0;
+    display: grid;
+    grid-template-columns : repeat(8, 1fr);
+    grid-template-rows: auto;
+    flex-direction: row;
+    grid-template-areas: "switch switch logo logo logo logo donate donate";
+    align-items: center;
+    justify-content: center;
+    padding: 0 5%;
+    position: relative;
+}
+/*🌝 Переключатель 🌚*/
+input[type=checkbox]{
+    height: 0; width: 0;
+    visibility: hidden;
+    display: none;
+}
+label {
+    grid-area: switch;
+    cursor: pointer;
+    height: 40%; width: auto;
+    aspect-ratio: 2 / 1;
+    background: grey;
+    display: block;
+    border-radius: 1000px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    transition: background 0.3s;
+}
+label::after {
+    content: "";
+    position: absolute;
+    width: auto; height: 80%;
+    aspect-ratio: 1 / 1;
+    background: #FFFFFF;
+    border-radius: 1000px;
+    transition: 0.3s;
+    left: calc(4%);
+}
+input:checked + label {
+    background: #d8dbe0;
+    transition: background 0.3s;
+}
+input:checked + label:after {
+    transform: translateX(125%);
+}
+/* Логотип */
+.logo-area {
+    grid-area: logo;
+    width: 100%; height: 40%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5vmin;
+    margin: 0 auto;
+}
+.logo-point {
+    background: #FF4F37;
+    width: auto; height: 30%;
+    aspect-ratio: 1 / 1;
+    border-radius: 1000px;
+}
+.logo {
+    width: auto; height: 100%;
+    aspect-ratio: 1 / 1;
+    background: url(./press-the-button-source/img/press-the-button-logo.svg);
+    background-position: center center;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+/* Донатик */
+.donate {
+    grid-area: donate;
+    width: max-content; height: 40%;
+    background: #252525;
+    border-radius: 1000px;
+    padding: 0 2vmin;
+    display: flex;
+    justify-self: flex-end;
+    align-items: center;
+    transition: background 0.3s;
+}
+.donate a {
+    user-select: none;
+    color: #FFFFFF;
+    font-size: calc(12px + 1 * (100vw - 320px) / 880);
+    cursor: pointer;
+    text-decoration: none;
+    font-weight: 500;
+    transition: 0.3s;
+}
+.donate:hover {
+    background: #3C3C3C;
     transition: background 0.3s;
 }
 
-.container{
-    height: 100dvh;
+/* Текст логотипа */
+.logo-text-zone {
+    width: 100%; height: max-content;
+    padding: 0 5%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+.logo-line {
+    width: 100%; height: 0.5%;
+    border-radius: 1000px;
+    background: #252525;
+    opacity: 0.4;
+}
+.logo-text {
+    font-size: 2vw;
+    margin: 0 5%;
+    font-weight: 800;
+    color: #252525;
+    white-space: nowrap;
+    flex-wrap: nowrap;
+}
+
+/* Зона красной кнопки */
+.button-area {
+    width: 100%; height: 62%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 5%;
+}
+.user-stat {
+    width: 100%; height: 10%;
+    display: flex;
+    flex-direction: row;
+    padding: 0 5%;
+    justify-content: space-between;
+    align-items: center;
+}
+.big-red-button {
+    width: 100%; height: 100%;
+    display: flex;
+    padding: 0 5%;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.sound-volume-elements, .speed-volume-elements {
+    width: 16%; height: max-content;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    gap: 2vmax;
+}
+.sound-volume, .button-speed{
+    border: 0.1vmax solid rgba(37, 37, 37, 0.4);
+    width: 100%; height: max-content;
+    padding: 3vmin 0 2vmin 0;
+    border-radius: 1000px 1000px 0 0 ;
+    display: flex;
+    flex-direction: column;
+    gap: 1vmax;
+    justify-content: center;
+    align-items: center;
+}
+#volume-slider, #speed-slider {
+    width: 100%; height: 100%;
+    appearance: slider-vertical;
+}
+.sound-text, .speed-text {
+    width: 100%; height: max-content;
+    font-size: calc(10px + 1 * (100vw - 320px) / 880);
+    user-select: none;
+    text-decoration: none;
+    font-weight: 500;
+    text-align: center;
+    border: 0.1vmax solid rgba(37, 37, 37, 0.4);
+    border-radius: 1000px;
+}
+
+.pushable {
+    position: relative;
+    width: auto; height: 75%;
+    aspect-ratio: 1 / 1;
+    border: none;
+    background: transparent;
+    padding: 0;
+    cursor: pointer;
+    outline-offset: 4vmin;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    transition: filter 250ms;
+}
+.pushable.disabled {
+    pointer-events: none;
+    cursor: not-allowed;
+}
+.shadow, .edge, .front {
+    border-radius: 50%;
+}
+.shadow {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #ACB0B2;
+    will-change: transform;
+    transform: translateY(2vmin);
+    transition: transform 600ms cubic-bezier(.3, .7, .4, 1);
+}
+.edge {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      to left,
+      hsl(7deg 100% 16%) 0%,
+      hsl(7deg 100% 28%) 8%,
+      hsl(7deg 100% 28%) 92%,
+      hsl(7deg 100% 16%) 100%
+    );
+}
+.front {
+    position: relative;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1 / 1;
+    font-size: 1.25rem;
+    color: white;
+    background: #FF4F37;
+    will-change: transform;
+    transform: translateY(-2vmin);
+    transition: transform 600ms cubic-bezier(.3, .7, .4, 1);
+    text-align: center;
+}
+.pushable:hover {
+    filter: brightness(110%);
+}
+.pushable:hover .front {
+    transform: translateY(-3vmin);
+    transition: transform 250ms cubic-bezier(.3, .7, .4, 1.5);
+}
+.pushable:active .front {
+    transform: translateY(-1vmin);
+    transition: transform 34ms;
+}
+.pushable:hover .shadow {
+    transform: translateY(3vmin);
+    transition: transform 250ms cubic-bezier(.3, .7, .4, 1.5);
+}
+.pushable:active .shadow {
+    transform: translateY(1vmin);
+    transition: transform 34ms;
+}
+.pushable:focus:not(:focus-visible) {
+    outline: none;
+}
+
+.button-point-zone {
+    width: 2%; height: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
-    padding: 30px 0;
-    gap: 20px;
+    gap: 2.5vmin;
+}
+.line-button {
+    height: 100%; width: 5%;
+    border-radius: 1000px;
+    background: #252525;
+    opacity: 0.4;
+}
+.point-button {
+    background: #FF4F37;
+    width: 85%; height: auto;
+    aspect-ratio: 1 / 2.3;
+    border-radius: 1000px; 
 }
 
-/*- - - - - Логотип - - - - -*/
-.ill1da-logo{
-    width: 100%; height: max-content;
+/* Подвал кнопки */
+.button-footer {
+    width: 100%; height: 20%;
+    border-radius: 0 0 5vmin 5vmin;
+    padding: 0 5%;
+    background: green;
     display: flex;
     flex-direction: column;
-    text-align: center;
-    gap: 20px;
-}
-
-.ill1da-logo h1{
-    font-size: 40px;
-    font-weight: 800;
-    color: #FFFFFF;
-    text-shadow: 1px 1px 1px #7C362C, 2px 2px 1px #7C362C, 3px 3px 1px #7C362C;
-}
-
-.logo-text{
-    width: max-content;
-    background-color: #FFFFFF;
-    box-shadow: 3px 3px 0 0 #FF4F37;
-    font-family: PressStart2P;
-    font-size: 20px;
-    color: #FF4F37;
-    padding: 8px 24px 8px 16px;
-    text-decoration: none;
-    align-self: center;
-    transition: 0.2s;
- }
- .logo-text:hover{
-    box-shadow: 5px 5px 0 0 #FF4F37;
-    padding: 8px 26px 8px 18px;
-    transition: 0.2s;
- }
-.logo-text:active{
-    box-shadow: 0px 0px 0 0 #FF4F37;
-    border: 0px;
-    transition: 0.2s;
-}
-
-/* - - - - - Кнопка контент- - - - -*/
-.button{
-    background-color: #17191D;
-    min-width: 256px; min-height: 181px;
-    background-image: url(./press-the-button-source/img/red-button.svg);
-    background-position: center center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    border: 0px;
-    transition: 0.05s;
-    margin-bottom: 60px;
-    margin-top: 120px;
-}
-.button:hover{
-    cursor: pointer;
-}
-.button:active{
-    background-color: #17191D;
-    background-image: url(./press-the-button-source/img/red-button-press.svg);
-    background-position: center center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    border: 0px;
-    transition: 0.05s
-}
-.container input{
-    width: max-content;
-    margin-top: 10px;
-}
-
-.buttons{
-    display: flex;
-    flex-direction: column;
+    justify-content: space-between;
     align-items: center;
 }
-/* - - - - - Загрузка файла - - - - -*/
-.input-file-row {
-	display: inline-block;
+.sound-button-group {
+    width: 100%; height: 100%;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
-    gap: 5px;
-    margin-bottom: 20px;
-    text-align: center;
+    justify-content: space-between;
 }
-.input-file {
-	position: relative;
-	display: inline-block;
-}
-.input-file span {
-    width: 170px;
-	position: relative;
-	display: inline-block;
-	cursor: pointer;
-	outline: none;
-	text-decoration: none;
-	font-size: 14px;
-	vertical-align: middle;
-	color: #FFFFFF;
-	text-align: center;
-	border-radius: 4px;
-	background-color: #FF4F37;
-	line-height: 22px;
-	height: 40px;
-	padding: 10px 20px;
-	box-sizing: border-box;
-	border: none;
-	margin: 0;
-	transition: background-color 0.2s;
-}
-#reset-btn{
-    width: 170px;
-    position: relative;
-	display: inline-block;
-	cursor: pointer;
-	outline: none;
-	text-decoration: none;
-	font-size: 14px;
-	color: #FF4F37;
-	text-align: center;
-	border-radius: 4px;
-	background-color: #FFFFFF;
-	line-height: 22px;
-	height: 40px;
-	padding: 10px 20px;
-	box-sizing: border-box;
-	border: none;
-	margin: 0;
-	transition: background-color 0.2s;
-}
-
-.input-file input[type=file] {
-	position: absolute;
-	z-index: -1;
-	opacity: 0;
-	display: block;
-	width: 0;
-	height: 0;
-}
- 
-/* Focus */
-.input-file input[type=file]:focus + span {
-	box-shadow: 0 0 0 0.2rem #007BFF40;
-}
- 
-/* Hover/Active */
-.input-file:hover span {
-	background-color: #7C362C;
-}
-.input-file:active span {
-	background-color: #7C362C;
-}
-
-/*- - - - - Медиа-запрос - - - - -*/
-@media only screen and (max-width:450px) {
-    .ill1da-logo h1{
-        font-size: 32px;
-    }   
-}
-
-@media only screen and (max-width: 426px) {
-    .ill1da-logo h1{
-        font-size: 32px;
-    }
+.sound-button {
+    height: 50%; width: auto;
+    aspect-ratio: 1 / 1;
+    border-radius: 1000px;
 }

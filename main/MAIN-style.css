@@ -435,7 +435,6 @@ canvas {
     overflow: hidden;
     padding: 1vmax 0;
     border-radius: 2vmin;
-    background: #0DFEA7;
 }
 .prompter-before p {
     display:inline-block;

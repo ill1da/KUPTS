@@ -1,35 +1,79 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Жми на кнопку</title>
+    <title>Жми на кнопку!</title>
     <link rel="stylesheet" href="./Press-The-Button-style.css">
-    <link rel="icon" href="./press-the-button-source/img/press-the-button-logo.svg">
 </head>
 <body>
-<div class="container">
-    <div class="ill1da-logo">
-       <a class="logo-text" href="https://ill1da.space">ILL1DA.SPACE</a>
-       <h1>ЖМИ НА КНОПКУ!</h1>
-       <div id="count-display" style="color: #FFF;">Нажатий: 0</div>
-    </div>
-
-    <button class="button" id="red-button"></button>
-
-    <div class="buttons">
-        <form method="post" enctype="multipart/form-data">
-            <div class="input-file-row">
-                <label class="input-file">
-                    <input type="file" id="change-sound" name="file[]" multiple>
-                    <span>ВЫБЕРИТЕ ФАЙЛ</span>
-                </label>
-                <div class="input-file-list"></div> 
+    <a class="ill1da" href="../index.html">ill1da.space</a>
+    <div class="container">
+        <div class="button-head">
+            <input type="checkbox" id="switch">
+            <label for="switch"></label>
+            <div class="logo-area">
+                <div class="logo-point"></div>
+                <div class="logo"></div>
+                <div class="logo-point"></div>    
             </div>
-        </form>
-        <button id="reset-btn">Сброс</button>
+            <div class="donate"><a class="donate-button" href="https://www.donationalerts.com/r/ill1da">Поддержать</a></div>
+        </div>
+
+        <div class="logo-text-zone">
+            <div class="logo-line"></div>
+            <div class="logo-text">ЖМИ НА КНОПКУ!</div>
+            <div class="logo-line"></div>
+        </div>
+
+        <div class="button-area">
+            <div class="user-stat">
+            </div>
+            <div class="big-red-button">
+                <div class="sound-volume-elements">
+                    <div class="sound-volume">
+                        <span id="volume-value">x</span>
+                        <input type="range" id="volume-slider" min="0.1" max="1" step="0.1" value="0.5">
+                    </div>
+                    <div class="sound-text">ГРОМКОСТЬ</div>
+                </div>
+                <div class="button-point-zone">
+                    <div class="line-button"></div>
+                    <div class="point-button"></div>
+                    <div class="line-button"></div>
+                </div>
+                <button class="pushable">
+                    <span class="shadow"></span>
+                    <span class="edge"></span>
+                    <span class="front"></span>
+                </button>
+                <div class="button-point-zone">
+                    <div class="line-button"></div>
+                    <div class="point-button"></div>
+                    <div class="line-button"></div>
+                </div>
+                <div class="speed-volume-elements">
+                    <div class="button-speed">
+                        <span id="speed-value">x</span>
+                        <input type="range" id="speed-slider" min="0.1" max="1" step="0.1" value="1">
+                    </div>
+                    <div class="speed-text">ЗАДЕРЖКА</div>
+                </div>   
+            </div>
+        </div>
+        <div class="button-footer">
+            <div class="user-stat"></div>
+            <div class="sound-button-group">
+                <button class="sound-button"></button>
+                <button class="sound-button"></button>
+                <button class="sound-button"></button>
+                <button class="sound-button"></button>
+                <button class="sound-button"></button>
+                <button class="sound-button"></button>
+                <button class="sound-button"></button>
+            </div>
+        </div>
     </div>
-</div>
 </body>
-<script src="./Press-The-Button-script.js" type="module"></script>
+<script src="./Press-The-Button-script.js"></script>
 </html>
