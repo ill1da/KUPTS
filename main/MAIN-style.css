@@ -1,472 +1,170 @@
 @font-face {
-    font-family: Montserrat;
-    src: url(./MAIN-source/font/Montserrat-VariableFont_wght.ttf);
-}
-@font-face {
-    font-family: MontserratAlt;
-    src: url(./MAIN-source/font/MontserratAlternates-Black.ttf);
+    font-family: LexendMega;
+    src: url(./MAIN-source/font/LexendMega-VariableFont_wght.ttf);
 }
 
 *{
     margin: 0; padding: 0;
-    font-family: Montserrat;
-    color: #131110;
-    text-transform: uppercase;
     box-sizing: border-box;
     user-select: none;
+    color: #000000;
+    text-transform: uppercase;
+    font-size: 1rem;
+    font-weight: 300;
+    line-height: 160%;
 }
 
 html{
-    width: 100%; height: fit-content;
-    position: absolute;
+    width: 100%; height: 100%;
 }
 body {
     width: 100%; height: 100%;
-    overflow-x: hidden;
+    background: #FADF0B;
 }
 
-.container {
-    display: flex;
-    width: 100%;
-    min-height: 100%;    height: max-content;
-    padding: 0 1vmax 1vmax 1vmax;
-    flex-direction: column;
-    align-items: center;
-    gap: 2vmax;
-    background: #131110;
-}
-
-/* - ⬜ Хедер ⬜ - */
-header {
-    position: sticky;
-    top: 0; left: 0;
-    width: 100%; height: 4vmax;
-    border-radius: 0px 0px 2vmin 2vmin;
-    outline: 1vmin solid #131110;
-    background: #E1E3E1;
-    z-index: 999;
-}
-
-/* - ⬜ Обложка ⬜ - */
-#cover {
-    display: flex;
-    width: 100%;
-    padding: 5vmax;
-    flex-direction: column;
-    align-items: center;
-    gap: 50px;
-    border-radius: 2vmin;
-    background: #E1E3E1;
-}
-/* - Кнопка "Идея" - */
-.cover-idea {
-    display: flex;
-    width: 100%; height: max-content; min-height: 20px;
-    justify-content: flex-end;
-}
-.idea-button {
-    position: relative;
-    display: flex;
-    width: max-content;
-    height: max-content;
-    justify-content: center;
-    align-items: center;
-    border-radius: 100%;
-    background-color: #131110;
-    user-select: none;
-    cursor: pointer;
-    aspect-ratio: 1 / 1;
-    padding: 1vmax;
-    transition: 0.2s ease-in-out;
-}
-.idea-button::before {
-    content: "";
-    position: absolute;
-    width: 100%; height: 100%;
-    top: 0; left: 0;
-    background-image: url(./MAIN-source/img/idea-star.svg);
-    background-position: center center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    animation: rotateBackground 10s linear infinite;
-}
-.idea-button:hover {
-    background-color: #13111000;
-    transition: 0.2s ease-in-out;
-}
-@keyframes rotateBackground {
-    0% {
-      transform: rotate(0deg);
-    }
-    100% {
-      transform: rotate(360deg);
-    }
-}
-.idea-button p {
-    transform: rotate(6deg);
-    color: #FFF;
-    text-align: center;
-    font-size: 1vw;
-    font-style: normal;
-    font-weight: 700;
-    line-height: normal;
-    text-transform: uppercase;
-}
-/* - Логотипа и текст на сайте - */
-.cover-text {
-    display: flex;
-    height: fit-content; min-height: 20px;
-    justify-content: space-between;
-    align-items: flex-end;
-    gap: 50px;
-    align-self: stretch;
-    margin-top: 8vmax;
-    text-wrap: nowrap;
-}
-.text-logo {
-    min-height: 20px;
-    width: 100%;
-}
-.text-logo h1 {
-    width: 100%; min-height: 20px;
-    font-weight: 900;
-    font-size: 6.2vw;
-}
-.text-logo h3, .cover-text h4 {
-    min-height: 20px;
-    font-weight: 700;
-    font-size: 1.6vw;
-}
-
-/* - - Эмодзи - - */
-#emoji {
-    position:absolute;
-    color: #555;
-	-webkit-touch-callout: none;
-	-webkit-user-select: none;
-	-khtml-user-select: none;
-	-moz-user-select: none;
-	-ms-user-select: none;
-	user-select: none;
-    transition: 0.2s ease-in-out;
-}
-#emoji:hover {
-    cursor: pointer;
-    text-align: right;
-    font-size: 1.7vw;
-    transition: 0.2s ease-in-out;
-}
-
-/* - Кнопки-ссылки - */
-.cover-button {
-    display: flex;
-    width: 100%; height: 100%; min-height: 20px;
-    align-items: center;
-    align-self: stretch;
-    gap: 2vmax;
-}
-.about-me-link {
-    display: flex;
-    padding: 1vmin 2vmax;
-    align-items: center;
-    align-self: stretch;
-    border-radius: 4vmin;
-    border: none;
-    background: #131110;
-    font-size: 1.6vw;
-    font-style: normal;
-    text-decoration: none;
-    font-weight: 700;
-    line-height: normal;
-    text-transform: uppercase;
-    transition: 0.3s ease-in-out;
-}
-.about-me-link span {
-    color: #E1E3E1;
-}
-.about-me-link:hover {
-    background: #403F40;
-    transition: 0.3s ease-in-out;
-    cursor: pointer;
-}
-
-/* - 🟢 Разноцветный блок 🟢 - */
-.color-shape {
-    display: flex;
+/* - Контейнер - */
+#container {
     width: 100%; height: max-content;
-    padding: 8vmax 5vmax 4vmax 5vmax;
-    flex-direction: column;
-    justify-content: end;
-    align-items: center;
-    border-radius: 2vmin;
-    gap: 0;
-    background: linear-gradient(284deg, rgba(0, 0, 0, 0.00) 50%, #751848 71.67%, #01F5F9 100%), linear-gradient(63deg, #FF9A2D 33.02%, #D63032 54.56%, rgba(117, 26, 27, 0.50) 75.13%, #000 100%);
-}
-.color-shape h3 {
-    color: #FFFFFF;
-    text-align: center;
-    font-family: Montserrat;
-    font-size: 6.2vw;
-    font-style: normal;
-    font-weight: 900;
-    line-height: normal;
-    letter-spacing: 0.62vw;
-    z-index: 9;
-}
-.bottom-color {
-    display: grid;
-    grid-template-columns : repeat(5, 1fr);
-    grid-template-rows: repeat(1, 8vmax);
-    align-items: flex-end;
-    width: 100%;
-    grid-template-areas: "suggest-idea suggest-idea num-and-button num-and-button num-and-button";
-    z-index: 11;
-}
-#suggest-idea {
-    grid-area: suggest-idea;
     display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-self: center;
+    padding: 50px 100px;
+    gap: 50px;
+}
+
+/* - Лого - */
+#logo-AREA {
+    box-sizing: content-box;
+    width: fit-content; height: fit-content;
+    position: relative;
+    border-radius: 25px;
+}
+#logo {
     width: max-content; height: max-content;
-    position: relative;
-    cursor: pointer;
-    color: #FFFFFF;
-    text-align: left;
-    flex-wrap: nowrap;
-    font-family: Montserrat;
-    font-size: 1.6vw;
-    font-style: normal;
-    font-weight: 500;
-    line-height: normal;
-    letter-spacing: 0.16vw;
-    padding: 1vmin 0;
-}
-#suggest-idea::after {
-    content: "";
-    display: block;
     position: absolute;
-    right: 0; bottom: -0.3vmin;
-    width: 0; height: 0.5vmin;
-    background-color: #FFFFFF;
-    transition: width 0.5s;
-}
-#suggest-idea:hover::after {
-    content: "";
-    width: 100%;
-    display: block;
-    position: absolute;
-    left: 0; bottom: -0.3vmin;
-    height: 0.5vmin;
-    background-color: #FFFFFF;
-    transition: width 0.5s;    
-}
-.num-and-button {
-    grid-area: num-and-button;
-    display: grid;
-    position: relative;
-    bottom: -6.5vmax;
-    grid-template-columns : repeat(3, 1fr);
-    width: 100%; height: max-content;
-    align-items: center;
-    
-}
-
-#to-pojects {
-    color: #FFFFFF;
-    font-family: Montserrat;
-    font-size: 1.6vw;
-    letter-spacing: 0.16vw;
-    font-style: normal;
+    font-family: LexendMega;
+    font-size: clamp(32px, 4vw, 64px);
     font-weight: 700;
-    line-height: normal;
-    text-transform: uppercase;
-    display: flex;
-    padding: 1vmin 2vmax;
-    justify-content: center;
-    align-items: center;
-    border-radius: 4vmin;
-    outline: 0.5vmin solid #FFFFFF;
-    transition: background 0.3s;
-}
-#to-pojects:hover {
-    cursor: pointer;
-    background: #FFFFFF30;
-    transition: background 0.3s;
-}
-.line-color {
-    width: 100%;
-    height: 0.5vmin;
-    background: #FFFFFF;
-    
-}
-#progect-value {
-    -webkit-text-stroke: 0.5vmin #FFFFFF;
-    -webkit-text-fill-color: transparent;
-    font-family: MontserratAlt;
-    font-size: 13vw;
-    font-style: normal;
-    font-weight: 900;
-    line-height: normal;   
-}
-canvas {
-    position: absolute;
+    text-decoration: none;
+    background: #C4A1FF;
+    border: 7px solid #000000;
+    border-radius: clamp(15px, 3vw, 25px);
+    padding: 5px 15px;
+    transition: ease-in-out 0.16s;
     z-index: 10;
 }
-
-/* - 🟨 Промптер до 🟨 - */
-.prompter {
-    width: 100%; height: fit-content;
-    white-space: nowrap;
-    overflow: hidden;
-    padding: 1vmax 0;
-    border-radius: 2vmin;
-    background: #F7C65D;
+#after-logo {
+    width: max-content; height: max-content;
+    position: relative;
+    font-family: LexendMega;
+    font-size: clamp(32px, 4vw, 64px);
+    font-weight: 700;
+    text-decoration: none;
+    background: #000000;
+    border: 7px solid #000000;
+    border-radius: clamp(15px, 3vw, 25px);
+    padding: 5px 15px;
+    top: 5px; left: 5px;
+    transition: ease-in-out 0.16s;
+    z-index: 9;
 }
-#prompter-list {
-    color: #131110;
-    font-size: 2vw;
-    font-weight: 800;
-}
-
-
-/* - ⬛ Проекты ⬛ - */
-.projects {
-    width: 100%; height: max-content;
-    display: grid;
-    gap: 2vmax;
-    grid-template-columns : repeat(4, 1fr);
-    grid-template-rows: auto;
-    /* ! */
-    grid-template-areas:
-    "popular popular value go-up"
-    "popular popular value subscribe"
-    "Color-conquest Percentage Life-checklist subscribe"
+#logo-AREA:hover #logo{
+    transform: translate(5px, 5px);
+    transition: ease-in-out 0.16s;
 }
 
+/* - Пул карт */
+#card-pull {
+    width: fit-content; height: max-content;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center; justify-content: center;
+    padding: 50px;
+    background: #FFB802;
+    background-image: url(./MAIN-source/img/BACK-DOT.png);
+    background-size: 30px;
+    gap: 50px;
+}
+.card-AREA {
+    box-sizing: content-box;
+    position: relative;
+    width: fit-content; height: fit-content;
+    border-radius: 25px;
+}
+.card-AREA:hover .card {
+    transform: translate(-5px, -5px);
+    transition: ease-in-out 0.16s;
+}
 .card {
-    width: 100%; height: 100%;
-    flex: 1 0 0;
-    aspect-ratio: 340 / 290;
-    align-self: stretch;
-    border-radius: 2vmin;
+    width: clamp(245px, 20vw, 490px);
+    aspect-ratio: 245/318.5;
+    position: relative;
+    background: #FFFFFF;
+    border-radius: 25px;
+    border: 7px solid #000000;
+    transition: ease-in-out 0.16s;
+    z-index: 10;
 }
-#popular-project {
-    grid-area: popular;
-    width: 100%; height: 100%;
-    background: #FFA07A;
-    flex: 1 0 0;
-    aspect-ratio: 700 / 400;
-    align-self: stretch;
-    border-radius: 2vmin;
-}
-#projects-num {
-    grid-area: value;
-    width: 100%; height: 100%;
-    background: #FFDAFF;
-    flex: 1 0 0;
-    aspect-ratio: 340 / 400;
-    align-self: stretch;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    border-radius: 2vmin;
-    padding: 2vmax;
+.shadow {
+    width: clamp(245px, 20vw, 490px);
+    aspect-ratio: 245/318.5;
+    position: absolute;
+    background: #000000;
+    border: 7px solid #000000;
+    border-radius: 25px;
+    padding: 5px 15px;
+    top: 0px; left: 0px;
+    transition: ease-in-out 0.16s;
+    z-index: 9;
 }
 
-#go-up {
-    grid-area: go-up;
-    width: 100%; height: 100%;
-    background: #BEEE3A;
-    flex: 1 0 0;
-    aspect-ratio: 340 / 200;
-    align-self: stretch;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    border-radius: 2vmin;
-    padding: 2vmax;
-    cursor: pointer;
-}
-#go-up h3 {
-    color: #353D18;
-    font-size: 2vw;
-    font-weight: 800;
-}
-#go-up h4 {
-    text-align: right;
-    line-height: 80%;
-    color: #353D18;
-    font-size: 2vw;
-    font-weight: 800;
-}
-#subscribe {
-    grid-area: subscribe;
-    width: 100%; height: 100%;
-    background: #2C28E4;
-    flex: 1 0 0;
-    aspect-ratio: 340 / 490;
-    align-self: stretch;
-    border-radius: 2vmin;
-}
-#Color-conquest {
-    background: #CC88FF;
-}
-#Percentage {
-    background: #A6D8E2;
-}
-#Swipe-facts {
-    background: #FFEE4F;
-}
-#Chronometer {
-    background: #9ACD32;
-}
-#Life-checklist {
-    background: #F2B5FC;
-}
+/* - Карточки - */
 #Tic-Tac-Toe {
-    background: #26B8B5;
-}
-#none {
-    background: #AAADDC;
+    background: #E3DFF2;
 }
 
-/* - 🟦 Промптер после 🟦 - */
-.prompter-before {
-    width: 100%; height: fit-content;
-    white-space: nowrap;
-    overflow: hidden;
-    padding: 1vmax 0;
-    border-radius: 2vmin;
-}
-.prompter-before p {
-    display:inline-block;
-    color: #131110;
-    font-size: 2vw;
-    font-weight: 800;
-    animation: marquee linear 30s infinite;
+#Life-checklist {
+    background: #FFB2EF;
 }
 
-@keyframes marquee {
-    0% {
-        transform: translateX(0%);
-    }
-    100% {
-        transform: translateX(-100%);
-    }
+#Press-the-button {
+    background: #FF7A5C;
 }
 
-#square {
-    position: fixed;
-    width: 30px;
-    height: 30px;
-    background: linear-gradient(270deg, #F00 50%, #EB00FF 50%);
-    transform-origin: center center;
-    transition: transform 0.1s ease-in-out;
-    z-index: 1000;
+#Swipe-facts {
+    background: #FFDB58;
 }
-.bullet {
-    position: fixed;
-    width: 5px;
-    height: 5px;
-    background-color: #00F;
-    border-radius: 50%;
-    z-index: 1000;
+
+#Chronometer {
+    background: #7FBC8C;
+}
+
+#Percentage {
+    background: #87CEEB;
+}
+
+#Color-battle {
+    background: #C4A1FF;
+}
+
+#Travotron {
+    background: #90EE90;
+}
+
+#Sand-painting {
+    background: #E3A018;
+}
+
+#game-2048 {
+    background: #FDFD96;
+}
+
+#Krugorost {
+    background: #FF69B4;
+}
+
+#Sticks-and-Fields {
+    background: #DAF5F0;
 }

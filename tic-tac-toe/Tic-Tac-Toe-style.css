@@ -1,303 +1,154 @@
-/* - - - - - Шрифты - - - - - */
 @font-face {
     font-family: PressStart2P;
     src: url(./Tic-Tac-Toe-source/font/PressStart2P-Regular.ttf);
 }
 @font-face {
-    font-family: Rubik;
-    src: url(./Tic-Tac-Toe-source/font/Rubik-VariableFont_wght.ttf);
+    font-family: Montserrat;
+    src: url(./Tic-Tac-Toe-source/font/Montserrat-VariableFont_wght.ttf);
 }
 
-/* - - - - - Крестики-Нолики - - - - - */
-*{
-    box-sizing: border-box;
+/* - - Крестики-Нолики! - - */
+* {
     margin: 0; padding: 0;
-    font-family: Rubik;
-    font-size: 18px;
-    font-weight: 700;
-    color: #17191D;
+    box-sizing: border-box;
+    user-select: none;
+    font-family: Montserrat;
+    color: #252525;
+    font-size: 1rem;
+    font-weight: 300;
+    line-height: 160%;
 }
 
 html{
-    height: fit-content;
-}
-
-body{
     width: 100%; height: 100%;
-    background-color: rgba(47, 87, 224, 1);
-    transition: background 0.3s;
 }
-
-.container{
-    height: 100dvh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding-top: 30px;
-    gap: 20px;
-}
-
-/*- - - - - Логотип - - - - -*/
-.ill1da-logo{
-    width: 100%; height: max-content;
-    display: flex;
-    flex-direction: column;
-    text-align: center;
-    gap: 20px;
-}
-
-.ill1da-logo h1{
-    font-size: 40px;
-    font-weight: 800;
-    color: #FFFFFF;
-    text-shadow: 1px 1px 1px #17191D, 2px 2px 1px #17191D, 3px 3px 1px #17191D;
-}
-
-.logo-text{
-    width: max-content;
-    background-color: #FFFFFF;
-    box-shadow: 3px 3px 0 0 #17191D;
-    font-family: PressStart2P;
-    font-size: 20px;
-    color: #17191D;
-    padding: 8px 24px 8px 16px;
-    text-decoration: none;
-    align-self: center;
-    transition: 0.2s;
- }
- .logo-text:hover{
-    box-shadow: 5px 5px 0 0 #17191D;
-    padding: 8px 26px 8px 18px;
-    transition: 0.2s;
- }
-.logo-text:active{
-    box-shadow: 0px 0px 0 0 #17191D;
-    border: 0px;
-    transition: 0.2s;
-}
-
-/*- - - - - Игровая карточка - - - - -*/
-.game-content{
-    width: max-content; height: max-content;
-    background-color: #FFFFFF;
-    padding: 0px 30px;
-    box-shadow: 3px 3px 0 0 #17191D;
-}
-
-
-.game-settings{
-    box-sizing: border-box;
-    width: 100%; height: auto;
-    background-color: #FFFFFF;
-    padding-top: 10px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
-}
-.player-mode{
-    width: max-content; height: max-content;
-    padding: 10px 30px 10px 10px;
-    margin-top: 5px;
-    outline: 0px solid #17191D;
-    background-color: rgba(240, 240, 240, 1);
-    box-shadow: 3px 3px 0 0 #17191D;
-    -webkit-appearance: none;
-    background-image: url(./Tic-Tac-Toe-source/img/appearance_down.svg);
-    background-repeat: no-repeat;
-    background-position: 264px 19px;
-    border: 1px solid #17191D;
-    cursor: pointer;
-    transition: 0.2s;
-}
-.player-mode:focus{
-    outline: 0px solid #17191D;
-}
-.player-mode:hover{
-    outline: 0px solid #17191D;
-    box-shadow: 4px 4px 0 0 #17191D;
-    transition: 0.2s;    
-
-}
-.title{
-    margin-top: 15px;
-    display: block;
-    text-align: center;
-}
-
-.difficulty-setings{
-    width: 100%; height: auto;
-}
-.difficulty{
-    box-sizing: border-box;
-    width: auto; height: auto;
-    margin: 10px 0;
-    display: flex;
-    justify-content: space-between;
-}
-.radio-text{
-    width: max-content; height: auto;
-    background-color: #F0F0F0;
-    color: #17191D;
-    border: 1px solid #17191D;
-    padding: 5px 15px;
-    box-shadow: 3px 3px 0 0 #17191D;
-    transition: 0.2s;
-}
-.radio-text:hover{
-    box-shadow: 4px 4px 0 0 #17191D;
-    cursor: pointer;
-    transition: 0.2s;
-}
-.radio-text:active{
-    box-shadow: 0px 0px 0 0 #17191D;
-    border: 0px;
-    transition: 0.2s;
-}
-.difficulty-value{
-    position: absolute;
-    clip: rect(1px);
-    height: 1px;
-    width: 1px;
-}
-.difficulty-value:checked + .radio-text{
-    background-color: #26B8B580;
-    color: #17191D;
-    box-shadow: 3px 3px 0 0 #17191D;
-}
-
-/*- - - - - Кнопка новая игра - - - - -*/
-.new-game{
-    width: max-content; height: auto;
-    padding: 5px 15px;
-    background-color: #9AC530;
-    color: #17191D;
-    padding: 5px 15px;
-    box-shadow: 3px 3px 0 0 #17191D;
-    margin: 10px 0px;
-    transition: 0.2s;
-}
-.new-game:hover{
-    box-shadow: 4px 4px 0 0 #17191D;
-    transition: 0.2s;
-    cursor: pointer;
-}
-.new-game:active{
-    box-shadow: 0px 0px 0 0 #17191D;
-    border: 0px;
-    transition: 0.2s;
-}
-.btnGame{
-    height: 60px; width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-/*- - - - - Игровое поле - - - - -*/
-.game-container{
-    width: 300px; height: 300px;
-    background-color: #F0F0F0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-svg.cross, svg.circle{
-    width: 100px; height: 100px;
-}
-
-.game{
-    display: flex;
-    flex-wrap: wrap;
-    width: 300px; height: 300px;
-    outline: 2px solid #17191D;
-}
-
-.field{
-    width: 100px; height: 100px;
-    border: 2px solid #17191D;
-    text-align: center;
-}
-.field:hover{
-    background-color: #DCDCDC;
-    cursor: pointer;
-}
-.o{
-    font-size: 76px;
-    color: #8651A2;
-}
-.x{
-    font-size: 76px;
-    color: #FF8800;
-}
-
-/*- - - - - Результат - победа - - - - -*/
-.res{
-    width: 100%; height: 22px;
-    display: block;
-    text-align: center;
-    color: #9AC530;
-    margin: 15px 0px 10px 0px;
-}
-.active{
-    background-color: #9AC53080;
-    color: #668519;
+body {
+    width: 100%; height: 100%;
+    background: #8b8b8b;
     transition: background-color 0.3s ease;
-    transition: color 0.3s ease;
+}
+.container {
+    width: 100%; height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
-/*- - - - - Медиа-запрос - - - - -*/
-@media only screen and (max-width:450px) {
-    .ill1da-logo h1{
-        font-size: 32px;
-    }   
+/* - - - Логотип - - - */
+header {
+    min-width: 100%; min-height: max-content;
+    padding: 1.5rem 2rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    z-index: 1000;
+}
+header .bar {
+    user-select: none;
+    font-family: PressStart2P;
+    color: #252525;
+    font-style: normal;
+    font-size: 1.5rem;
+    text-decoration: none;
+    transition: ease-in-out 0.3s;
+}
+header .bar:hover {
+    color: #131110;
+    transition: ease-in-out 0.3s;
 }
 
-@media only screen and (max-width: 426px) {
-    .ill1da-logo h1{
-        font-size: 32px;
-    }
+/* - - - Тело - - - */
+main {
+    min-width: 100%; min-height: max-content;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-@media only screen and (max-width: 376px) {
-    .ill1da-logo h1{
-        font-size: 24px;
-    }
+.main-field {
+    position: relative;
+    display: grid;
+    width: 30rem; height: 30rem;
+    aspect-ratio: 1/1;
+    grid-template-columns: 33% 33% 33%;
+    grid-template-rows: 33% 33% 33%;
+}
 
-    .game-container, .game{
-        width: 255px; height: 255px;
-        margin: 0 auto;
-    }
-    .field{
-        width: 85px; height: 85px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-    .player-mode{
-        padding: 8px 24px 8px 8px;
-        font-size: 14px;
-        box-shadow: 3px 3px 0 0 #17191D;
-        background-position: 205px 15px;
-    }
-    
-    .game-content{
-        padding: 0px 15px;
-    }
+.cell {
+    width: 100%; height: 100%;
+    border: 1px solid black;
+    cursor: pointer;
+    transition: ease-in-out 0.1s;
+    font-weight: 900;
+    font-size: 5rem;
+    text-align: center;
+}   
+.cell:hover {
+    background: #25252525;
+    transition: ease-in-out 0.1s;
+}
 
-    svg.cross, svg.circle{
-        width: 85px; height: 85px;
-    }
-    .o{
-        font-size: 64px;
-        color: #8651A2;
-    }
-    .x{
-        font-size: 64px;
-        color: #FF8800;
-    }
-    .radio-text{
-        font-size: 14px;
-    }
+.line {
+    position: absolute;
+    background-color: #252525;
+    z-index: 10;
+}
+.horizontal {
+    left: 0;
+    right: 0;
+    height: 10px;
+    transform: translateY(-50%);
+}
+
+.vertical {
+    top: 0;
+    bottom: 0;
+    width: 10px;
+    transform: translateX(-50%);
+}
+
+.diagonal-down, .diagonal-up {
+    position: absolute;
+    width: calc(100% * 1.414); /* Увеличиваем длину на sqrt(2) для покрытия диагонали */
+    height: 10px;
+    top: 50%;
+    left: 50%;
+    transform-origin: center;
+}
+
+.diagonal-down {
+    transform: translate(-50%, -50%) rotate(45deg); /* Поворачиваем на 45 градусов */
+}
+
+.diagonal-up {
+    transform: translate(-50%, -50%) rotate(-45deg); /* Поворачиваем на -45 градусов */
+}
+
+.x, .o {
+    font-weight: bold; /* Делаем шрифт жирным */
+    text-shadow:
+        -2px -2px 0 #000,
+         2px -2px 0 #000,
+        -2px  2px 0 #000,
+         2px  2px 0 #000, /* Четыре основные тени для увеличения толщины */
+        -3px  0   0 #000,
+         3px  0   0 #000,
+         0   -3px 0 #000,
+         0    3px 0 #000; /* Дополнительные тени для расширения обводки */
+}
+
+.x {
+    color: #D92407; /* Красный цвет для X */
+}
+
+.o {
+    color: #1E07D9; /* Синий цвет для O */
+}
+
+
+
+/* - - - Подвал - - - */
+footer {
+    background: violet;
+    min-width: 100%; min-height: max-content;
 }

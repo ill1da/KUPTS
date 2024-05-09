@@ -1,305 +1,84 @@
-class TicTacToe {
-    constructor() {
-        this.startGameBtn = document.querySelector('.start-game');
-        this.gameContainer = document.getElementById('game-container');
-        this.game = document.querySelector(".game");
-        this.res = document.querySelector(".res");
-        this.btnGame = document.querySelector(".new-game");
-        this.playerMode = document.querySelector(".player-mode");
-        this.difficulty = document.querySelector(".difficulty");
-        this.fields = document.querySelectorAll(".field");
-        this.step = false;
-        //игроки
-        this.cross = new Cross();
-        this.circle = new Circle();
-        this.initBound = this.init.bind(this);
-        this.comb = [
-            [0, 1, 2],
-            [3, 4, 5],
-            [6, 7, 8],
-            [0, 3, 6],
-            [1, 4, 7],
-            [2, 5, 8],
-            [0, 4, 8],
-            [2, 4, 6],
-        ];
-    }
+document.addEventListener('DOMContentLoaded', () => {
+    const cells = document.querySelectorAll('.cell');
+    const mainField = document.querySelector('.main-field');
+    let turn = 'X'; // X начинает игру
+    let gameOver = false;
+    const winningCombinations = [
+        { combo: [0, 1, 2], type: 'horizontal', linePos: '16.67%' },
+        { combo: [3, 4, 5], type: 'horizontal', linePos: '50%' },
+        { combo: [6, 7, 8], type: 'horizontal', linePos: '83.33%' },
+        { combo: [0, 3, 6], type: 'vertical', linePos: '16.67%' },
+        { combo: [1, 4, 7], type: 'vertical', linePos: '50%' },
+        { combo: [2, 5, 8], type: 'vertical', linePos: '83.33%' },
+        { combo: [0, 4, 8], type: 'diagonal-down' },
+        { combo: [2, 4, 6], type: 'diagonal-up' }
+    ];
 
-    init(e) {
-		if (e.target.innerHTML === '') {
-			if (!this.step) {
-				new Cross().stepCross(e.target);
-				this.step = !this.step;
-                this.vibrateOnMove(); // Вызываем виброотклик
-				if (!this.win()) {
-					if (this.playerMode.value == "vs-ai") {
-						this.aiMove();
-					}
-				}
-			} else { 
-				if (this.playerMode.value == "vs-player") {
-					new Circle().stepZero(e.target);
-					this.step = !this.step;
-                    this.vibrateOnMove(); // Вызываем виброотклик
-					this.win(); 
-				}
-			}
-		}
-	}
+    cells.forEach(cell => cell.addEventListener('click', cellClick, { once: true }));
 
-    aiMove() {
-        const emptyFields = this.getEmptyFields();
-        const radios = document.querySelectorAll('input[name="difficulty"]');
-        let checkedRadio;
+    function cellClick(e) {
+        if (!gameOver) {
+            const cell = e.target;
+            cell.textContent = turn;
+            cell.classList.add(turn === 'X' ? 'x' : 'o'); // Добавляем класс для стилизации
+            cell.style.pointerEvents = 'none'; // Предотвращаем повторный клик по ячейке
 
-        radios.forEach(radio => {
-            if (radio.checked) {
-                checkedRadio = radio;
-            }
-        });
-
-        const difficulty = checkedRadio.value;
-        setTimeout(() =>{
-            let moveIndex;
-    
-            switch (difficulty) {
-                case "easy":
-                    moveIndex = Math.floor(Math.random() * emptyFields.length);
-                    break;
-                case "medium":
-                    moveIndex = this.mediumAiMove(emptyFields);
-                    break;
-                case "hard":
-                    moveIndex = this.hardAiMove(emptyFields);
-                    break;
-                default:
-                    moveIndex = Math.floor(Math.random() * emptyFields.length);
-            }
-
-            if (emptyFields.length > 0) {
-                const targetField = this.fields[emptyFields[moveIndex]];
-                new Circle().stepZero(targetField);
-                this.step = !this.step;
-                this.vibrateOnMove(); // Вызываем виброотклик
-                this.win();
-            }
-        }, 1000);
-    }
-
-
-    mediumAiMove(emptyFields) {
-        for (const index of emptyFields) {
-            const boardCopy = [...this.getBoardState()];
-            boardCopy[index] = "o";
-            if (this.checkWin(boardCopy, "o")) {
-                return emptyFields.indexOf(index);
-            }
-            boardCopy[index] = "x";
-            if (this.checkWin(boardCopy, "x")) {
-                return emptyFields.indexOf(index);
-            }
-        }
-        return Math.floor(Math.random() * emptyFields.length);
-    }
-
-    hardAiMove(emptyFields) {
-        for (const index of emptyFields) {
-            const boardCopy = [...this.getBoardState()];
-            boardCopy[index] = "o";
-            if (this.checkWin(boardCopy, "o")) {
-                return emptyFields.indexOf(index);
-            }
-        }
-
-        for (const index of emptyFields) {
-            const boardCopy = [...this.getBoardState()];
-            boardCopy[index] = "x";
-            if (this.checkWin(boardCopy, "x")) {
-                return emptyFields.indexOf(index);
-            }
-        }
-
-        return Math.floor(Math.random() * emptyFields.length);
-    }
-	
-	getEmptyFields() {
-        const emptyFields = [];
-        this.fields.forEach((field, index) => {
-            if (field.innerHTML === '') {
-                emptyFields.push(index);
-            }
-        });
-        return emptyFields;
-    }
-
-    getBoardState() {
-        const board = [];
-        this.fields.forEach((field) => {
-            if (field.classList.contains("x")) {
-                board.push("x");
-            } else if (field.classList.contains("o")) {
-                board.push("o");
+            if (checkWin(turn)) {
+                gameOver = true;
+                setTimeout(resetBoard, 3000); // Показываем линию 3 секунды перед сбросом
+            } else if (isBoardFull()) {
+                setTimeout(resetBoard, 1000); // Сброс при ничьей
             } else {
-                board.push("");
+                switchTurn();
             }
-        });
-        return board;
-    }
-
-    minimax(newBoard, player, depth, alpha, beta) {
-		const availSpots = this.getEmptyFields();
-	
-		if (this.checkWin(newBoard, "x")) {
-			return { score: -10 + depth };
-		} else if (this.checkWin(newBoard, "o")) {
-			return { score: 10 - depth };
-		} else if (availSpots.length === 0) {
-			return { score: 0 };
-		}
-	
-		if (player === "o") {
-			let bestScore = -Infinity;
-			let bestMove = null;
-			for (const index of availSpots) {
-				newBoard[index] = player;
-				const score = this.minimax(newBoard, "x", depth + 1, alpha, beta).score;
-				newBoard[index] = '';
-				if (score > bestScore) {
-					bestScore = score;
-					bestMove = index;
-				}
-				alpha = Math.max(alpha, bestScore);
-				if (alpha >= beta) {
-					break;
-				}
-			}
-			return { score: bestScore, index: bestMove };
-		} else {
-			let bestScore = Infinity;
-			let bestMove = null;
-			for (const index of availSpots) {
-				newBoard[index] = player;
-				const score = this.minimax(newBoard, "o", depth + 1, alpha, beta).score;
-				newBoard[index] = '';
-				if (score < bestScore) {
-					bestScore = score;
-					bestMove = index;
-				}
-				beta = Math.min(beta, bestScore);
-				if (alpha >= beta) {
-					break;
-				}
-			}
-			return { score: bestScore, index: bestMove };
-		}
-	}	
-
-    newGame() {
-        this.step = false;
-        this.res.innerText = "";
-        this.fields.forEach((item) => {
-            item.innerHTML = "";
-            item.classList.remove("x", "o", "active");
-        });
-        this.game.addEventListener("click", this.init.bind(this));
-        this.game.addEventListener("click", this.initBound);
-    }
-
-    win() {
-		let gameOver = false;
-		for (let i = 0; i < this.comb.length; i++) {
-			if (
-				this.fields[this.comb[i][0]].classList.contains("x") &&
-				this.fields[this.comb[i][1]].classList.contains("x") &&
-				this.fields[this.comb[i][2]].classList.contains("x")
-			) {
-				gameOver = true;
-				this.fields[this.comb[i][0]].classList.add("active");
-				this.fields[this.comb[i][1]].classList.add("active");
-				this.fields[this.comb[i][2]].classList.add("active");
-				this.res.innerText = "Выиграл X";
-				this.game.removeEventListener("click", this.initBound);
-				break;
-			} else if (
-				this.fields[this.comb[i][0]].classList.contains("o") &&
-				this.fields[this.comb[i][1]].classList.contains("o") &&
-				this.fields[this.comb[i][2]].classList.contains("o")
-			) {
-				gameOver = true;
-                this.fields[this.comb[i][0]].classList.add("active");
-                this.fields[this.comb[i][1]].classList.add("active");
-                this.fields[this.comb[i][2]].classList.add("active");
-                this.res.innerText = "Выиграл O";
-				this.game.removeEventListener("click", this.initBound);
-				break;
-			}
-		}
-	
-		if (!gameOver && this.getEmptyFields().length === 0) {
-			this.res.innerText = "Ничья";
-			gameOver = true;
-		}
-	
-		return gameOver;
-	}
-
-    checkWin(board, player) {
-		for (let i = 0; i < this.comb.length; i++) {
-			if (
-				board[this.comb[i][0]] === player &&
-				board[this.comb[i][1]] === player &&
-				board[this.comb[i][2]] === player
-			) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-    vibrateOnMove() {
-        if ("vibrate" in navigator) {
-            navigator.vibrate(20);
-            console.log("+");
         }
     }
 
-}
-
-class Cross {
-    constructor() {
-		this.cross = "x";
-	}
-
-	stepCross(target) {
-		if (target.innerHTML === '') {
-			target.innerHTML = this.cross;
-			target.classList.add("x");
-		}
-	}
-}
-
-class Circle {
-    constructor() {
-		this.circle = "o";
-	}
-
-	stepZero(target) {
-		if (target.innerHTML === '') {
-			target.innerHTML = this.circle;
-			target.classList.add("o");
-		}
-	}
-}
-
-const ticTacToe = new TicTacToe();
-ticTacToe.btnGame.addEventListener("click", ticTacToe.newGame.bind(ticTacToe));
-ticTacToe.game.addEventListener("click", ticTacToe.initBound);
-
-document.getElementById("player-mode").addEventListener("change", function() {
-    const difficultySelect = document.getElementById("difficulty");
-    if (this.value === "vs-ai") {
-        difficultySelect.style.display = "block";
-    } else {
-        difficultySelect.style.display = "none";
+    function drawLine({ type, linePos }) {
+        const line = document.createElement('div');
+        line.className = `line ${type}`;
+        if (['horizontal', 'vertical'].includes(type)) {
+            line.style[type === 'horizontal' ? 'top' : 'left'] = linePos;
+        } else {
+            line.style.top = '50%';
+            line.style.left = '50%';
+        }
+        mainField.appendChild(line);
     }
+
+    function checkWin(player) {
+        return winningCombinations.some(({ combo, type, linePos }) => {
+            if (combo.every(index => cells[index].textContent === player)) {
+                drawLine({ type, linePos });
+                return true;
+            }
+            return false;
+        });
+    }
+
+    function switchTurn() {
+        turn = turn === 'X' ? 'O' : 'X';
+        document.body.style.backgroundColor = turn === 'X' ? '#F2AF5C' : '#40799A';
+    }
+
+    function isBoardFull() {
+        return [...cells].every(cell => cell.textContent);
+    }
+
+    function resetBoard() {
+        cells.forEach(cell => {
+            cell.textContent = '';
+            cell.classList.remove('x', 'o'); // Удаляем классы стилей
+            cell.style.pointerEvents = 'auto';
+            cell.addEventListener('click', cellClick, { once: true });
+        });
+        const line = document.querySelector('.line');
+        if (line) {
+            line.remove();
+        }
+        gameOver = false;
+        switchTurn(); // Смена игрока, чтобы начать новый раунд
+    }
+
+    switchTurn(); // Устанавливаем начальный цвет фона
 });
