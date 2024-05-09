@@ -2,15 +2,19 @@
     font-family: LexendMega;
     src: url(./MAIN-source/font/LexendMega-VariableFont_wght.ttf);
 }
+@font-face {
+    font-family: Montserrat;
+    src: url(./MAIN-source/font/Montserrat-VariableFont_wght.ttf);
+}
 
 *{
     margin: 0; padding: 0;
     box-sizing: border-box;
     user-select: none;
+    font-family: Montserrat;
+    font-weight: 700;
     color: #000000;
     text-transform: uppercase;
-    font-size: 1rem;
-    font-weight: 300;
     line-height: 160%;
 }
 
@@ -98,17 +102,28 @@ body {
     transition: ease-in-out 0.16s;
 }
 .card {
-    width: clamp(245px, 20vw, 490px);
+    width: clamp(245px, 16vw, 490px);
     aspect-ratio: 245/318.5;
     position: relative;
     background: #FFFFFF;
     border-radius: 25px;
     border: 7px solid #000000;
     transition: ease-in-out 0.16s;
+    background-position: center center;
+    background-size: cover;
+    background-repeat: no-repeat;
     z-index: 10;
 }
+#card-logo {
+    width: 100%; height: 100%;
+} 
+.card-line {
+    width: 100%;
+    aspect-ratio: 215/4;
+    background: #000000;
+}
 .shadow {
-    width: clamp(245px, 20vw, 490px);
+    width: clamp(245px, 16vw, 490px);
     aspect-ratio: 245/318.5;
     position: absolute;
     background: #000000;
@@ -122,49 +137,62 @@ body {
 
 /* - Карточки - */
 #Tic-Tac-Toe {
-    background: #E3DFF2;
+    background-color: #E3DFF2;
+    background-image: url(./MAIN-source/card/Tic-Tac-Toe-card.svg);
 }
 
+
 #Life-checklist {
-    background: #FFB2EF;
+    background-color: #FFB2EF;
+    background-image: url(./MAIN-source/card/Life-checklist-card.svg);
 }
 
 #Press-the-button {
-    background: #FF7A5C;
+    background-color: #FF7A5C;
+    background-image: url(./MAIN-source/card/Press-the-button-card.svg);
 }
 
 #Swipe-facts {
-    background: #FFDB58;
+    background-color: #FFDB58;
+    background-image: url(./MAIN-source/card/Swipe-facts-card.svg);
 }
 
 #Chronometer {
-    background: #7FBC8C;
+    background-color: #7FBC8C;
+    background-image: url(./MAIN-source/card/Chronometer-card.svg);
 }
 
 #Percentage {
-    background: #87CEEB;
+    background-color: #87CEEB;
+    background-image: url(./MAIN-source/card/Percentage-card.svg);
 }
 
 #Color-battle {
-    background: #C4A1FF;
+    background-color: #C4A1FF;
+    background-image: url(./MAIN-source/card/Color-battle-card.svg);
 }
 
 #Travotron {
-    background: #90EE90;
+    background-color: #90EE90;
+    background-image: url(./MAIN-source/card/Travotron-card.svg);
 }
 
 #Sand-painting {
-    background: #E3A018;
+    background-color: #E3A018;
+    background-image: url(./MAIN-source/card/Sand-painting-card.svg);
 }
 
-#game-2048 {
-    background: #FDFD96;
+#Game-2048 {
+    background-color: #FDFD96;
+    background-image: url(./MAIN-source/card/Game-2048-card.svg);
 }
 
 #Krugorost {
-    background: #FF69B4;
+    background-color: #FF69B4;
+    background-image: url(./MAIN-source/card/Krugorost-card.svg);
 }
 
 #Sticks-and-Fields {
-    background: #DAF5F0;
+    background-color: #DAF5F0;
+    background-image: url(./MAIN-source/card/Sticks-and-Fields-card.svg);
 }
