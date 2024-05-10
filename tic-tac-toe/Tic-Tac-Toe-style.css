@@ -1,21 +1,20 @@
 @font-face {
-    font-family: PressStart2P;
-    src: url(./Tic-Tac-Toe-source/font/PressStart2P-Regular.ttf);
+    font-family: LexendMega;
+    src: url(../assets/fonts/LexendMega-VariableFont_wght.ttf);
 }
 @font-face {
     font-family: Montserrat;
-    src: url(./Tic-Tac-Toe-source/font/Montserrat-VariableFont_wght.ttf);
+    src: url(../assets/fonts/Montserrat-VariableFont_wght.ttf);
 }
 
-/* - - Крестики-Нолики! - - */
-* {
+*{
     margin: 0; padding: 0;
     box-sizing: border-box;
     user-select: none;
     font-family: Montserrat;
-    color: #252525;
-    font-size: 1rem;
-    font-weight: 300;
+    font-weight: 700;
+    color: #000000;
+    text-transform: uppercase;
     line-height: 160%;
 }
 
@@ -24,131 +23,117 @@ html{
 }
 body {
     width: 100%; height: 100%;
-    background: #8b8b8b;
-    transition: background-color 0.3s ease;
+    background: #8B8B8B;
+    transition: background ease-in-out 0.3s;
 }
-.container {
-    width: 100%; height: 100vh;
+
+/* - Контейнер - */
+#container {
+    width: 100%; height: 100%;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-self: flex-start;
+    padding: clamp(10px, 5vw, 25px);
+    gap: clamp(15px, 5vw, 50px);
 }
 
-/* - - - Логотип - - - */
-header {
-    min-width: 100%; min-height: max-content;
-    padding: 1.5rem 2rem;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    z-index: 1000;
+/* - Лого - */
+#logo-AREA {
+    box-sizing: content-box;
+    width: fit-content; height: fit-content;
+    position: relative;
+    border-radius: 25px;
 }
-header .bar {
-    user-select: none;
-    font-family: PressStart2P;
-    color: #252525;
-    font-style: normal;
-    font-size: 1.5rem;
+#logo, #after-logo {
+    width: max-content; height: max-content;
+    position: absolute;
+    font-family: LexendMega;
+    font-size: clamp(12px, 2vw, 24px);
+    font-weight: 700;
     text-decoration: none;
-    transition: ease-in-out 0.3s;
+    background: #FFFFFF;
+    border: 3px solid #000000;
+    border-radius: clamp(6px, 1.5vw, 12px);
+    padding: 2px 8px;
+    transition: ease-in-out 0.16s;
+    z-index: 10;
 }
-header .bar:hover {
-    color: #131110;
-    transition: ease-in-out 0.3s;
+#after-logo {
+    top: 3px; left: 3px;
+    background: #000000;
+    z-index: 9;
+}
+#logo-AREA:hover #logo{
+    transform: translate(3px, 3px);
+    transition: ease-in-out 0.16s;
 }
 
-/* - - - Тело - - - */
+/* - Тело сайта - */
 main {
-    min-width: 100%; min-height: max-content;
+    min-width: 100%; min-height: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
 }
-
 .main-field {
     position: relative;
     display: grid;
-    width: 30rem; height: 30rem;
+    width: 30rem;
     aspect-ratio: 1/1;
-    grid-template-columns: 33% 33% 33%;
-    grid-template-rows: 33% 33% 33%;
 }
-
 .cell {
     width: 100%; height: 100%;
+    background: #FFFFFF;
     border: 1px solid black;
     cursor: pointer;
     transition: ease-in-out 0.1s;
     font-weight: 900;
-    font-size: 5rem;
+    font-size: var(--cell-font-size, 20px);
     text-align: center;
-}   
+    aspect-ratio: 1 / 1;
+    transition: opacity 0.5s;
+}
+.cell.fading {
+    opacity: 0.5;
+}
 .cell:hover {
-    background: #25252525;
+    background: #FFFFFF75;
     transition: ease-in-out 0.1s;
 }
 
-.line {
-    position: absolute;
-    background-color: #252525;
-    z-index: 10;
-}
-.horizontal {
+
+.modal {
+    display: block; /* Показываем модальное окно по умолчанию */
+    position: fixed;
+    z-index: 1;
     left: 0;
-    right: 0;
-    height: 10px;
-    transform: translateY(-50%);
-}
-
-.vertical {
     top: 0;
-    bottom: 0;
-    width: 10px;
-    transform: translateX(-50%);
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0,0,0);
+    background-color: rgba(0,0,0,0.4);
 }
 
-.diagonal-down, .diagonal-up {
-    position: absolute;
-    width: calc(100% * 1.414); /* Увеличиваем длину на sqrt(2) для покрытия диагонали */
-    height: 10px;
-    top: 50%;
-    left: 50%;
-    transform-origin: center;
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 500px;
+    text-align: center;
 }
 
-.diagonal-down {
-    transform: translate(-50%, -50%) rotate(45deg); /* Поворачиваем на 45 градусов */
+button {
+    padding: 10px 20px;
+    margin: 10px;
+    cursor: pointer;
 }
 
-.diagonal-up {
-    transform: translate(-50%, -50%) rotate(-45deg); /* Поворачиваем на -45 градусов */
-}
-
-.x, .o {
-    font-weight: bold; /* Делаем шрифт жирным */
-    text-shadow:
-        -2px -2px 0 #000,
-         2px -2px 0 #000,
-        -2px  2px 0 #000,
-         2px  2px 0 #000, /* Четыре основные тени для увеличения толщины */
-        -3px  0   0 #000,
-         3px  0   0 #000,
-         0   -3px 0 #000,
-         0    3px 0 #000; /* Дополнительные тени для расширения обводки */
-}
-
-.x {
-    color: #D92407; /* Красный цвет для X */
-}
-
-.o {
-    color: #1E07D9; /* Синий цвет для O */
-}
-
-
-
-/* - - - Подвал - - - */
-footer {
-    background: violet;
-    min-width: 100%; min-height: max-content;
+.scoreboard {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+    font-size: 1.5em;
 }

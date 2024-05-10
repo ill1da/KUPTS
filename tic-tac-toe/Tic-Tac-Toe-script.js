@@ -1,59 +1,245 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const cells = document.querySelectorAll('.cell');
-    const mainField = document.querySelector('.main-field');
-    let turn = 'X'; // X начинает игру
+    const cellsContainer = document.getElementById('mainField');
+    const modal = document.getElementById('modal');
+    const vsPlayerButton = document.getElementById('vsPlayer');
+    const vsBotButton = document.getElementById('vsBot');
+    const botDifficultyDiv = document.getElementById('botDifficulty');
+    const startBotGameButton = document.getElementById('startBotGame');
+    const difficultySlider = document.getElementById('difficulty');
+    const scoreXElement = document.getElementById('scoreX');
+    const scoreOElement = document.getElementById('scoreO');
+    const playerOElement = document.getElementById('playerO');
+    const modifyCheckbox = document.getElementById('modifyCheckbox');
+    const modificationOptions = document.getElementById('modificationOptions');
+    const gridSizeSelect = document.getElementById('gridSize');
+    const winLengthInput = document.getElementById('winLength');
+    const gameModeRadios = document.getElementsByName('gameMode');
+    let turn;
     let gameOver = false;
-    const winningCombinations = [
-        { combo: [0, 1, 2], type: 'horizontal', linePos: '16.67%' },
-        { combo: [3, 4, 5], type: 'horizontal', linePos: '50%' },
-        { combo: [6, 7, 8], type: 'horizontal', linePos: '83.33%' },
-        { combo: [0, 3, 6], type: 'vertical', linePos: '16.67%' },
-        { combo: [1, 4, 7], type: 'vertical', linePos: '50%' },
-        { combo: [2, 5, 8], type: 'vertical', linePos: '83.33%' },
-        { combo: [0, 4, 8], type: 'diagonal-down' },
-        { combo: [2, 4, 6], type: 'diagonal-up' }
-    ];
+    let vsBot = false;
+    let difficulty = 1;
+    let scoreX = 0;
+    let scoreO = 0;
+    let gridSize = 3;
+    let winLength = 3;
+    let gameMode = 'classic';
+    let cells = [];
+    let movesX = [];
+    let movesO = [];
 
-    cells.forEach(cell => cell.addEventListener('click', cellClick, { once: true }));
+    const resizeObserver = new ResizeObserver(entries => {
+        for (let entry of entries) {
+            const cellSize = Math.min(entry.contentRect.width, entry.contentRect.height);
+            entry.target.style.setProperty('--cell-font-size', `${cellSize * 0.6}px`);
+        }
+    });
+
+    modifyCheckbox.addEventListener('change', () => {
+        if (modifyCheckbox.checked) {
+            modificationOptions.style.display = 'block';
+        } else {
+            modificationOptions.style.display = 'none';
+            resetToDefaultSettings();
+        }
+    });
+
+    vsPlayerButton.addEventListener('click', () => {
+        vsBot = false;
+        updatePlayerOText('Игрок O');
+        startGame();
+    });
+
+    vsBotButton.addEventListener('click', () => {
+        vsBot = true;
+        updatePlayerOText('Бот O');
+        botDifficultyDiv.style.display = 'block';
+    });
+
+    startBotGameButton.addEventListener('click', () => {
+        difficulty = parseInt(difficultySlider.value, 10);
+        startGame();
+    });
+
+    gameModeRadios.forEach(radio => {
+        radio.addEventListener('change', (e) => {
+            gameMode = e.target.value;
+        });
+    });
+
+    function startGame() {
+        gridSize = parseInt(gridSizeSelect.value, 10);
+        winLength = parseInt(winLengthInput.value, 10);
+        modal.style.display = 'none';
+        createGrid(gridSize);
+        turn = Math.random() < 0.5 ? 'X' : 'O';
+        movesX = [];
+        movesO = [];
+        setTimeout(() => {
+            document.body.style.backgroundColor = turn === 'X' ? '#F2AF5C' : '#40799A';
+            cells.forEach(cell => cell.addEventListener('click', cellClick));
+            if (vsBot && turn === 'O') {
+                lockCells();
+                setTimeout(botMove, 1000);
+            }
+        }, 1000);
+    }
+
+    function createGrid(size) {
+        cellsContainer.innerHTML = '';
+        cellsContainer.style.gridTemplateColumns = `repeat(${size}, 1fr)`;
+        cellsContainer.style.gridTemplateRows = `repeat(${size}, 1fr)`;
+        cells = [];
+        for (let i = 0; i < size * size; i++) {
+            const cell = document.createElement('div');
+            cell.classList.add('cell');
+            cellsContainer.appendChild(cell);
+            cells.push(cell);
+            resizeObserver.observe(cell);
+        }
+    }
 
     function cellClick(e) {
-        if (!gameOver) {
+        if (!gameOver && (vsBot && turn === 'X' || !vsBot)) {
             const cell = e.target;
-            cell.textContent = turn;
-            cell.classList.add(turn === 'X' ? 'x' : 'o'); // Добавляем класс для стилизации
-            cell.style.pointerEvents = 'none'; // Предотвращаем повторный клик по ячейке
-
-            if (checkWin(turn)) {
-                gameOver = true;
-                setTimeout(resetBoard, 3000); // Показываем линию 3 секунды перед сбросом
-            } else if (isBoardFull()) {
-                setTimeout(resetBoard, 1000); // Сброс при ничьей
-            } else {
-                switchTurn();
+            if (cell.textContent === '') {
+                prepareNextMove();
+                cell.textContent = turn;
+                cell.style.pointerEvents = 'none';
+                finalizeMove(cell);
             }
         }
     }
 
-    function drawLine({ type, linePos }) {
-        const line = document.createElement('div');
-        line.className = `line ${type}`;
-        if (['horizontal', 'vertical'].includes(type)) {
-            line.style[type === 'horizontal' ? 'top' : 'left'] = linePos;
-        } else {
-            line.style.top = '50%';
-            line.style.left = '50%';
+    function prepareNextMove() {
+        if (gameMode === 'modern') {
+            if (turn === 'X' && movesX.length >= winLength) {
+                const oldMove = movesX[0];
+                oldMove.classList.add('fading');
+            } else if (turn === 'O' && movesO.length >= winLength) {
+                const oldMove = movesO[0];
+                oldMove.classList.add('fading');
+            }
         }
-        mainField.appendChild(line);
     }
 
-    function checkWin(player) {
-        return winningCombinations.some(({ combo, type, linePos }) => {
-            if (combo.every(index => cells[index].textContent === player)) {
-                drawLine({ type, linePos });
+    function finalizeMove(cell) {
+        if (gameMode === 'modern') {
+            if (turn === 'X') {
+                if (movesX.length >= winLength) {
+                    const oldMove = movesX.shift();
+                    oldMove.textContent = '';
+                    oldMove.classList.remove('fading');
+                    oldMove.style.pointerEvents = 'auto';
+                }
+                movesX.push(cell);
+            } else {
+                if (movesO.length >= winLength) {
+                    const oldMove = movesO.shift();
+                    oldMove.textContent = '';
+                    oldMove.classList.remove('fading');
+                    oldMove.style.pointerEvents = 'auto';
+                }
+                movesO.push(cell);
+            }
+            
+            // Check for win or full board after removing the old move
+            if (checkWin(turn)) {
+                gameOver = true;
+                updateScore(turn);
+                setTimeout(resetBoard, 1000);
+            } else if (isBoardFull()) {
+                setTimeout(resetBoard, 1000);
+            } else {
+                switchTurn();
+                if (vsBot && turn === 'O') {
+                    lockCells();
+                    setTimeout(botMove, 1000);
+                }
+            }
+        }
+    }
+    
+
+    function botMove() {
+        if (!gameOver) {
+            let moveMade = false;
+
+            if (difficulty === 3) {
+                moveMade = attemptWinningMove('O') || attemptBlockingMove('X');
+            } else if (difficulty === 2) {
+                moveMade = attemptBlockingMove('X');
+            }
+
+            if (!moveMade) {
+                prepareNextMove();
+                setTimeout(makeRandomMove, 500); // Увеличено время для подготовки удаления
+            }
+
+            if (checkWin(turn)) {
+                gameOver = true;
+                updateScore(turn);
+                setTimeout(resetBoard, 1000);
+            } else if (isBoardFull()) {
+                setTimeout(resetBoard, 1000);
+            } else {
+                switchTurn();
+                unlockCells();
+            }
+        }
+    }
+
+    function attemptWinningMove(player) {
+        return winningCombinations(player).some(combination => {
+            const cellsArray = combination.map(index => cells[index]);
+            const countPlayer = cellsArray.filter(cell => cell.textContent === player).length;
+            const emptyCells = cellsArray.filter(cell => cell.textContent === '');
+
+            if (countPlayer === winLength - 1 && emptyCells.length === 1) {
+                emptyCells[0].textContent = 'O';
+                emptyCells[0].style.pointerEvents = 'none';
                 return true;
             }
             return false;
         });
+    }
+
+    function attemptBlockingMove(player) {
+        return attemptWinningMove(player);
+    }
+
+    function makeRandomMove() {
+        const emptyCells = cells.filter(cell => !cell.textContent);
+        const randomIndex = Math.floor(Math.random() * emptyCells.length);
+        const cell = emptyCells[randomIndex];
+        if (gameMode === 'modern') {
+            prepareNextMove();
+            movesO.push(cell);
+        }
+        cell.textContent = 'O';
+        cell.style.pointerEvents = 'none';
+    }
+
+    function lockCells() {
+        cells.forEach(cell => cell.style.pointerEvents = 'none');
+    }
+
+    function unlockCells() {
+        cells.forEach(cell => {
+            if (!cell.textContent) {
+                cell.style.pointerEvents = 'auto';
+            }
+        });
+    }
+
+    function switchTurnWithDelay() {
+        switchTurn();
+        lockCells();
+        setTimeout(() => {
+            unlockCells();
+            if (vsBot && turn === 'O' && !gameOver) {
+                setTimeout(botMove, 1000);
+            }
+        }, 1000);
     }
 
     function switchTurn() {
@@ -61,24 +247,80 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.style.backgroundColor = turn === 'X' ? '#F2AF5C' : '#40799A';
     }
 
+    function checkWin(player) {
+        return winningCombinations(player).some(combination => {
+            return combination.every(index => {
+                return cells[index].textContent === player;
+            });
+        });
+    }
+
+    function winningCombinations(player) {
+        const combinations = [];
+        const gridSizeSquared = gridSize * gridSize;
+
+        for (let i = 0; i < gridSize; i++) {
+            for (let j = 0; j < gridSize - winLength + 1; j++) {
+                const row = [], col = [];
+                for (let k = 0; k < winLength; k++) {
+                    row.push(i * gridSize + j + k);
+                    col.push(j * gridSize + i + k * gridSize);
+                }
+                combinations.push(row, col);
+            }
+        }
+
+        for (let i = 0; i < gridSize - winLength + 1; i++) {
+            for (let j = 0; j < gridSize - winLength + 1; j++) {
+                const diag1 = [], diag2 = [];
+                for (let k = 0; k < winLength; k++) {
+                    diag1.push((i + k) * gridSize + j + k);
+                    diag2.push((i + k) * gridSize + j + winLength - k - 1);
+                }
+                combinations.push(diag1, diag2);
+            }
+        }
+
+        return combinations;
+    }
+
     function isBoardFull() {
-        return [...cells].every(cell => cell.textContent);
+        return cells.every(cell => cell.textContent);
     }
 
     function resetBoard() {
         cells.forEach(cell => {
             cell.textContent = '';
-            cell.classList.remove('x', 'o'); // Удаляем классы стилей
             cell.style.pointerEvents = 'auto';
-            cell.addEventListener('click', cellClick, { once: true });
+            cell.classList.remove('fading');
+            cell.addEventListener('click', cellClick);
         });
-        const line = document.querySelector('.line');
-        if (line) {
-            line.remove();
-        }
+        movesX = [];
+        movesO = [];
         gameOver = false;
-        switchTurn(); // Смена игрока, чтобы начать новый раунд
+        switchTurn();
+        if (vsBot && turn === 'O') {
+            lockCells();
+            setTimeout(botMove, 1000);
+        }
     }
 
-    switchTurn(); // Устанавливаем начальный цвет фона
+    function updateScore(player) {
+        if (player === 'X') {
+            scoreX++;
+            scoreXElement.textContent = scoreX;
+        } else if (player === 'O') {
+            scoreO++;
+            scoreOElement.textContent = scoreO;
+        }
+    }
+
+    function updatePlayerOText(text) {
+        playerOElement.firstChild.textContent = `${text}: `;
+    }
+
+    function resetToDefaultSettings() {
+        gridSizeSelect.value = 3;
+        winLengthInput.value = 3;
+    }
 });
