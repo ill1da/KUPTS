@@ -92,6 +92,9 @@ document.addEventListener('DOMContentLoaded', () => {
         for (let i = 0; i < size * size; i++) {
             const cell = document.createElement('div');
             cell.classList.add('cell');
+            const symbol = document.createElement('div'); // Добавляем элемент для символа
+            symbol.classList.add('symbol');
+            cell.appendChild(symbol);
             cellsContainer.appendChild(cell);
             cells.push(cell);
             resizeObserver.observe(cell);
@@ -100,10 +103,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function cellClick(e) {
         if (!gameOver && (vsBot && turn === 'X' || !vsBot)) {
-            const cell = e.target;
-            if (cell.textContent === '') {
+            const cell = e.target.closest('.cell'); // Получаем ближайшую ячейку
+            const symbol = cell.querySelector('.symbol'); // Получаем элемент символа
+            if (symbol.textContent === '') {
                 prepareNextMove();
-                cell.textContent = turn;
+                symbol.textContent = turn;
                 cell.style.pointerEvents = 'none';
                 finalizeMove(cell);
             }
@@ -113,10 +117,10 @@ document.addEventListener('DOMContentLoaded', () => {
     function prepareNextMove() {
         if (gameMode === 'modern') {
             if (turn === 'X' && movesX.length >= winLength) {
-                const oldMove = movesX[0];
+                const oldMove = movesX[0].querySelector('.symbol');
                 oldMove.classList.add('fading');
             } else if (turn === 'O' && movesO.length >= winLength) {
-                const oldMove = movesO[0];
+                const oldMove = movesO[0].querySelector('.symbol');
                 oldMove.classList.add('fading');
             }
         }
@@ -127,21 +131,23 @@ document.addEventListener('DOMContentLoaded', () => {
             if (turn === 'X') {
                 if (movesX.length >= winLength) {
                     const oldMove = movesX.shift();
-                    oldMove.textContent = '';
-                    oldMove.classList.remove('fading');
+                    const oldSymbol = oldMove.querySelector('.symbol');
+                    oldSymbol.textContent = '';
+                    oldSymbol.classList.remove('fading');
                     oldMove.style.pointerEvents = 'auto';
                 }
                 movesX.push(cell);
             } else {
                 if (movesO.length >= winLength) {
                     const oldMove = movesO.shift();
-                    oldMove.textContent = '';
-                    oldMove.classList.remove('fading');
+                    const oldSymbol = oldMove.querySelector('.symbol');
+                    oldSymbol.textContent = '';
+                    oldSymbol.classList.remove('fading');
                     oldMove.style.pointerEvents = 'auto';
                 }
                 movesO.push(cell);
             }
-            
+
             // Check for win or full board after removing the old move
             if (checkWin(turn)) {
                 gameOver = true;
@@ -154,11 +160,29 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (vsBot && turn === 'O') {
                     lockCells();
                     setTimeout(botMove, 1000);
+                } else {
+                    unlockCells(); // Ensure cells are unlocked for player's turn
+                }
+            }
+        } else {
+            // Classic mode handling
+            if (checkWin(turn)) {
+                gameOver = true;
+                updateScore(turn);
+                setTimeout(resetBoard, 1000);
+            } else if (isBoardFull()) {
+                setTimeout(resetBoard, 1000);
+            } else {
+                switchTurn();
+                if (vsBot && turn === 'O') {
+                    lockCells();
+                    setTimeout(botMove, 1000);
+                } else {
+                    unlockCells(); // Ensure cells are unlocked for player's turn
                 }
             }
         }
     }
-    
 
     function botMove() {
         if (!gameOver) {
@@ -171,19 +195,15 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             if (!moveMade) {
-                prepareNextMove();
-                setTimeout(makeRandomMove, 500); // Увеличено время для подготовки удаления
-            }
-
-            if (checkWin(turn)) {
-                gameOver = true;
-                updateScore(turn);
-                setTimeout(resetBoard, 1000);
-            } else if (isBoardFull()) {
-                setTimeout(resetBoard, 1000);
+                prepareNextMove(); // Prepare before making a random move
+                setTimeout(() => {
+                    makeRandomMove();
+                    finalizeMove(movesO[movesO.length - 1]); // Finalize move for bot
+                    unlockCells(); // Ensure cells are unlocked after bot's move
+                }, 500);
             } else {
-                switchTurn();
-                unlockCells();
+                finalizeMove(movesO[movesO.length - 1]); // Finalize move for bot
+                unlockCells(); // Ensure cells are unlocked after bot's move
             }
         }
     }
@@ -191,11 +211,11 @@ document.addEventListener('DOMContentLoaded', () => {
     function attemptWinningMove(player) {
         return winningCombinations(player).some(combination => {
             const cellsArray = combination.map(index => cells[index]);
-            const countPlayer = cellsArray.filter(cell => cell.textContent === player).length;
-            const emptyCells = cellsArray.filter(cell => cell.textContent === '');
+            const countPlayer = cellsArray.filter(cell => cell.querySelector('.symbol').textContent === player).length;
+            const emptyCells = cellsArray.filter(cell => cell.querySelector('.symbol').textContent === '');
 
             if (countPlayer === winLength - 1 && emptyCells.length === 1) {
-                emptyCells[0].textContent = 'O';
+                emptyCells[0].querySelector('.symbol').textContent = 'O';
                 emptyCells[0].style.pointerEvents = 'none';
                 return true;
             }
@@ -208,14 +228,21 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function makeRandomMove() {
-        const emptyCells = cells.filter(cell => !cell.textContent);
+        const emptyCells = cells.filter(cell => !cell.querySelector('.symbol').textContent);
         const randomIndex = Math.floor(Math.random() * emptyCells.length);
         const cell = emptyCells[randomIndex];
         if (gameMode === 'modern') {
-            prepareNextMove();
+            if (movesO.length >= winLength) {
+                const oldMove = movesO.shift();
+                const oldSymbol = oldMove.querySelector('.symbol');
+                oldSymbol.textContent = '';
+                oldSymbol.classList.remove('fading');
+                oldMove.style.pointerEvents = 'auto';
+            }
             movesO.push(cell);
         }
-        cell.textContent = 'O';
+        const symbol = cell.querySelector('.symbol');
+        symbol.textContent = 'O';
         cell.style.pointerEvents = 'none';
     }
 
@@ -225,21 +252,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function unlockCells() {
         cells.forEach(cell => {
-            if (!cell.textContent) {
+            if (!cell.querySelector('.symbol').textContent) {
                 cell.style.pointerEvents = 'auto';
             }
         });
-    }
-
-    function switchTurnWithDelay() {
-        switchTurn();
-        lockCells();
-        setTimeout(() => {
-            unlockCells();
-            if (vsBot && turn === 'O' && !gameOver) {
-                setTimeout(botMove, 1000);
-            }
-        }, 1000);
     }
 
     function switchTurn() {
@@ -250,7 +266,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function checkWin(player) {
         return winningCombinations(player).some(combination => {
             return combination.every(index => {
-                return cells[index].textContent === player;
+                return cells[index].querySelector('.symbol').textContent === player;
             });
         });
     }
@@ -285,14 +301,15 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function isBoardFull() {
-        return cells.every(cell => cell.textContent);
+        return cells.every(cell => cell.querySelector('.symbol').textContent);
     }
 
     function resetBoard() {
         cells.forEach(cell => {
-            cell.textContent = '';
+            const symbol = cell.querySelector('.symbol');
+            symbol.textContent = '';
             cell.style.pointerEvents = 'auto';
-            cell.classList.remove('fading');
+            symbol.classList.remove('fading');
             cell.addEventListener('click', cellClick);
         });
         movesX = [];
