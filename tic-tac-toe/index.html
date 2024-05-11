@@ -25,26 +25,13 @@
     <div id="modal" class="modal">
         <div class="modal-content">
             <h2>Выберите режим игры</h2>
-            <button id="vsPlayer">Против игрока</button>
-            <button id="vsBot">Против бота</button>
-            <div id="botDifficulty" style="display:none;">
-                <label for="difficulty">Выберите сложность:</label>
-                <input type="range" id="difficulty" name="difficulty" min="1" max="3" step="1" list="tickmarks">
-                <datalist id="tickmarks">
-                    <option value="1" label="Легкий"></option>
-                    <option value="2" label="Средний"></option>
-                    <option value="3" label="Сложный"></option>
-                </datalist>
-                <button id="startBotGame">Начать игру</button>
-            </div>
-            <div>
-                <label>
-                    <input type="checkbox" id="modifyCheckbox"> Модифицировать
-                </label>
-            </div>
-            <div id="modificationOptions" style="display:none;">
-                <label for="gridSize">Размер поля:</label>
-                <select id="gridSize">
+            <button id="classicMode">Классический режим</button>
+            <button id="updatedMode">Обновленный режим</button>
+            
+            <div id="classicOptions" style="display:none;">
+                <h3>Классический режим</h3>
+                <label for="gridSizeClassic">Размер поля:</label>
+                <select id="gridSizeClassic">
                     <option value="3">3x3</option>
                     <option value="4">4x4</option>
                     <option value="5">5x5</option>
@@ -54,20 +41,47 @@
                     <option value="9">9x9</option>
                     <option value="10">10x10</option>
                 </select>
-                <label for="winLength">Количество для победы:</label>
-                <input type="number" id="winLength" min="3" max="10" value="3">
+                <label for="winLengthClassic">Количество для победы:</label>
+                <input type="number" id="winLengthClassic" min="3" max="10" value="3">
+                <label for="difficultyClassic">Выберите сложность:</label>
+                <input type="range" id="difficultyClassic" name="difficultyClassic" min="1" max="3" step="1" list="tickmarksClassic">
+                <datalist id="tickmarksClassic">
+                    <option value="1" label="Легкий"></option>
+                    <option value="2" label="Средний"></option>
+                    <option value="3" label="Сложный"></option>
+                </datalist>
+                <button id="startBotGameClassic">Против бота</button>
+                <button id="startPlayerGameClassic">Против игрока</button>
             </div>
-            <div>
-                <label>
-                    <input type="radio" name="gameMode" value="classic" checked> Классический
-                </label>
-                <label>
-                    <input type="radio" name="gameMode" value="modern"> Обновленный
-                </label>
+
+            <div id="updatedOptions" style="display:none;">
+                <h3>Обновленный режим</h3>
+                <label for="gridSizeUpdated">Размер поля:</label>
+                <select id="gridSizeUpdated">
+                    <option value="3">3x3</option>
+                    <option value="4">4x4</option>
+                    <option value="5">5x5</option>
+                </select>
+                <label for="winLengthUpdated">Количество для победы:</label>
+                <input type="number" id="winLengthUpdated" min="3" max="5" value="3">
+                <label for="difficultyUpdated">Выберите сложность:</label>
+                <input type="range" id="difficultyUpdated" name="difficultyUpdated" min="1" max="3" step="1" list="tickmarksUpdated">
+                <datalist id="tickmarksUpdated">
+                    <option value="1" label="Легкий"></option>
+                    <option value="2" label="Средний"></option>
+                    <option value="3" label="Сложный"></option>
+                </datalist>
+                <button id="startBotGameUpdated">Против бота</button>
+                <button id="startPlayerGameUpdated">Против игрока</button>
             </div>
         </div>
     </div>
+
+    <footer>
+        <div>!</div>
+    </footer>
 </div>
-<script src="./Tic-Tac-Toe-script.js"></script>
+<script src="./Tic-Tac-Toe-classic.js"></script>
+<script src="./Tic-Tac-Toe-updated.js" defer></script>
 </body>
 </html>
