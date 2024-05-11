@@ -27,22 +27,33 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // Установка значений по умолчанию, если элементы существуют
+    if (gridSizeSelect) {
+        gridSizeSelect.value = gridSize;
+    }
+    if (winLengthInput) {
+        winLengthInput.value = winLength;
+    }
+
+    // Обработчики событий для кнопок выбора режима
     startPlayerGameUpdatedButton.addEventListener('click', () => {
         vsBot = false;
         updatePlayerOText('Игрок O');
-        startGame();
+        gridSize = parseInt(gridSizeSelect?.value, 10) || 3; // Проверяем наличие элемента перед получением значения
+        winLength = parseInt(winLengthInput?.value, 10) || 3; // Проверяем наличие элемента перед получением значения
+        startGame(); // Убедитесь, что эта функция вызывается
     });
 
     startBotGameUpdatedButton.addEventListener('click', () => {
         vsBot = true;
         updatePlayerOText('Бот O');
         difficulty = parseInt(difficultySliderUpdated.value, 10);
-        startGame();
+        gridSize = parseInt(gridSizeSelect?.value, 10) || 3; // Проверяем наличие элемента перед получением значения
+        winLength = parseInt(winLengthInput?.value, 10) || 3; // Проверяем наличие элемента перед получением значения
+        startGame(); // Убедитесь, что эта функция вызывается
     });
 
     function startGame() {
-        gridSize = parseInt(gridSizeSelect.value, 10);
-        winLength = parseInt(winLengthInput.value, 10);
         modal.style.display = 'none';
         createGrid(gridSize);
         turn = Math.random() < 0.5 ? 'X' : 'O';
@@ -72,7 +83,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function cellClick(e) {
-        if (!gameOver && (vsBot && turn === 'X' || !vsBot)) { // Разрешаем клик, если против бота и ход 'X', либо против игрока
+        if (!gameOver && (vsBot && turn === 'X' || !vsBot)) {
             const cell = e.target;
             if (cell.textContent === '') {
                 cell.textContent = turn;
@@ -84,10 +95,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     oldestCell.classList.add('fading');
                     setTimeout(() => {
                         oldestCell.textContent = '';
-                        oldestCell.style.pointerEvents = 'auto';
                         oldestCell.classList.remove('fading');
-                        
-                        // После удаления символа проверяем наличие выигрышной комбинации
+                        oldestCell.style.pointerEvents = 'auto';
                         if (checkWin(turn)) {
                             gameOver = true;
                             updateScore(turn);
@@ -143,7 +152,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 setTimeout(resetBoard, 1000);
             } else {
                 switchTurn();
-                unlockCells(); // Разблокируем ячейки после хода бота
+                unlockCells();
             }
         }
     }
@@ -165,8 +174,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     oldestCell.classList.add('fading');
                     setTimeout(() => {
                         oldestCell.textContent = '';
-                        oldestCell.style.pointerEvents = 'auto';
                         oldestCell.classList.remove('fading');
+                        oldestCell.style.pointerEvents = 'auto';
                     }, 500);
                 }
 
@@ -193,8 +202,8 @@ document.addEventListener('DOMContentLoaded', () => {
             oldestCell.classList.add('fading');
             setTimeout(() => {
                 oldestCell.textContent = '';
-                oldestCell.style.pointerEvents = 'auto';
                 oldestCell.classList.remove('fading');
+                oldestCell.style.pointerEvents = 'auto';
             }, 500);
         }
     }
@@ -231,7 +240,7 @@ document.addEventListener('DOMContentLoaded', () => {
         for (let i = 0; i < gridSize; i++) {
             for (let j = 0; j < gridSize - winLength + 1; j++) {
                 const row = [], col = [];
-                for (let k = 0; k + j < gridSize && k < winLength; k++) {
+                for (let k = 0; k < winLength; k++) {
                     row.push(i * gridSize + j + k);
                     col.push(j * gridSize + i + k * gridSize);
                 }

@@ -3,11 +3,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const modal = document.getElementById('modal');
     const classicModeButton = document.getElementById('classicMode');
     const updatedModeButton = document.getElementById('updatedMode');
+    const gridSizeSelectClassic = document.getElementById('gridSizeClassic');
+    const winLengthInputClassic = document.getElementById('winLengthClassic');
     const difficultySliderClassic = document.getElementById('difficultyClassic');
     const startBotGameClassicButton = document.getElementById('startBotGameClassic');
     const startPlayerGameClassicButton = document.getElementById('startPlayerGameClassic');
-    const gridSizeSelectClassic = document.getElementById('gridSizeClassic');
-    const winLengthInputClassic = document.getElementById('winLengthClassic');
     const scoreXElement = document.getElementById('scoreX');
     const scoreOElement = document.getElementById('scoreO');
     const playerOElement = document.getElementById('playerO');
@@ -38,6 +38,20 @@ document.addEventListener('DOMContentLoaded', () => {
     updatedModeButton.addEventListener('click', () => {
         classicOptions.style.display = 'none';
         updatedOptions.style.display = 'block';
+    });
+
+    gridSizeSelectClassic.addEventListener('change', () => {
+        const size = parseInt(gridSizeSelectClassic.value, 10);
+        if (size === 3) {
+            winLengthInputClassic.value = 3;
+            winLengthInputClassic.max = 3;
+        } else if (size === 4) {
+            winLengthInputClassic.value = 4;
+            winLengthInputClassic.max = 4;
+        } else {
+            winLengthInputClassic.value = 5;
+            winLengthInputClassic.max = 10;
+        }
     });
 
     startPlayerGameClassicButton.addEventListener('click', () => {
