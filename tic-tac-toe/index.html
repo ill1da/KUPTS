@@ -27,6 +27,7 @@
             <h2>Выберите режим игры</h2>
             <button id="classicMode">Классический режим</button>
             <button id="updatedMode">Обновленный режим</button>
+            <button id="superMode">Супер крестики-нолики</button>
             
             <div id="classicOptions" style="display:none;">
                 <h3>Классический режим</h3>
@@ -66,10 +67,20 @@
                 <button id="startBotGameUpdated">Против бота</button>
                 <button id="startPlayerGameUpdated">Против игрока</button>
             </div>
+
+            <div id="superOptions" style="display:none;">
+                <h3>Супер крестики-нолики</h3>
+                <button id="startSuperGame">Начать игру</button>
+            </div>
         </div>
     </div>
+
+    <footer>
+        <div>!</div>
+    </footer>
 </div>
 <script src="./Tic-Tac-Toe-classic.js"></script>
 <script src="./Tic-Tac-Toe-updated.js" defer></script>
+<script src="./Tic-Tac-Toe-super.js" defer></script>
 </body>
 </html>

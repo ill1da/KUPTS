@@ -137,3 +137,43 @@ button {
     margin-bottom: 20px;
     font-size: 1.5em;
 }
+
+/* Стили для супер крестики-нолики */
+.super-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    gap: 5px;
+}
+
+.super-cell {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    border: 2px solid black;
+    position: relative;
+    transition: opacity 0.5s;
+}
+
+.super-cell.inactive {
+    opacity: 0.5;
+}
+
+.super-cell.active {
+    opacity: 1;
+}
+
+.super-cell.won::before {
+    content: attr(data-winner);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0,0,0,0.1);
+    font-size: 5rem;
+    color: rgba(0,0,0,0.5);
+}
