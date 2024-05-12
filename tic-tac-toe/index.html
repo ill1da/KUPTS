@@ -70,14 +70,18 @@
 
             <div id="superOptions" style="display:none;">
                 <h3>Супер крестики-нолики</h3>
-                <button id="startSuperGame">Начать игру</button>
+                <label for="difficultySuper">Выберите сложность:</label>
+                <input type="range" id="difficultySuper" name="difficultySuper" min="1" max="3" step="1" list="tickmarksSuper">
+                <datalist id="tickmarksSuper">
+                    <option value="1" label="Легкий"></option>
+                    <option value="2" label="Средний"></option>
+                    <option value="3" label="Сложный"></option>
+                </datalist>
+                <button id="startBotGameSuper">Против бота</button>
+                <button id="startPlayerGameSuper">Против игрока</button>
             </div>
         </div>
     </div>
-
-    <footer>
-        <div>!</div>
-    </footer>
 </div>
 <script src="./Tic-Tac-Toe-classic.js"></script>
 <script src="./Tic-Tac-Toe-updated.js" defer></script>

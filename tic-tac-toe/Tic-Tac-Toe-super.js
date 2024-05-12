@@ -1,7 +1,9 @@
 document.addEventListener('DOMContentLoaded', () => {
     const cellsContainer = document.getElementById('mainField');
     const modal = document.getElementById('modal');
-    const startSuperGameButton = document.getElementById('startSuperGame');
+    const startBotGameSuperButton = document.getElementById('startBotGameSuper');
+    const startPlayerGameSuperButton = document.getElementById('startPlayerGameSuper');
+    const difficultySliderSuper = document.getElementById('difficultySuper');
     const scoreXElement = document.getElementById('scoreX');
     const scoreOElement = document.getElementById('scoreO');
     const playerOElement = document.getElementById('playerO');
@@ -12,6 +14,8 @@ document.addEventListener('DOMContentLoaded', () => {
     let cells = [];
     let moveHistory = { X: [], O: [] };
     let currentLargeCell = null;
+    let vsBot = false;
+    let difficulty = 1;
 
     const resizeObserver = new ResizeObserver(entries => {
         for (let entry of entries) {
@@ -26,7 +30,18 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('superOptions').style.display = 'block';
     });
 
-    startSuperGameButton.addEventListener('click', startSuperGame);
+    startPlayerGameSuperButton.addEventListener('click', () => {
+        vsBot = false;
+        updatePlayerOText('Игрок O');
+        startSuperGame();
+    });
+
+    startBotGameSuperButton.addEventListener('click', () => {
+        vsBot = true;
+        updatePlayerOText('Бот O');
+        difficulty = parseInt(difficultySliderSuper.value, 10);
+        startSuperGame();
+    });
 
     function startSuperGame() {
         modal.style.display = 'none';
@@ -39,6 +54,10 @@ document.addEventListener('DOMContentLoaded', () => {
             document.body.style.backgroundColor = turn === 'X' ? '#F2AF5C' : '#40799A';
             cells.forEach(cell => cell.addEventListener('click', superCellClick));
             updateLargeCellClasses();
+            if (vsBot && turn === 'O') {
+                lockCells();
+                setTimeout(botMove, 1000);
+            }
         }, 1000);
     }
 
@@ -99,7 +118,96 @@ document.addEventListener('DOMContentLoaded', () => {
 
             updateLargeCellClasses();
             switchTurn();
+            if (vsBot && turn === 'O') {
+                lockCells();
+                setTimeout(botMove, 1000);
+            }
         }
+    }
+
+    function botMove() {
+        if (gameOver) return;
+
+        let targetCell;
+
+        if (difficulty === 3) {
+            // Attempt winning move or block player's winning move
+            targetCell = findBestMove('O') || findBestMove('X');
+        } else if (difficulty === 2) {
+            // Block player's winning move
+            targetCell = findBestMove('X');
+        }
+
+        if (!targetCell) {
+            const availableBoards = currentLargeCell === null 
+                ? cells.filter(cell => !cell.parentElement.classList.contains('won') && !cell.textContent)
+                : cells.filter(cell => parseInt(cell.dataset.superIndex) === currentLargeCell && !cell.textContent);
+
+            if (availableBoards.length > 0) {
+                targetCell = availableBoards[Math.floor(Math.random() * availableBoards.length)];
+            }
+        }
+
+        if (targetCell) {
+            targetCell.textContent = 'O';
+            targetCell.style.pointerEvents = 'none';
+
+            const innerIndex = parseInt(targetCell.dataset.index);
+            const outerIndex = parseInt(targetCell.dataset.superIndex);
+
+            if (checkWin('O', outerIndex)) {
+                const largeCell = document.querySelector(`.super-cell[data-index='${outerIndex}']`);
+                largeCell.classList.add('won');
+                largeCell.dataset.winner = 'O';
+
+                if (checkSuperWin('O')) {
+                    gameOver = true;
+                    updateScore('O');
+                    setTimeout(resetSuperBoard, 1000);
+                    return;
+                }
+            }
+
+            if (isBoardFull(outerIndex)) {
+                currentLargeCell = null;
+            } else {
+                currentLargeCell = innerIndex;
+            }
+
+            updateLargeCellClasses();
+            switchTurn();
+            unlockCells();
+        }
+    }
+
+    function findBestMove(player) {
+        const potentialMoves = [];
+
+        for (let superIndex = 0; superIndex < 9; superIndex++) {
+            if (!document.querySelector(`.super-cell[data-index='${superIndex}']`).classList.contains('won')) {
+                for (let index = 0; index < 9; index++) {
+                    const cell = cells[superIndex * 9 + index];
+                    if (cell.textContent === '') {
+                        cell.textContent = player;
+                        if (checkWin(player, superIndex)) {
+                            potentialMoves.push({ cell, superIndex, index });
+                        }
+                        cell.textContent = '';
+                    }
+                }
+            }
+        }
+
+        if (potentialMoves.length > 0) {
+            const validMoves = potentialMoves.filter(move => 
+                currentLargeCell === null || currentLargeCell === move.superIndex || isLargeCellWon(currentLargeCell)
+            );
+            if (validMoves.length > 0) {
+                return validMoves[Math.floor(Math.random() * validMoves.length)].cell;
+            }
+        }
+
+        return null;
     }
 
     function isLargeCellWon(index) {
@@ -151,6 +259,10 @@ document.addEventListener('DOMContentLoaded', () => {
         currentLargeCell = null;
         moveHistory = { X: [], O: [] };
         switchTurn();
+        if (vsBot && turn === 'O') {
+            lockCells();
+            setTimeout(botMove, 1000);
+        }
     }
 
     function switchTurn() {
@@ -179,5 +291,21 @@ document.addEventListener('DOMContentLoaded', () => {
             scoreO++;
             scoreOElement.textContent = scoreO;
         }
+    }
+
+    function updatePlayerOText(text) {
+        playerOElement.firstChild.textContent = `${text}: `;
+    }
+
+    function lockCells() {
+        cells.forEach(cell => cell.style.pointerEvents = 'none');
+    }
+
+    function unlockCells() {
+        cells.forEach(cell => {
+            if (!cell.textContent) {
+                cell.style.pointerEvents = 'auto';
+            }
+        });
     }
 });
