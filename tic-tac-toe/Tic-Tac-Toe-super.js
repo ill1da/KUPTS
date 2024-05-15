@@ -90,18 +90,19 @@ document.addEventListener('DOMContentLoaded', () => {
         const cell = e.target;
         const superIndex = parseInt(cell.dataset.superIndex);
         const index = parseInt(cell.dataset.index);
-
-        if (cell.textContent === '' && (currentLargeCell === null || currentLargeCell === superIndex || isLargeCellWon(currentLargeCell))) {
+    
+        // Проверяем, доступен ли квадрат для хода или является "ничьей"
+        if (cell.textContent === '' && (currentLargeCell === null || currentLargeCell === superIndex || isLargeCellWon(currentLargeCell) || checkDraw(currentLargeCell))) {
             cell.textContent = turn;
             cell.style.pointerEvents = 'none';
-
+    
             moveHistory[turn].push(cell);
-
+    
             if (checkWin(turn, superIndex)) {
                 const largeCell = document.querySelector(`.super-cell[data-index='${superIndex}']`);
                 largeCell.classList.add('won');
                 largeCell.dataset.winner = turn;
-
+    
                 if (checkSuperWin(turn)) {
                     gameOver = true;
                     updateScore(turn);
@@ -109,13 +110,18 @@ document.addEventListener('DOMContentLoaded', () => {
                     return;
                 }
             }
-
+    
             if (isBoardFull(superIndex)) {
-                currentLargeCell = null;
+                if (!checkDraw(superIndex)) {
+                    const largeCell = document.querySelector(`.super-cell[data-index='${superIndex}']`);
+                    markAsDraw(largeCell);
+                }
+                // Если все клетки заполнены и ничья, разрешаем ход в любой квадрат
+                currentLargeCell = null;  
             } else {
                 currentLargeCell = index;
             }
-
+    
             updateLargeCellClasses();
             switchTurn();
             if (vsBot && turn === 'O') {
@@ -123,7 +129,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 setTimeout(botMove, 1000);
             }
         }
-    }
+    }    
 
     function botMove() {
         if (gameOver) return;
@@ -229,16 +235,43 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function checkSuperWin(player) {
-        return [
+        // Проверка выигрышных комбинаций
+        const winningCombinations = [
             [0, 1, 2], [3, 4, 5], [6, 7, 8], // Rows
             [0, 3, 6], [1, 4, 7], [2, 5, 8], // Columns
             [0, 4, 8], [2, 4, 6]  // Diagonals
-        ].some(combination => {
+        ];
+    
+        const isWin = winningCombinations.some(combination => {
             return combination.every(index => {
                 const largeCell = document.querySelector(`.super-cell[data-index='${index}']`);
                 return largeCell && largeCell.dataset.winner === player;
             });
         });
+    
+        if (isWin) {
+            return true;
+        }
+    
+        // Проверка на ничью
+        const isDraw = winningCombinations.every(combination => {
+            return combination.every(index => {
+                const largeCell = document.querySelector(`.super-cell[data-index='${index}']`);
+                return largeCell.dataset.winner; // Ничья, если все квадраты завершены
+            });
+        });
+    
+        if (isDraw) {
+            setTimeout(resetSuperBoard, 1000); // Сброс доски с задержкой
+            return false;
+        }
+    
+        return false;
+    }    
+
+    function markAsDraw(largeCell) {
+        largeCell.classList.add('draw');
+        largeCell.dataset.winner = 'draw';  // Отмечаем квадрат как завершенный ничьей
     }
 
     function isBoardFull(superIndex) {
@@ -247,23 +280,33 @@ document.addEventListener('DOMContentLoaded', () => {
         return subCells.every(cell => cell.textContent !== '');
     }
 
+    function checkDraw(superIndex) {
+        const largeCell = document.querySelector(`.super-cell[data-index='${superIndex}']`);
+        return largeCell.classList.contains('draw');
+    }
+
     function resetSuperBoard() {
         cells.forEach(cell => {
             cell.textContent = '';
             cell.style.pointerEvents = 'auto';
         });
         document.querySelectorAll('.super-cell').forEach(superCell => {
-            superCell.classList.remove('won', 'active', 'inactive');
+            superCell.classList.remove('won', 'draw', 'active', 'inactive');
             delete superCell.dataset.winner;
         });
         currentLargeCell = null;
         moveHistory = { X: [], O: [] };
-        switchTurn();
+        gameOver = false;
+        switchTurn(); // Случайно выбираем, кто начнет следующий раунд
         if (vsBot && turn === 'O') {
             lockCells();
             setTimeout(botMove, 1000);
+        } else {
+            unlockCells();
         }
+        updateLargeCellClasses();
     }
+
 
     function switchTurn() {
         turn = turn === 'X' ? 'O' : 'X';
@@ -273,7 +316,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateLargeCellClasses() {
         document.querySelectorAll('.super-cell').forEach(superCell => {
             const index = parseInt(superCell.dataset.index);
-            if (currentLargeCell === null || currentLargeCell === index || isLargeCellWon(currentLargeCell)) {
+            if (currentLargeCell === null || currentLargeCell === index || isLargeCellWon(currentLargeCell) || checkDraw(currentLargeCell)) {
                 superCell.classList.add('active');
                 superCell.classList.remove('inactive');
             } else {

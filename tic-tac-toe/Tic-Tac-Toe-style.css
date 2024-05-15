@@ -177,3 +177,9 @@ button {
     font-size: 5rem;
     color: rgba(0,0,0,0.5);
 }
+
+.super-cell.draw {
+    pointer-events: none; /* Отключаем возможность взаимодействия с элементом */
+    position: relative; /* Относительное позиционирование для возможности размещения текста */
+    opacity: 0.5;
+}
