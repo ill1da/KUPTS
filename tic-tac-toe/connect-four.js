@@ -269,7 +269,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.target.classList.contains('cell')) {
             const col = e.target.dataset.col;
             cells.forEach(cell => {
-                if (cell.dataset.col === col) {
+                if (cell.dataset.col === col && !cell.textContent) {
                     cell.classList.add('column-highlight');
                 }
             });
