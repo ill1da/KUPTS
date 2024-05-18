@@ -22,7 +22,7 @@ html{
     width: 100%; height: 100%;
 }
 body {
-    width: 100%; height: 100%;
+    width: 100vw; height: 100vh;
     background: #8B8B8B;
     transition: background ease-in-out 0.3s;
 }
@@ -103,21 +103,21 @@ main {
 
 
 .modal {
-    display: block; /* Показываем модальное окно по умолчанию */
     position: fixed;
     z-index: 1;
     left: 0;
     top: 0;
-    width: 100%;
-    height: 100%;
+    width: 100vw; height: 100%;
     overflow: auto;
     background-color: rgb(0,0,0);
     background-color: rgba(0,0,0,0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .modal-content {
     background-color: #fefefe;
-    margin: 15% auto;
     padding: 20px;
     border: 1px solid #888;
     width: 80%;
@@ -179,7 +179,72 @@ button {
 }
 
 .super-cell.draw {
+    background-color: #ccc; /* Серый цвет фона для ничьи */
+    color: #666; /* Темно-серый цвет текста */
     pointer-events: none; /* Отключаем возможность взаимодействия с элементом */
     position: relative; /* Относительное позиционирование для возможности размещения текста */
     opacity: 0.5;
+}
+
+.connect-four-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    grid-template-rows: repeat(6, 1fr);
+    gap: 5px;
+}
+
+.cell.playerX {
+    background-color: #F2AF5C;
+}
+
+.cell.playerO {
+    background-color: #40799A;
+}
+
+
+/* Existing styles */
+
+#backToMenu {
+    display: block;
+    margin: 20px auto;
+    padding: 10px 20px;
+    background-color: #40799A;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+
+#backToMenu:hover {
+    background-color: #305f7a;
+}
+
+input[type="range"] {
+    appearance: none;
+    width: 100%;
+    height: 8px;
+    border-radius: 5px;
+    background: #ddd;
+    outline: none;
+    opacity: 0.7;
+    transition: opacity 0.2s, background-color 0.2s;
+}
+
+input[type="range"]:hover {
+    opacity: 1;
+}
+
+button {
+    margin-top: 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.cell.column-highlight {
+    background: #FFFFFF75;
+    transition: ease-in-out 0.1s;
 }

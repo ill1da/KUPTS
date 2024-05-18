@@ -3,16 +3,30 @@ document.addEventListener('DOMContentLoaded', () => {
     const modal = document.getElementById('modal');
     const classicModeButton = document.getElementById('classicMode');
     const updatedModeButton = document.getElementById('updatedMode');
+    const superModeButton = document.getElementById('superMode');
+    const connectFourModeButton = document.getElementById('connectFourMode');
     const gridSizeSelectClassic = document.getElementById('gridSizeClassic');
     const winLengthInputClassic = document.getElementById('winLengthClassic');
     const difficultySliderClassic = document.getElementById('difficultyClassic');
     const startBotGameClassicButton = document.getElementById('startBotGameClassic');
     const startPlayerGameClassicButton = document.getElementById('startPlayerGameClassic');
+    const difficultySliderUpdated = document.getElementById('difficultyUpdated');
+    const startBotGameUpdatedButton = document.getElementById('startBotGameUpdated');
+    const startPlayerGameUpdatedButton = document.getElementById('startPlayerGameUpdated');
+    const difficultySliderSuper = document.getElementById('difficultySuper');
+    const startBotGameSuperButton = document.getElementById('startBotGameSuper');
+    const startPlayerGameSuperButton = document.getElementById('startPlayerGameSuper');
+    const difficultySliderConnectFour = document.getElementById('difficultyConnectFour');
+    const startBotGameConnectFourButton = document.getElementById('startBotGameConnectFour');
+    const startPlayerGameConnectFourButton = document.getElementById('startPlayerGameConnectFour');
     const scoreXElement = document.getElementById('scoreX');
     const scoreOElement = document.getElementById('scoreO');
     const playerOElement = document.getElementById('playerO');
     const classicOptions = document.getElementById('classicOptions');
     const updatedOptions = document.getElementById('updatedOptions');
+    const superOptions = document.getElementById('superOptions');
+    const connectFourOptions = document.getElementById('connectFourOptions');
+    const backToMenuButton = document.getElementById('backToMenu');
     let turn;
     let gameOver = false;
     let vsBot = false;
@@ -23,21 +37,101 @@ document.addEventListener('DOMContentLoaded', () => {
     let winLength = 3;
     let cells = [];
 
+    function hideAllOptions() {
+        classicOptions.style.display = 'none';
+        updatedOptions.style.display = 'none';
+        superOptions.style.display = 'none';
+        connectFourOptions.style.display = 'none';
+    }
+
+    function resetSettings() {
+        // Сброс настроек классического режима
+        gridSizeSelectClassic.value = '3';
+        winLengthInputClassic.value = '3';
+        difficultySliderClassic.value = '1';
+        updateDifficultyColor(difficultySliderClassic, startBotGameClassicButton);
+
+        // Сброс настроек обновленного режима
+        difficultySliderUpdated.value = '1';
+        updateDifficultyColor(difficultySliderUpdated, startBotGameUpdatedButton);
+
+        // Сброс настроек супер крестиков-ноликов
+        difficultySliderSuper.value = '1';
+        updateDifficultyColor(difficultySliderSuper, startBotGameSuperButton);
+
+        // Сброс настроек "Четыре в ряд"
+        difficultySliderConnectFour.value = '1';
+        updateDifficultyColor(difficultySliderConnectFour, startBotGameConnectFourButton);
+
+        // Скрыть информацию о текущем игроке и обновить фон
+        document.querySelector('.scoreboard').style.display = 'none';
+        document.body.style.backgroundColor = '#8B8B8B';
+    }
+
+    function showMainMenu() {
+        hideAllOptions();
+        modal.style.display = 'block';
+        cellsContainer.innerHTML = ''; // Очистить игровое поле
+        resetSettings();
+    }
+
+    classicModeButton.addEventListener('click', () => {
+        hideAllOptions();
+        classicOptions.style.display = 'block';
+    });
+
+    updatedModeButton.addEventListener('click', () => {
+        hideAllOptions();
+        updatedOptions.style.display = 'block';
+    });
+
+    superModeButton.addEventListener('click', () => {
+        hideAllOptions();
+        superOptions.style.display = 'block';
+    });
+
+    connectFourModeButton.addEventListener('click', () => {
+        hideAllOptions();
+        connectFourOptions.style.display = 'block';
+    });
+
+    backToMenuButton.addEventListener('click', showMainMenu);
+
+    function updateDifficultyColor(slider, button) {
+        const value = parseInt(slider.value, 10);
+        let color;
+        if (value === 1) {
+            color = 'green';
+        } else if (value === 2) {
+            color = 'yellow';
+        } else if (value === 3) {
+            color = 'red';
+        }
+        slider.style.backgroundColor = color;
+        button.style.backgroundColor = color;
+    }
+
+    difficultySliderClassic.addEventListener('input', () => {
+        updateDifficultyColor(difficultySliderClassic, startBotGameClassicButton);
+    });
+
+    difficultySliderUpdated.addEventListener('input', () => {
+        updateDifficultyColor(difficultySliderUpdated, startBotGameUpdatedButton);
+    });
+
+    difficultySliderSuper.addEventListener('input', () => {
+        updateDifficultyColor(difficultySliderSuper, startBotGameSuperButton);
+    });
+
+    difficultySliderConnectFour.addEventListener('input', () => {
+        updateDifficultyColor(difficultySliderConnectFour, startBotGameConnectFourButton);
+    });
+
     const resizeObserver = new ResizeObserver(entries => {
         for (let entry of entries) {
             const cellSize = Math.min(entry.contentRect.width, entry.contentRect.height);
             entry.target.style.setProperty('--cell-font-size', `${cellSize * 0.6}px`);
         }
-    });
-
-    classicModeButton.addEventListener('click', () => {
-        classicOptions.style.display = 'block';
-        updatedOptions.style.display = 'none';
-    });
-
-    updatedModeButton.addEventListener('click', () => {
-        classicOptions.style.display = 'none';
-        updatedOptions.style.display = 'block';
     });
 
     gridSizeSelectClassic.addEventListener('change', () => {
@@ -57,20 +151,76 @@ document.addEventListener('DOMContentLoaded', () => {
     startPlayerGameClassicButton.addEventListener('click', () => {
         vsBot = false;
         updatePlayerOText('Игрок O');
-        startGame();
+        startGame('classic');
     });
 
     startBotGameClassicButton.addEventListener('click', () => {
         vsBot = true;
         updatePlayerOText('Бот O');
         difficulty = parseInt(difficultySliderClassic.value, 10);
-        startGame();
+        startGame('classic');
     });
 
-    function startGame() {
-        gridSize = parseInt(gridSizeSelectClassic.value, 10);
-        winLength = parseInt(winLengthInputClassic.value, 10);
+    startPlayerGameUpdatedButton.addEventListener('click', () => {
+        vsBot = false;
+        updatePlayerOText('Игрок O');
+        startGame('updated');
+    });
+
+    startBotGameUpdatedButton.addEventListener('click', () => {
+        vsBot = true;
+        updatePlayerOText('Бот O');
+        difficulty = parseInt(difficultySliderUpdated.value, 10);
+        startGame('updated');
+    });
+
+    startPlayerGameSuperButton.addEventListener('click', () => {
+        vsBot = false;
+        updatePlayerOText('Игрок O');
+        startGame('super');
+    });
+
+    startBotGameSuperButton.addEventListener('click', () => {
+        vsBot = true;
+        updatePlayerOText('Бот O');
+        difficulty = parseInt(difficultySliderSuper.value, 10);
+        startGame('super');
+    });
+
+    startPlayerGameConnectFourButton.addEventListener('click', () => {
+        vsBot = false;
+        updatePlayerOText('Игрок O');
+        startGame('connectFour');
+    });
+
+    startBotGameConnectFourButton.addEventListener('click', () => {
+        vsBot = true;
+        updatePlayerOText('Бот O');
+        difficulty = parseInt(difficultySliderConnectFour.value, 10);
+        startGame('connectFour');
+    });
+
+    function startGame(mode) {
+        switch (mode) {
+            case 'classic':
+                gridSize = parseInt(gridSizeSelectClassic.value, 10);
+                winLength = parseInt(winLengthInputClassic.value, 10);
+                break;
+            case 'updated':
+                gridSize = 3; // Задайте соответствующие параметры для обновленного режима
+                winLength = 3;
+                break;
+            case 'super':
+                gridSize = 3; // Задайте соответствующие параметры для супер крестиков-ноликов
+                winLength = 3;
+                break;
+            case 'connectFour':
+                gridSize = 7; // Задайте соответствующие параметры для "Четыре в ряд"
+                winLength = 4;
+                break;
+        }
         modal.style.display = 'none';
+        document.querySelector('.scoreboard').style.display = 'flex'; // Показать информацию о текущем игроке
         createGrid(gridSize);
         turn = Math.random() < 0.5 ? 'X' : 'O';
         setTimeout(() => {
@@ -98,7 +248,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function cellClick(e) {
-        if (!gameOver && (vsBot && turn === 'X' || !vsBot)) { // Разрешаем клик, если против бота и ход 'X', либо против игрока
+        if (!gameOver && (vsBot && turn === 'X' || !vsBot)) {
             const cell = e.target;
             if (cell.textContent === '') {
                 cell.textContent = turn;
@@ -113,7 +263,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 } else {
                     switchTurn();
                     if (vsBot && turn === 'O') {
-                        lockCells(); // Блокируем ячейки перед ходом бота
+                        lockCells();
                         setTimeout(botMove, 1000);
                     }
                 }
@@ -143,7 +293,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 setTimeout(resetBoard, 1000);
             } else {
                 switchTurn();
-                unlockCells(); // Разблокируем ячейки после хода бота
+                unlockCells();
             }
         }
     }

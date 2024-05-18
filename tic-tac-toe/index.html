@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Крестики-Нолики</title>
+    <title>Крестики-нолики и Четыре в ряд</title>
     <link rel="stylesheet" href="./Tic-Tac-Toe-style.css">
 </head>
 <body>
@@ -19,6 +19,7 @@
                 <div id="playerO">Игрок O: <span id="scoreO">0</span></div>
             </div>
             <div class="main-field" id="mainField"></div>
+            <button id="backToMenu" class="backButton">Назад</button>
         </div>
     </main>
 
@@ -28,6 +29,7 @@
             <button id="classicMode">Классический режим</button>
             <button id="updatedMode">Обновленный режим</button>
             <button id="superMode">Супер крестики-нолики</button>
+            <button id="connectFourMode">Четыре в ряд</button>
             
             <div id="classicOptions" style="display:none;">
                 <h3>Классический режим</h3>
@@ -80,11 +82,25 @@
                 <button id="startBotGameSuper">Против бота</button>
                 <button id="startPlayerGameSuper">Против игрока</button>
             </div>
+
+            <div id="connectFourOptions" style="display:none;">
+                <h3>Четыре в ряд</h3>
+                <label for="difficultyConnectFour">Выберите сложность:</label>
+                <input type="range" id="difficultyConnectFour" name="difficultyConnectFour" min="1" max="3" step="1" list="tickmarksConnectFour">
+                <datalist id="tickmarksConnectFour">
+                    <option value="1" label="Легкий"></option>
+                    <option value="2" label="Средний"></option>
+                    <option value="3" label="Сложный"></option>
+                </datalist>
+                <button id="startBotGameConnectFour">Против бота</button>
+                <button id="startPlayerGameConnectFour">Против игрока</button>
+            </div>
         </div>
     </div>
 </div>
 <script src="./Tic-Tac-Toe-classic.js"></script>
 <script src="./Tic-Tac-Toe-updated.js" defer></script>
 <script src="./Tic-Tac-Toe-super.js" defer></script>
+<script src="./connect-four.js" defer></script>
 </body>
 </html>
