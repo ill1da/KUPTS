@@ -1,255 +1,121 @@
-@font-face {
-    font-family: LexendMega;
-    src: url(../assets/fonts/LexendMega-VariableFont_wght.ttf);
-}
-@font-face {
-    font-family: Montserrat;
-    src: url(../assets/fonts/Montserrat-VariableFont_wght.ttf);
-}
-
-*{
-    margin: 0; padding: 0;
-    box-sizing: border-box;
-    user-select: none;
-    font-family: Montserrat;
-    font-weight: 700;
-    color: #000000;
-    text-transform: uppercase;
-    line-height: 160%;
-}
-
-html{
-    width: 100%; height: 100%;
-}
 body {
-    width: 100vw; height: 100vh;
-    background: #8B8B8B;
-    transition: background ease-in-out 0.3s;
-}
-
-/* - Контейнер - */
-#container {
-    width: 100%; height: 100%;
+    font-family: Arial, sans-serif;
     display: flex;
-    flex-direction: column;
-    justify-self: flex-start;
-    padding: clamp(10px, 5vw, 25px);
-    gap: clamp(15px, 5vw, 50px);
-}
-
-/* - Лого - */
-#logo-AREA {
-    box-sizing: content-box;
-    width: fit-content; height: fit-content;
-    position: relative;
-    border-radius: 25px;
-}
-#logo, #after-logo {
-    width: max-content; height: max-content;
-    position: absolute;
-    font-family: LexendMega;
-    font-size: clamp(12px, 2vw, 24px);
-    font-weight: 700;
-    text-decoration: none;
-    background: #FFFFFF;
-    border: 3px solid #000000;
-    border-radius: clamp(6px, 1.5vw, 12px);
-    padding: 2px 8px;
-    transition: ease-in-out 0.16s;
-    z-index: 10;
-}
-#after-logo {
-    top: 3px; left: 3px;
-    background: #000000;
-    z-index: 9;
-}
-#logo-AREA:hover #logo{
-    transform: translate(3px, 3px);
-    transition: ease-in-out 0.16s;
-}
-
-/* - Тело сайта - */
-main {
-    min-width: 100%; min-height: 100%;
-    display: flex;
-    flex-direction: column;
+    justify-content: center;
     align-items: center;
-}
-.main-field {
-    position: relative;
-    display: grid;
-    width: 30rem;
-    aspect-ratio: 1/1;
-}
-.cell {
-    width: 100%; height: 100%;
-    background: #FFFFFF;
-    border: 1px solid black;
-    cursor: pointer;
-    transition: ease-in-out 0.1s;
-    font-weight: 900;
-    font-size: var(--cell-font-size, 20px);
-    text-align: center;
-    aspect-ratio: 1 / 1;
-    transition: opacity 0.5s;
-}
-.cell.fading {
-    opacity: 0.5;
-}
-.cell:hover {
-    background: #FFFFFF75;
-    transition: ease-in-out 0.1s;
+    height: 100vh;
+    margin: 0;
 }
 
+#modes {
+    width: 20%;
+    background-color: red;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    color: white;
+    height: 300px;
+}
+
+.mode-button {
+    padding: 10px;
+    margin: 5px;
+    background-color: transparent;
+    border: none;
+    color: white;
+    text-align: left;
+    font-size: 16px;
+}
+
+.mode-button.selected {
+    background-color: #900;
+}
+
+#mode-info {
+    width: 30%;
+    background-color: black;
+    color: white;
+    margin-left: 20px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 300px;
+}
+
+#mode-title {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+#difficulty, #play-bot, #play-human {
+    width: 200px; /* Adjust width as needed */
+}
+
+button {
+    padding: 10px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+#game-board {
+    display: grid;
+    grid-template-columns: repeat(3, 100px);
+    gap: 10px;
+    margin: 20px;
+}
+
+.cell {
+    width: 100px;
+    height: 100px;
+    background-color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    cursor: pointer;
+    border: 1px solid #000;
+}
 
 .modal {
     position: fixed;
-    z-index: 1;
-    left: 0;
     top: 0;
-    width: 100vw; height: 100%;
-    overflow: auto;
-    background-color: rgb(0,0,0);
-    background-color: rgba(0,0,0,0.4);
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
 .modal-content {
-    background-color: #fefefe;
+    background-color: white;
     padding: 20px;
-    border: 1px solid #888;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    padding: 0 25%;
-    justify-content: center;
-    align-items: center;
+    border-radius: 10px;
     text-align: center;
+    width: 50%;
 }
 
-button {
-    padding: 10px 20px;
-    margin: 10px;
-    cursor: pointer;
+.hidden {
+    display: none;
 }
 
-.scoreboard {
-    display: flex;
-    justify-content: space-around;
-    margin-bottom: 20px;
-    font-size: 1.5em;
-}
-
-/* Стили для супер крестики-нолики */
-.super-grid {
+#game-board {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: repeat(3, 1fr);
-    gap: 5px;
+    grid-template-columns: repeat(3, 100px);
+    gap: 10px;
+    margin: 20px;
 }
 
-.super-cell {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: repeat(3, 1fr);
-    border: 2px solid black;
-    position: relative;
-    transition: opacity 0.5s;
-}
-
-.super-cell.inactive {
-    opacity: 0.5;
-}
-
-.super-cell.active {
-    opacity: 1;
-}
-
-.super-cell.won::before {
-    content: attr(data-winner);
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+.cell {
+    width: 100px;
+    height: 100px;
+    background-color: #fff;
     display: flex;
     justify-content: center;
     align-items: center;
-    background: rgba(0,0,0,0.1);
-    font-size: 5rem;
-    color: rgba(0,0,0,0.5);
-}
-
-.super-cell.draw {
-    background-color: #ccc; /* Серый цвет фона для ничьи */
-    color: #666; /* Темно-серый цвет текста */
-    pointer-events: none; /* Отключаем возможность взаимодействия с элементом */
-    position: relative; /* Относительное позиционирование для возможности размещения текста */
-    opacity: 0.5;
-}
-
-.connect-four-grid {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    grid-template-rows: repeat(6, 1fr);
-    gap: 5px;
-}
-
-.cell.playerX {
-    background-color: #F2AF5C;
-}
-
-.cell.playerO {
-    background-color: #40799A;
-}
-
-
-/* Existing styles */
-
-#backToMenu {
-    display: block;
-    margin: 20px auto;
-    padding: 10px 20px;
-    background-color: #40799A;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
+    font-size: 24px;
     cursor: pointer;
-    font-size: 16px;
-    transition: background-color 0.3s;
-}
-
-#backToMenu:hover {
-    background-color: #305f7a;
-}
-
-input[type="range"] {
-    appearance: none;
-    width: 40%;
-    height: 8px;
-    border-radius: 5px;
-    background: #ddd;
-    outline: none;
-    opacity: 0.7;
-    transition: opacity 0.2s, background-color 0.2s;
-}
-
-input[type="range"]:hover {
-    opacity: 1;
-}
-
-button {
-    margin-top: 10px;
-    padding: 10px 20px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-.cell.column-highlight {
-    background: #FFFFFF75;
-    transition: ease-in-out 0.1s;
+    border: 1px solid #000;
 }

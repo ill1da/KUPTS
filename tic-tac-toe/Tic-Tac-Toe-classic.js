@@ -1,425 +1,186 @@
-document.addEventListener('DOMContentLoaded', () => {
-    const cellsContainer = document.getElementById('mainField');
-    const modal = document.getElementById('modal');
-    const classicModeButton = document.getElementById('classicMode');
-    const updatedModeButton = document.getElementById('updatedMode');
-    const superModeButton = document.getElementById('superMode');
-    const connectFourModeButton = document.getElementById('connectFourMode');
-    const gridSizeSelectClassic = document.getElementById('gridSizeClassic');
-    const winLengthInputClassic = document.getElementById('winLengthClassic');
-    const difficultySliderClassic = document.getElementById('difficultyClassic');
-    const startBotGameClassicButton = document.getElementById('startBotGameClassic');
-    const startPlayerGameClassicButton = document.getElementById('startPlayerGameClassic');
-    const difficultySliderUpdated = document.getElementById('difficultyUpdated');
-    const startBotGameUpdatedButton = document.getElementById('startBotGameUpdated');
-    const startPlayerGameUpdatedButton = document.getElementById('startPlayerGameUpdated');
-    const difficultySliderSuper = document.getElementById('difficultySuper');
-    const startBotGameSuperButton = document.getElementById('startBotGameSuper');
-    const startPlayerGameSuperButton = document.getElementById('startPlayerGameSuper');
-    const difficultySliderConnectFour = document.getElementById('difficultyConnectFour');
-    const startBotGameConnectFourButton = document.getElementById('startBotGameConnectFour');
-    const startPlayerGameConnectFourButton = document.getElementById('startPlayerGameConnectFour');
-    const scoreXElement = document.getElementById('scoreX');
-    const scoreOElement = document.getElementById('scoreO');
-    const playerOElement = document.getElementById('playerO');
-    const classicOptions = document.getElementById('classicOptions');
-    const updatedOptions = document.getElementById('updatedOptions');
-    const superOptions = document.getElementById('superOptions');
-    const connectFourOptions = document.getElementById('connectFourOptions');
-    const backToMenuButton = document.getElementById('backToMenu');
-    let turn;
-    let gameOver = false;
-    let vsBot = false;
-    let difficulty = 1;
-    let scoreX = 0;
-    let scoreO = 0;
-    let gridSize = 3;
-    let winLength = 3;
-    let cells = [];
+const board = [
+    ['', '', ''],
+    ['', '', ''],
+    ['', '', '']
+];
 
-    function hideAllOptions() {
-        classicOptions.style.display = 'none';
-        updatedOptions.style.display = 'none';
-        superOptions.style.display = 'none';
-        connectFourOptions.style.display = 'none';
+let currentPlayer = 'X'; // Игрок начинает игру
+
+// Инициализация игрового поля
+function initializeGame(firstPlayer) {
+    document.querySelectorAll('.cell').forEach((cell, index) => {
+        cell.textContent = '';
+        cell.removeEventListener('click', handleCellClick);
+        cell.addEventListener('click', handleCellClick, { once: true });
+        cell.dataset.index = `${Math.floor(index / 3)},${index % 3}`;
+    });
+    currentPlayer = firstPlayer; // Задаем, кто начинает игру
+    displayCurrentPlayer();
+
+    // Если первым ходит бот и это игра против бота, бот делает ход
+    if (currentPlayer === 'O' && mode === 'bot') {
+        const difficulty = document.getElementById('difficulty-slider').value;
+        setTimeout(() => botMove(difficulty), 200);
     }
+}
 
-    function resetSettings() {
-        // Сброс настроек классического режима
-        gridSizeSelectClassic.value = '3';
-        winLengthInputClassic.value = '3';
-        difficultySliderClassic.value = '1';
-        updateDifficultyColor(difficultySliderClassic, startBotGameClassicButton);
-
-        // Сброс настроек обновленного режима
-        difficultySliderUpdated.value = '1';
-        updateDifficultyColor(difficultySliderUpdated, startBotGameUpdatedButton);
-
-        // Сброс настроек супер крестиков-ноликов
-        difficultySliderSuper.value = '1';
-        updateDifficultyColor(difficultySliderSuper, startBotGameSuperButton);
-
-        // Сброс настроек "Четыре в ряд"
-        difficultySliderConnectFour.value = '1';
-        updateDifficultyColor(difficultySliderConnectFour, startBotGameConnectFourButton);
-
-        // Скрыть информацию о текущем игроке и обновить фон
-        document.querySelector('.scoreboard').style.display = 'none';
-        document.body.style.backgroundColor = '#8B8B8B';
-    }
-
-    function showMainMenu() {
-        hideAllOptions();
-        modal.style.display = 'block';
-        cellsContainer.innerHTML = ''; // Очистить игровое поле
-        resetSettings();
-    }
-
-    classicModeButton.addEventListener('click', () => {
-        hideAllOptions();
-        classicOptions.style.display = 'block';
-    });
-
-    updatedModeButton.addEventListener('click', () => {
-        hideAllOptions();
-        updatedOptions.style.display = 'block';
-    });
-
-    superModeButton.addEventListener('click', () => {
-        hideAllOptions();
-        superOptions.style.display = 'block';
-    });
-
-    connectFourModeButton.addEventListener('click', () => {
-        hideAllOptions();
-        connectFourOptions.style.display = 'block';
-    });
-
-    backToMenuButton.addEventListener('click', showMainMenu);
-
-    function updateDifficultyColor(slider, button) {
-        const value = parseInt(slider.value, 10);
-        let color;
-        if (value === 1) {
-            color = 'green';
-        } else if (value === 2) {
-            color = 'yellow';
-        } else if (value === 3) {
-            color = 'red';
+function handleCellClick(event) {
+    const cell = event.target;
+    const [row, col] = cell.dataset.index.split(',');
+    makeMove(parseInt(row), parseInt(col), currentPlayer);
+    if (checkWin(currentPlayer)) {
+        alert(`${currentPlayer} wins!`);
+        resetGameBoard();
+    } else if (checkDraw()) {
+        alert("It's a draw!");
+        resetGameBoard();
+    } else {
+        currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+        displayCurrentPlayer();
+        if (currentPlayer === 'O' && mode === 'bot') {
+            const difficulty = document.getElementById('difficulty-slider').value;
+            setTimeout(() => botMove(difficulty), 200);
         }
-        slider.style.backgroundColor = color;
-        button.style.backgroundColor = color;
     }
+}
 
-    difficultySliderClassic.addEventListener('input', () => {
-        updateDifficultyColor(difficultySliderClassic, startBotGameClassicButton);
-    });
+function makeMove(row, col, player) {
+    board[row][col] = player;
+    document.querySelector(`[data-index="${row},${col}"]`).textContent = player;
+}
 
-    difficultySliderUpdated.addEventListener('input', () => {
-        updateDifficultyColor(difficultySliderUpdated, startBotGameUpdatedButton);
-    });
+function checkWin(player) {
+    const lines = [
+        [board[0][0], board[0][1], board[0][2]],
+        [board[1][0], board[1][1], board[1][2]],
+        [board[2][0], board[2][1], board[2][2]],
+        [board[0][0], board[1][0], board[2][0]],
+        [board[0][1], board[1][1], board[2][1]],
+        [board[0][2], board[1][2], board[2][2]],
+        [board[0][0], board[1][1], board[2][2]],
+        [board[2][0], board[1][1], board[0][2]]
+    ];
+    return lines.some(line => line.every(cell => cell === player));
+}
 
-    difficultySliderSuper.addEventListener('input', () => {
-        updateDifficultyColor(difficultySliderSuper, startBotGameSuperButton);
-    });
+function checkDraw() {
+    return board.every(row => row.every(cell => cell));
+}
 
-    difficultySliderConnectFour.addEventListener('input', () => {
-        updateDifficultyColor(difficultySliderConnectFour, startBotGameConnectFourButton);
-    });
+function displayCurrentPlayer() {
+    const status = document.getElementById('status');
+    status.textContent = `Current Player: ${currentPlayer}`;
+}
 
-    const resizeObserver = new ResizeObserver(entries => {
-        for (let entry of entries) {
-            const cellSize = Math.min(entry.contentRect.width, entry.contentRect.height);
-            entry.target.style.setProperty('--cell-font-size', `${cellSize * 0.6}px`);
-        }
-    });
+function resetGameBoard() {
+    board.forEach(row => row.fill(''));
+    initializeGame();
+}
 
-    gridSizeSelectClassic.addEventListener('change', () => {
-        const size = parseInt(gridSizeSelectClassic.value, 10);
-        if (size === 3) {
-            winLengthInputClassic.value = 3;
-            winLengthInputClassic.max = 3;
-        } else if (size === 4) {
-            winLengthInputClassic.value = 4;
-            winLengthInputClassic.max = 4;
+function botMove(difficulty) {
+    let move;
+    if (difficulty === '1') {
+        move = findRandomMove();
+    } else if (difficulty === '2') {
+        move = findBlockingMove('X') || findRandomMove();
+    } else {
+        move = findBestMove();
+    }
+    if (move) {
+        makeMove(move.row, move.col, 'O');
+        if (checkWin('O')) {
+            alert(`O wins!`);
+            resetGameBoard();
+        } else if (checkDraw()) {
+            alert("It's a draw!");
+            resetGameBoard();
         } else {
-            winLengthInputClassic.value = 5;
-            winLengthInputClassic.max = 10;
+            currentPlayer = 'X';
+            displayCurrentPlayer();
         }
-    });
+    }
+}
 
-    startPlayerGameClassicButton.addEventListener('click', () => {
-        vsBot = false;
-        updatePlayerOText('Игрок O');
-        startGame('classic');
-    });
-
-    startBotGameClassicButton.addEventListener('click', () => {
-        vsBot = true;
-        updatePlayerOText('Бот O');
-        difficulty = parseInt(difficultySliderClassic.value, 10);
-        startGame('classic');
-    });
-
-    startPlayerGameUpdatedButton.addEventListener('click', () => {
-        vsBot = false;
-        updatePlayerOText('Игрок O');
-        startGame('updated');
-    });
-
-    startBotGameUpdatedButton.addEventListener('click', () => {
-        vsBot = true;
-        updatePlayerOText('Бот O');
-        difficulty = parseInt(difficultySliderUpdated.value, 10);
-        startGame('updated');
-    });
-
-    startPlayerGameSuperButton.addEventListener('click', () => {
-        vsBot = false;
-        updatePlayerOText('Игрок O');
-        startGame('super');
-    });
-
-    startBotGameSuperButton.addEventListener('click', () => {
-        vsBot = true;
-        updatePlayerOText('Бот O');
-        difficulty = parseInt(difficultySliderSuper.value, 10);
-        startGame('super');
-    });
-
-    startPlayerGameConnectFourButton.addEventListener('click', () => {
-        vsBot = false;
-        updatePlayerOText('Игрок O');
-        startGame('connectFour');
-    });
-
-    startBotGameConnectFourButton.addEventListener('click', () => {
-        vsBot = true;
-        updatePlayerOText('Бот O');
-        difficulty = parseInt(difficultySliderConnectFour.value, 10);
-        startGame('connectFour');
-    });
-
-    function startGame(mode) {
-        switch (mode) {
-            case 'classic':
-                gridSize = parseInt(gridSizeSelectClassic.value, 10);
-                winLength = parseInt(winLengthInputClassic.value, 10);
-                break;
-            case 'updated':
-                gridSize = 3; // Задайте соответствующие параметры для обновленного режима
-                winLength = 3;
-                break;
-            case 'super':
-                gridSize = 3; // Задайте соответствующие параметры для супер крестиков-ноликов
-                winLength = 3;
-                break;
-            case 'connectFour':
-                gridSize = 7; // Задайте соответствующие параметры для "Четыре в ряд"
-                winLength = 4;
-                break;
-        }
-        modal.style.display = 'none';
-        document.querySelector('.scoreboard').style.display = 'flex'; // Показать информацию о текущем игроке
-        createGrid(gridSize);
-        turn = Math.random() < 0.5 ? 'X' : 'O';
-        setTimeout(() => {
-            document.body.style.backgroundColor = turn === 'X' ? '#F2AF5C' : '#40799A';
-            cells.forEach(cell => cell.addEventListener('click', cellClick));
-            if (vsBot && turn === 'O') {
-                lockCells();
-                setTimeout(botMove, 1000);
+function findRandomMove() {
+    const emptyCells = [];
+    board.forEach((row, rowIndex) => {
+        row.forEach((cell, colIndex) => {
+            if (cell === '') {
+                emptyCells.push({ row: rowIndex, col: colIndex });
             }
-        }, 1000);
+        });
+    });
+    if (emptyCells.length > 0) {
+        return emptyCells[Math.floor(Math.random() * emptyCells.length)];
     }
+    return null;
+}
 
-    function createGrid(size) {
-        cellsContainer.innerHTML = '';
-        cellsContainer.style.gridTemplateColumns = `repeat(${size}, 1fr)`;
-        cellsContainer.style.gridTemplateRows = `repeat(${size}, 1fr)`;
-        cells = [];
-        for (let i = 0; i < size * size; i++) {
-            const cell = document.createElement('div');
-            cell.classList.add('cell');
-            cellsContainer.appendChild(cell);
-            cells.push(cell);
-            resizeObserver.observe(cell);
-        }
-    }
-
-    function cellClick(e) {
-        if (!gameOver && (vsBot && turn === 'X' || !vsBot)) {
-            const cell = e.target;
-            if (cell.textContent === '') {
-                cell.textContent = turn;
-                cell.style.pointerEvents = 'none';
-
-                if (checkWin(turn)) {
-                    gameOver = true;
-                    updateScore(turn);
-                    setTimeout(resetBoard, 1000);
-                } else if (isBoardFull()) {
-                    setTimeout(resetBoard, 1000);
-                } else {
-                    switchTurn();
-                    if (vsBot && turn === 'O') {
-                        lockCells();
-                        setTimeout(botMove, 1000);
-                    }
+function findBlockingMove(player) {
+    for (let row = 0; row < 3; row++) {
+        for (let col = 0; col < 3; col++) {
+            if (board[row][col] === '') {
+                board[row][col] = player;
+                const winning = checkWin(player);
+                board[row][col] = ''; // Возвращаем клетку в исходное состояние
+                if (winning) {
+                    return { row, col };
                 }
             }
         }
     }
+    return null;
+}
 
-    function botMove() {
-        if (!gameOver) {
-            let moveMade = false;
-
-            if (difficulty === 3) {
-                moveMade = attemptWinningMove('O') || attemptBlockingMove('X');
-            } else if (difficulty === 2) {
-                moveMade = attemptBlockingMove('X');
-            }
-
-            if (!moveMade) {
-                makeRandomMove();
-            }
-
-            if (checkWin(turn)) {
-                gameOver = true;
-                updateScore(turn);
-                setTimeout(resetBoard, 1000);
-            } else if (isBoardFull()) {
-                setTimeout(resetBoard, 1000);
-            } else {
-                switchTurn();
-                unlockCells();
-            }
-        }
-    }
-
-    function attemptWinningMove(player) {
-        return winningCombinations(player).some(combination => {
-            const cellsArray = combination.map(index => cells[index]);
-            const countPlayer = cellsArray.filter(cell => cell.textContent === player).length;
-            const emptyCells = cellsArray.filter(cell => cell.textContent === '');
-
-            if (countPlayer === winLength - 1 && emptyCells.length === 1) {
-                const targetCell = emptyCells[0];
-                targetCell.textContent = 'O';
-                targetCell.style.pointerEvents = 'none';
-                return true;
-            }
-            return false;
-        });
-    }
-
-    function attemptBlockingMove(player) {
-        return attemptWinningMove(player);
-    }
-
-    function makeRandomMove() {
-        const emptyCells = cells.filter(cell => !cell.textContent);
-        const randomIndex = Math.floor(Math.random() * emptyCells.length);
-        const targetCell = emptyCells[randomIndex];
-        targetCell.textContent = 'O';
-        targetCell.style.pointerEvents = 'none';
-    }
-
-    function lockCells() {
-        cells.forEach(cell => cell.style.pointerEvents = 'none');
-    }
-
-    function unlockCells() {
-        cells.forEach(cell => {
-            if (!cell.textContent) {
-                cell.style.pointerEvents = 'auto';
-            }
-        });
-    }
-
-    function switchTurnWithDelay() {
-        switchTurn();
-        lockCells();
-        setTimeout(() => {
-            unlockCells();
-            if (vsBot && turn === 'O' && !gameOver) {
-                setTimeout(botMove, 1000);
-            }
-        }, 1000);
-    }
-
-    function switchTurn() {
-        turn = turn === 'X' ? 'O' : 'X';
-        document.body.style.backgroundColor = turn === 'X' ? '#F2AF5C' : '#40799A';
-    }
-
-    function checkWin(player) {
-        return winningCombinations(player).some(combination => {
-            return combination.every(index => {
-                return cells[index].textContent === player;
-            });
-        });
-    }
-
-    function winningCombinations(player) {
-        const combinations = [];
-        const gridSizeSquared = gridSize * gridSize;
-
-        for (let i = 0; i < gridSize; i++) {
-            for (let j = 0; j < gridSize - winLength + 1; j++) {
-                const row = [], col = [];
-                for (let k = 0; k < winLength; k++) {
-                    row.push(i * gridSize + j + k);
-                    col.push(j * gridSize + i + k * gridSize);
+function findBestMove() {
+    let bestScore = -Infinity;
+    let bestMove = null;
+    for (let row = 0; row < 3; row++) {
+        for (let col = 0; col < 3; col++) {
+            if (board[row][col] === '') {
+                board[row][col] = 'O';
+                let score = minimax(board, 0, false);
+                board[row][col] = '';
+                if (score > bestScore) {
+                    bestScore = score;
+                    bestMove = { row, col };
                 }
-                combinations.push(row, col);
             }
         }
+    }
+    return bestMove;
+}
 
-        for (let i = 0; i < gridSize - winLength + 1; i++) {
-            for (let j = 0; j < gridSize - winLength + 1; j++) {
-                const diag1 = [], diag2 = [];
-                for (let k = 0; k < winLength; k++) {
-                    diag1.push((i + k) * gridSize + j + k);
-                    diag2.push((i + k) * gridSize + j + winLength - k - 1);
+function minimax(board, depth, isMaximizing) {
+    if (checkWin('O')) return 10 - depth;
+    if (checkWin('X')) return depth - 10;
+    if (checkDraw()) return 0;
+
+    if (isMaximizing) {
+        let bestScore = -Infinity;
+        for (let row = 0; row < 3; row++) {
+            for (let col = 0; col < 3; col++) {
+                if (board[row][col] === '') {
+                    board[row][col] = 'O';
+                    let score = minimax(board, depth + 1, false);
+                    board[row][col] = '';
+                    bestScore = Math.max(score, bestScore);
                 }
-                combinations.push(diag1, diag2);
             }
         }
-
-        return combinations;
-    }
-
-    function isBoardFull() {
-        return cells.every(cell => cell.textContent);
-    }
-
-    function resetBoard() {
-        cells.forEach(cell => {
-            cell.textContent = '';
-            cell.style.pointerEvents = 'auto';
-            cell.addEventListener('click', cellClick);
-        });
-        gameOver = false;
-        switchTurn();
-        if (vsBot && turn === 'O') {
-            lockCells();
-            setTimeout(botMove, 1000);
+        return bestScore;
+    } else {
+        let bestScore = Infinity;
+        for (let row = 0; row < 3; row++) {
+            for (let col = 0; col < 3; col++) {
+                if (board[row][col] === '') {
+                    board[row][col] = 'X';
+                    let score = minimax(board, depth + 1, true);
+                    board[row][col] = '';
+                    bestScore = Math.min(score, bestScore);
+                }
+            }
         }
+        return bestScore;
     }
-
-    function updateScore(player) {
-        if (player === 'X') {
-            scoreX++;
-            scoreXElement.textContent = scoreX;
-        } else if (player === 'O') {
-            scoreO++;
-            scoreOElement.textContent = scoreO;
-        }
-    }
-
-    function updatePlayerOText(text) {
-        playerOElement.firstChild.textContent = `${text}: `;
-    }
-});
+}
