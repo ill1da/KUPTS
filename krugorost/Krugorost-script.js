@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const { Engine, Render, World, Bodies, Body, Events } = Matter;
+    const { Engine, Render, World, Bodies, Body, Events, Query, Vector } = Matter;
 
     const engine = Engine.create({
         gravity: { x: 0, y: 1 },
@@ -9,31 +9,31 @@ document.addEventListener('DOMContentLoaded', function() {
 
     engine.world.gravity.y = 1;
     Matter.Common.set(engine, 'constraintIterations', 2);
-    
+
     const world = engine.world;
     const render = Render.create({
         element: document.getElementById('game-container'),
         engine: engine,
         options: { wireframes: false, width: 800, height: 720 }
     });
-    
+
     const collisionCategories = {
         control: 0x0001,
         active: 0x0002
     };
 
     const levels = [
-        { size: 16, color: '#5B748E', density: 0.01},
-        { size: 34, color: '#FF4B19', density: 0.01},
-        { size: 52, color: '#D95970', density: 0.01},
-        { size: 70, color: '#F2A679', density: 0.01},
-        { size: 88, color: '#E8D650', density: 0.01},
-        { size: 106, color: '#473145', density: 0.01},
-        { size: 124, color: '#F28705', density: 0.01},
-        { size: 142, color: '#BF1304', density: 0.01},
-        { size: 160, color: '#D9A404', density: 0.01},
-        { size: 178, color: '#8C4E03', density: 0.01},
-        { size: 196, color: '#50732D', density: 0.01}
+        { size: 16, color: '#5B748E', density: 0.01 },
+        { size: 34, color: '#FF4B19', density: 0.01 },
+        { size: 52, color: '#D95970', density: 0.01 },
+        { size: 70, color: '#F2A679', density: 0.01 },
+        { size: 88, color: '#E8D650', density: 0.01 },
+        { size: 106, color: '#473145', density: 0.01 },
+        { size: 124, color: '#F28705', density: 0.01 },
+        { size: 142, color: '#BF1304', density: 0.01 },
+        { size: 160, color: '#D9A404', density: 0.01 },
+        { size: 178, color: '#8C4E03', density: 0.01 },
+        { size: 196, color: '#50732D', density: 0.01 }
     ];
 
     let score = 0;
@@ -62,6 +62,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     let controlCircle = null;
 
+    let currentLineColor = '#000'; // Начальный цвет линии
+
     function createControlCircle() {
         const randomLevel = Math.floor(Math.random() * 4) + 1;
         const x = 400;
@@ -70,6 +72,9 @@ document.addEventListener('DOMContentLoaded', function() {
         Body.setStatic(controlCircle, true);
         World.add(world, controlCircle);
         Body.setPosition(controlCircle, { x: 400, y: 50 });
+    
+        // Обновляем цвет линии
+        currentLineColor = levels[randomLevel - 1].color;
     }
 
     createControlCircle();
@@ -153,21 +158,87 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
+    // Функция анимации для кружочков
+    let dashOffset = 0;
+    function animateLine() {
+        dashOffset += 0.5; // Скорость движения кружочков
+    }
+
     Events.on(render, 'afterRender', function() {
         if (controlCircle && controlCircle.isStatic) {
             const ctx = render.context;
-            ctx.beginPath();
-            ctx.setLineDash([5, 15]);
-            ctx.strokeStyle = controlCircle.render.fillStyle;
-            ctx.moveTo(controlCircle.position.x, controlCircle.position.y);
-            ctx.lineTo(controlCircle.position.x, 720);  // Draw to the bottom of the canvas
-            ctx.lineWidth = 2;
-            ctx.stroke();
+            ctx.fillStyle = currentLineColor; // Используем текущий цвет линии
+    
+            const bodies = Matter.Composite.allBodies(world);
+            const rayStart = { x: controlCircle.position.x, y: controlCircle.position.y };
+            const rayEnd = { x: controlCircle.position.x, y: render.options.height };
+    
+            // Найти все пересечения луча с телами на поле
+            const collisions = Query.ray(bodies, rayStart, rayEnd);
+    
+            let closestPoint = rayEnd;
+            let minDistance = Vector.magnitude(Vector.sub(rayStart, rayEnd)); // Максимально возможное расстояние
+    
+            collisions.forEach(collision => {
+                if (collision.body.isStatic === false && collision.body.circleRadius) {
+                    const bodyCenter = collision.body.position;
+                    const bodyRadius = collision.body.circleRadius; // Радиус тела
+    
+                    // Уравнение линии
+                    const lineStart = rayStart;
+                    const lineEnd = rayEnd;
+                    const lineDir = Vector.normalise(Vector.sub(lineEnd, lineStart));
+    
+                    // Вектор от центра круга до начала линии
+                    const toCircle = Vector.sub(bodyCenter, lineStart);
+    
+                    // Проекция вектора на направление линии
+                    const projLength = Vector.dot(lineDir, toCircle);
+                    const projPoint = Vector.add(lineStart, Vector.mult(lineDir, projLength));
+    
+                    // Вектор от проекционной точки до центра круга
+                    const fromProjToCenter = Vector.sub(bodyCenter, projPoint);
+    
+                    // Если расстояние от проекционной точки до центра круга меньше радиуса
+                    if (Vector.magnitude(fromProjToCenter) < bodyRadius) {
+                        // Вычисляем расстояние до точки пересечения линии с окружностью
+                        const offsetLength = Math.sqrt(bodyRadius * bodyRadius - Vector.magnitudeSquared(fromProjToCenter));
+                        const collisionPoint = Vector.add(projPoint, Vector.mult(lineDir, -offsetLength));
+    
+                        const distanceToEdgeVertical = Vector.magnitude(Vector.sub(rayStart, collisionPoint));
+    
+                        // Если расстояние до точки пересечения меньше текущего минимального расстояния
+                        if (distanceToEdgeVertical < minDistance) {
+                            minDistance = distanceToEdgeVertical;
+                            closestPoint = collisionPoint;
+                        }
+                    }
+                }
+            });
+    
+            // Создаем линейный градиент от начала до ближайшей точки столкновения
+            const gradient = ctx.createLinearGradient(rayStart.x, rayStart.y, closestPoint.x, closestPoint.y);
+            gradient.addColorStop(0, currentLineColor); // Начало градиента непрозрачное
+            gradient.addColorStop(1, `${currentLineColor}20`); // Конец градиента полностью прозрачный
+    
+            // Рисуем кружочки вдоль линии до ближайшей точки столкновения с градиентом
+            for (let i = dashOffset % 15; i < minDistance; i += 15) {
+                const x = rayStart.x;
+                const y = rayStart.y + i;
+                ctx.fillStyle = gradient;
+    
+                ctx.beginPath();
+                ctx.arc(x, y, 2, 0, Math.PI * 2);
+                ctx.fill();
+            }
+    
+            // Вызываем функцию анимации
+            animateLine();
         }
         if (document.getElementById('score-display')) {
             updateScoreDisplay();
         }
-    });
+    });    
 
     World.add(world, [
         Bodies.rectangle(400, 720, 800, 50, { isStatic: true, render: { fillStyle: 'grey' } }),
