@@ -62,58 +62,119 @@ document.addEventListener('DOMContentLoaded', function() {
 
     let controlCircle = null;
 
-    let currentLineColor = '#000'; // Начальный цвет линии
+    let currentLineColor = '#000';
 
-    function createControlCircle() {
+    function createControlCircle(x, y) {
         const randomLevel = Math.floor(Math.random() * 4) + 1;
-        const x = 400;
-        const y = 50;
         controlCircle = createCircle(randomLevel, x, y, true);
         Body.setStatic(controlCircle, true);
         World.add(world, controlCircle);
-        Body.setPosition(controlCircle, { x: 400, y: 50 });
+        Body.setPosition(controlCircle, { x, y });
     
-        // Обновляем цвет линии
         currentLineColor = levels[randomLevel - 1].color;
     }
 
-    createControlCircle();
+    function isTouchDevice() {
+        return 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+    }
 
-    render.canvas.addEventListener('mousemove', function(event) {
+    function getCanvasCoordinates(event) {
         const rect = render.canvas.getBoundingClientRect();
-        const mouseX = event.clientX - rect.left;
-        const radius = controlCircle.circleRadius;
+        const x = event.clientX - rect.left;
+        const y = event.clientY - rect.top;
+        return { x, y };
+    }
+
+    function initializeControlCircle() {
+        if (isTouchDevice()) {
+            createControlCircle(render.options.width / 2, 50);
+        } else {
+            createControlCircle(render.options.width / 2, 50); // Спавним по центру при загрузке страницы
+            render.canvas.addEventListener('mousemove', handleMouseMove);
+            render.canvas.addEventListener('mousedown', handleMouseDown);
+        }
+    }
+
+    // Глобальные переменные для хранения текущих координат курсора
+    let currentCursorX = render.options.width / 2;
+
+    function handleMouseMove(event) {
+        const { x } = getCanvasCoordinates(event);
+        // Обновляем глобальные координаты курсора
+        currentCursorX = x;
+    
         if (controlCircle && controlCircle.isStatic) {
-            const clampedX = Math.min(Math.max(mouseX, radius + 25), render.options.width - radius - 25);
+            const radius = controlCircle.circleRadius;
+            const clampedX = Math.min(Math.max(x, radius + 25), render.options.width - radius - 25);
             Body.setPosition(controlCircle, { x: clampedX, y: 50 });
         }
-    });
+    }
 
-    render.canvas.addEventListener('mousedown', function() {
-        if (controlCircle && controlCircle.isStatic) {
+    let lastSpawnTime = 0;
+    const spawnInterval = 500; // Интервал в миллисекундах между созданием новых шариков
+    
+    function handleMouseDown(event) {
+        const currentTime = new Date().getTime();
+        if (currentTime - lastSpawnTime < spawnInterval) {
+            return; // Если прошло недостаточно времени, не создаем новый шарик
+        }
+        lastSpawnTime = currentTime; // Обновляем время последнего создания шарика
+        
+        if (controlCircle) {
             controlCircle.collisionFilter.mask = 0xFFFF;
             Body.setStatic(controlCircle, false);
-            setTimeout(createControlCircle, 500);
+        }
+        
+        // Используем текущие координаты курсора из глобальной переменной
+        setTimeout(() => {
+            createControlCircle(currentCursorX, 50);
+        }, 500);
+    }
+
+    render.canvas.addEventListener('touchstart', function(event) {
+        event.preventDefault();
+        const touch = event.touches[0];
+        const { x } = getCanvasCoordinates(touch);
+        if (controlCircle && controlCircle.isStatic) {
+            const radius = controlCircle.circleRadius;
+            const clampedX = Math.min(Math.max(x, radius + 25), render.options.width - radius - 25);
+            // Держим шарик по центру до касания
+            Body.setPosition(controlCircle, { x: render.options.width / 2, y: 50 });
         }
     });
 
     render.canvas.addEventListener('touchmove', function(event) {
-        event.preventDefault();  // Предотвращаем стандартное поведение скроллинга
-        const touch = event.touches[0];  // Получаем первое касание
-        const rect = render.canvas.getBoundingClientRect();
-        const touchX = touch.clientX - rect.left;
-        const radius = controlCircle.circleRadius;
+        event.preventDefault();
+        const touch = event.touches[0];
+        const { x } = getCanvasCoordinates(touch);
         if (controlCircle && controlCircle.isStatic) {
-            const clampedX = Math.min(Math.max(touchX, radius + 25), render.options.width - radius - 25);
+            const radius = controlCircle.circleRadius;
+            const clampedX = Math.min(Math.max(x, radius + 25), render.options.width - radius - 25);
             Body.setPosition(controlCircle, { x: clampedX, y: 50 });
         }
     });
 
-    render.canvas.addEventListener('touchend', function() {
+    render.canvas.addEventListener('touchend', function(event) {
+        const touch = event.changedTouches[0];
+        const { x } = getCanvasCoordinates(touch);
+        const currentTime = new Date().getTime();
+        if (currentTime - lastSpawnTime < spawnInterval) {
+            return; // Если прошло недостаточно времени, не создаем новый шарик
+        }
+        lastSpawnTime = currentTime; // Обновляем время последнего создания шарика
+        
         if (controlCircle && controlCircle.isStatic) {
+            // Перемещаем шарик на позицию x касания
+            const radius = controlCircle.circleRadius;
+            const clampedX = Math.min(Math.max(x, radius + 25), render.options.width - radius - 25);
+            Body.setPosition(controlCircle, { x: clampedX, y: 50 });
+    
             controlCircle.collisionFilter.mask = 0xFFFF;
             Body.setStatic(controlCircle, false);
-            setTimeout(createControlCircle, 500);  // Задержка перед созданием нового контрольного шарика
+            
+            setTimeout(() => {
+                createControlCircle(render.options.width / 2, 50); // Создаем новый шарик по центру
+            }, 500);
         }
     });
 
@@ -158,56 +219,47 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Функция анимации для кружочков
     let dashOffset = 0;
     function animateLine() {
-        dashOffset += 0.5; // Скорость движения кружочков
+        dashOffset += 0.5;
     }
 
     Events.on(render, 'afterRender', function() {
         if (controlCircle && controlCircle.isStatic) {
             const ctx = render.context;
-            ctx.fillStyle = currentLineColor; // Используем текущий цвет линии
-    
+            ctx.fillStyle = currentLineColor;
+
             const bodies = Matter.Composite.allBodies(world);
-            const rayStart = { x: controlCircle.position.x, y: controlCircle.position.y };
+            const rayStart = { x: controlCircle.position.x, y: controlCircle.position.y + controlCircle.circleRadius };
             const rayEnd = { x: controlCircle.position.x, y: render.options.height };
-    
-            // Найти все пересечения луча с телами на поле
+
             const collisions = Query.ray(bodies, rayStart, rayEnd);
-    
+
             let closestPoint = rayEnd;
-            let minDistance = Vector.magnitude(Vector.sub(rayStart, rayEnd)); // Максимально возможное расстояние
-    
+            let minDistance = Vector.magnitude(Vector.sub(rayStart, rayEnd));
+
             collisions.forEach(collision => {
                 if (collision.body.isStatic === false && collision.body.circleRadius) {
                     const bodyCenter = collision.body.position;
-                    const bodyRadius = collision.body.circleRadius; // Радиус тела
-    
-                    // Уравнение линии
+                    const bodyRadius = collision.body.circleRadius;
+
                     const lineStart = rayStart;
                     const lineEnd = rayEnd;
                     const lineDir = Vector.normalise(Vector.sub(lineEnd, lineStart));
-    
-                    // Вектор от центра круга до начала линии
+
                     const toCircle = Vector.sub(bodyCenter, lineStart);
-    
-                    // Проекция вектора на направление линии
+
                     const projLength = Vector.dot(lineDir, toCircle);
                     const projPoint = Vector.add(lineStart, Vector.mult(lineDir, projLength));
-    
-                    // Вектор от проекционной точки до центра круга
+
                     const fromProjToCenter = Vector.sub(bodyCenter, projPoint);
-    
-                    // Если расстояние от проекционной точки до центра круга меньше радиуса
+
                     if (Vector.magnitude(fromProjToCenter) < bodyRadius) {
-                        // Вычисляем расстояние до точки пересечения линии с окружностью
                         const offsetLength = Math.sqrt(bodyRadius * bodyRadius - Vector.magnitudeSquared(fromProjToCenter));
                         const collisionPoint = Vector.add(projPoint, Vector.mult(lineDir, -offsetLength));
-    
+
                         const distanceToEdgeVertical = Vector.magnitude(Vector.sub(rayStart, collisionPoint));
-    
-                        // Если расстояние до точки пересечения меньше текущего минимального расстояния
+
                         if (distanceToEdgeVertical < minDistance) {
                             minDistance = distanceToEdgeVertical;
                             closestPoint = collisionPoint;
@@ -215,30 +267,29 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                 }
             });
-    
-            // Создаем линейный градиент от начала до ближайшей точки столкновения
+
             const gradient = ctx.createLinearGradient(rayStart.x, rayStart.y, closestPoint.x, closestPoint.y);
-            gradient.addColorStop(0, currentLineColor); // Начало градиента непрозрачное
-            gradient.addColorStop(1, `${currentLineColor}20`); // Конец градиента полностью прозрачный
-    
-            // Рисуем кружочки вдоль линии до ближайшей точки столкновения с градиентом
+            gradient.addColorStop(0, `${currentLineColor}00`);
+            gradient.addColorStop(0.05, currentLineColor);
+            gradient.addColorStop(0.9, currentLineColor);
+            gradient.addColorStop(1, `${currentLineColor}00`);
+
             for (let i = dashOffset % 15; i < minDistance; i += 15) {
                 const x = rayStart.x;
                 const y = rayStart.y + i;
                 ctx.fillStyle = gradient;
-    
+
                 ctx.beginPath();
-                ctx.arc(x, y, 2, 0, Math.PI * 2);
+                ctx.arc(x, y, 2.6, 0, Math.PI * 2);
                 ctx.fill();
             }
-    
-            // Вызываем функцию анимации
+
             animateLine();
         }
         if (document.getElementById('score-display')) {
             updateScoreDisplay();
         }
-    });    
+    });
 
     World.add(world, [
         Bodies.rectangle(400, 720, 800, 50, { isStatic: true, render: { fillStyle: 'grey' } }),
@@ -248,4 +299,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     Engine.run(engine);
     Render.run(render);
+
+    initializeControlCircle();
 });
