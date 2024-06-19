@@ -17,14 +17,6 @@ body, html {
     overflow: hidden;
 }
 
-#score {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    font-size: 20px;
-    color: #333;
-}
-
 #game-board {
     position: relative;
     width: 100%;
@@ -34,4 +26,5 @@ body, html {
 #score-display {
     position: absolute;
     left: 0; top: 0;
+    font-size: 2vw;
 }

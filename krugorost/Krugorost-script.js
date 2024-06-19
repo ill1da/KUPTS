@@ -7,9 +7,6 @@ document.addEventListener('DOMContentLoaded', function() {
         velocityIterations: 10
     });
 
-    engine.world.gravity.y = 1;
-    Matter.Common.set(engine, 'constraintIterations', 2);
-
     const world = engine.world;
     const render = Render.create({
         element: document.getElementById('game-container'),
@@ -66,11 +63,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function createControlCircle(x, y) {
         const randomLevel = Math.floor(Math.random() * 4) + 1;
-        controlCircle = createCircle(randomLevel, x, y, true);
+        const radius = levels[randomLevel - 1].size;
+        controlCircle = createCircle(randomLevel, x, y - radius, true); // Спавним центр шарика выше на его радиус
         Body.setStatic(controlCircle, true);
         World.add(world, controlCircle);
-        Body.setPosition(controlCircle, { x, y });
-    
+        Body.setPosition(controlCircle, { x, y: y - radius }); // Позиционируем центр на высоте
+
         currentLineColor = levels[randomLevel - 1].color;
     }
 
@@ -86,48 +84,47 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function initializeControlCircle() {
-        if (isTouchDevice()) {
-            createControlCircle(render.options.width / 2, 50);
-        } else {
-            createControlCircle(render.options.width / 2, 50); // Спавним по центру при загрузке страницы
+        const spawnX = render.options.width / 2;
+        const spawnY = 50; // Y-координата, где нижняя точка шарика будет касаться этого значения
+        createControlCircle(spawnX, spawnY);
+
+        if (!isTouchDevice()) {
             render.canvas.addEventListener('mousemove', handleMouseMove);
             render.canvas.addEventListener('mousedown', handleMouseDown);
         }
     }
 
-    // Глобальные переменные для хранения текущих координат курсора
     let currentCursorX = render.options.width / 2;
 
     function handleMouseMove(event) {
         const { x } = getCanvasCoordinates(event);
-        // Обновляем глобальные координаты курсора
         currentCursorX = x;
-    
+
         if (controlCircle && controlCircle.isStatic) {
             const radius = controlCircle.circleRadius;
             const clampedX = Math.min(Math.max(x, radius + 25), render.options.width - radius - 25);
-            Body.setPosition(controlCircle, { x: clampedX, y: 50 });
+            Body.setPosition(controlCircle, { x: clampedX, y: 50 - radius }); // Обновляем позицию с учетом радиуса
         }
     }
 
     let lastSpawnTime = 0;
-    const spawnInterval = 500; // Интервал в миллисекундах между созданием новых шариков
-    
+    const spawnInterval = 500;
+
     function handleMouseDown(event) {
         const currentTime = new Date().getTime();
         if (currentTime - lastSpawnTime < spawnInterval) {
-            return; // Если прошло недостаточно времени, не создаем новый шарик
+            return;
         }
-        lastSpawnTime = currentTime; // Обновляем время последнего создания шарика
-        
+        lastSpawnTime = currentTime;
+
         if (controlCircle) {
             controlCircle.collisionFilter.mask = 0xFFFF;
             Body.setStatic(controlCircle, false);
         }
-        
-        // Используем текущие координаты курсора из глобальной переменной
+
         setTimeout(() => {
-            createControlCircle(currentCursorX, 50);
+            const spawnY = 50; // Y-координата для нижней точки шарика
+            createControlCircle(currentCursorX, spawnY);
         }, 500);
     }
 
@@ -138,8 +135,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (controlCircle && controlCircle.isStatic) {
             const radius = controlCircle.circleRadius;
             const clampedX = Math.min(Math.max(x, radius + 25), render.options.width - radius - 25);
-            // Держим шарик по центру до касания
-            Body.setPosition(controlCircle, { x: render.options.width / 2, y: 50 });
+            Body.setPosition(controlCircle, { x: clampedX, y: 50 - radius });
         }
     });
 
@@ -150,7 +146,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (controlCircle && controlCircle.isStatic) {
             const radius = controlCircle.circleRadius;
             const clampedX = Math.min(Math.max(x, radius + 25), render.options.width - radius - 25);
-            Body.setPosition(controlCircle, { x: clampedX, y: 50 });
+            Body.setPosition(controlCircle, { x: clampedX, y: 50 - radius });
         }
     });
 
@@ -159,21 +155,21 @@ document.addEventListener('DOMContentLoaded', function() {
         const { x } = getCanvasCoordinates(touch);
         const currentTime = new Date().getTime();
         if (currentTime - lastSpawnTime < spawnInterval) {
-            return; // Если прошло недостаточно времени, не создаем новый шарик
+            return;
         }
-        lastSpawnTime = currentTime; // Обновляем время последнего создания шарика
-        
+        lastSpawnTime = currentTime;
+
         if (controlCircle && controlCircle.isStatic) {
-            // Перемещаем шарик на позицию x касания
             const radius = controlCircle.circleRadius;
             const clampedX = Math.min(Math.max(x, radius + 25), render.options.width - radius - 25);
-            Body.setPosition(controlCircle, { x: clampedX, y: 50 });
-    
+            Body.setPosition(controlCircle, { x: clampedX, y: 50 - radius });
+
             controlCircle.collisionFilter.mask = 0xFFFF;
             Body.setStatic(controlCircle, false);
-            
+
             setTimeout(() => {
-                createControlCircle(render.options.width / 2, 50); // Создаем новый шарик по центру
+                const spawnY = 50; // Y-координата для нижней точки шарика
+                createControlCircle(render.options.width / 2, spawnY);
             }, 500);
         }
     });
@@ -224,9 +220,12 @@ document.addEventListener('DOMContentLoaded', function() {
         dashOffset += 0.5;
     }
 
+    let losingFruits = [];
+
     Events.on(render, 'afterRender', function() {
+        const ctx = render.context; // Ensure ctx is defined here
+
         if (controlCircle && controlCircle.isStatic) {
-            const ctx = render.context;
             ctx.fillStyle = currentLineColor;
 
             const bodies = Matter.Composite.allBodies(world);
@@ -286,13 +285,67 @@ document.addEventListener('DOMContentLoaded', function() {
 
             animateLine();
         }
+
+        const losingLineY = render.options.height - 620; // Position of the losing line
+        ctx.strokeStyle = 'red';
+        ctx.lineWidth = 2;
+        ctx.setLineDash([5, 15]);
+        ctx.beginPath();
+        ctx.moveTo(0, losingLineY);
+        ctx.lineTo(render.options.width, losingLineY);
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        const bodies = Matter.Composite.allBodies(world);
+        bodies.forEach(body => {
+            const radius = body.circleRadius;
+            const isTouchingLine = body.position.y + radius >= losingLineY && body.position.y - radius <= losingLineY;
+            if (!body.isStatic && isTouchingLine) {
+                const fruitInContact = losingFruits.find(fruit => fruit.body === body);
+                if (fruitInContact) {
+                    fruitInContact.time += 1 / 60; // Increment by 1 frame (assuming 60 FPS)
+                    if (fruitInContact.time > 3) { // More than 3 seconds
+                        alert('Game Over!');
+                        Engine.clear(engine);
+                        Render.stop(render);
+                        window.location.reload();
+                    } else if (fruitInContact.time > 1) {
+                        // Draw pulsating dashed circle around the fruit
+                        ctx.beginPath();
+                        ctx.arc(fruitInContact.body.position.x, fruitInContact.body.position.y, radius + (Math.sin(Date.now() / 200) + 1) * 5, 0, Math.PI * 2);
+                        ctx.strokeStyle = fruitInContact.body.render.fillStyle;
+                        ctx.setLineDash([5, 3]); // Dashed line
+                        ctx.lineWidth = 2;
+                        ctx.stroke();
+                        ctx.setLineDash([]); // Reset to solid line
+                    }
+                } else {
+                    // Record the start time of contact
+                    losingFruits.push({ body, time: 0 });
+                }
+            } else {
+                // If the fruit is below the line, reset its contact time
+                const fruitInContact = losingFruits.find(fruit => fruit.body === body);
+                if (fruitInContact) {
+                    fruitInContact.time = 0;
+                }
+            }
+        });
+
+        // Remove fruits that are no longer in contact with the losing line
+        losingFruits = losingFruits.filter(fruit => {
+            const radius = fruit.body.circleRadius;
+            const isContacting = fruit.body.position.y + radius >= losingLineY && fruit.body.position.y - radius <= losingLineY;
+            return isContacting;
+        });
+
         if (document.getElementById('score-display')) {
             updateScoreDisplay();
         }
     });
 
     World.add(world, [
-        Bodies.rectangle(400, 720, 800, 50, { isStatic: true, render: { fillStyle: 'grey' } }),
+        Bodies.rectangle(400, 220, 800, 50, { isStatic: true, render: { fillStyle: 'grey' } }),
         Bodies.rectangle(0, 360, 50, 720, { isStatic: true, render: { fillStyle: 'grey' } }),
         Bodies.rectangle(800, 360, 50, 720, { isStatic: true, render: { fillStyle: 'grey' } })
     ]);
