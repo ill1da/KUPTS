@@ -345,7 +345,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     World.add(world, [
-        Bodies.rectangle(400, 220, 800, 50, { isStatic: true, render: { fillStyle: 'grey' } }),
+        Bodies.rectangle(400, 720, 800, 50, { isStatic: true, render: { fillStyle: 'grey' } }),
         Bodies.rectangle(0, 360, 50, 720, { isStatic: true, render: { fillStyle: 'grey' } }),
         Bodies.rectangle(800, 360, 50, 720, { isStatic: true, render: { fillStyle: 'grey' } })
     ]);
