@@ -286,7 +286,7 @@ document.addEventListener('DOMContentLoaded', function() {
             animateLine();
         }
 
-        const losingLineY = render.options.height - 620; // Position of the losing line
+        const losingLineY = render.options.height - 660; // Position of the losing line
         ctx.strokeStyle = 'red';
         ctx.lineWidth = 2;
         ctx.setLineDash([5, 15]);
