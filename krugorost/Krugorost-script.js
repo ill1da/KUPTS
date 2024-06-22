@@ -8,11 +8,49 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     const world = engine.world;
-    const render = Render.create({
-        element: document.getElementById('game-container'),
-        engine: engine,
-        options: { wireframes: false, width: 800, height: 720 }
-    });
+    const gameContainer = document.getElementById('game-container');
+    const backgroundCanvas = document.getElementById('background-canvas');
+    const gameCanvas = document.getElementById('game-canvas');
+    const nextBallsContainer = document.getElementById('next-balls-container');
+
+    // Настраиваем фон
+    function setupBackgroundCanvas() {
+        backgroundCanvas.width = gameContainer.clientWidth;
+        backgroundCanvas.height = gameContainer.clientHeight;
+        const ctx = backgroundCanvas.getContext('2d');
+        const losingLineY = backgroundCanvas.height - 660;
+
+        ctx.fillStyle = '#ADD8E6'; // Цвет для области выше линии проигрыша
+        ctx.fillRect(0, 0, backgroundCanvas.width, losingLineY);
+
+        ctx.fillStyle = '#FFFFE0'; // Цвет для области ниже линии проигрыша
+        ctx.fillRect(0, losingLineY, backgroundCanvas.width, backgroundCanvas.height - losingLineY);
+    }
+
+    setupBackgroundCanvas(); // Рисуем фон один раз
+
+    let render;
+
+    function createRender() {
+        const containerWidth = gameContainer.clientWidth;
+        const containerHeight = gameContainer.clientHeight;
+
+        render = Render.create({
+            canvas: gameCanvas,
+            engine: engine,
+            options: {
+                wireframes: false,
+                width: containerWidth,
+                height: containerHeight,
+                background: 'transparent' // Убедимся, что фон прозрачный
+            }
+        });
+
+        render.canvas.width = containerWidth;
+        render.canvas.height = containerHeight;
+    }
+
+    createRender(); // Инициализируем рендер
 
     const collisionCategories = {
         control: 0x0001,
@@ -20,20 +58,21 @@ document.addEventListener('DOMContentLoaded', function() {
     };
 
     const levels = [
-        { size: 16, color: '#5B748E', density: 0.01 },
-        { size: 34, color: '#FF4B19', density: 0.01 },
-        { size: 52, color: '#D95970', density: 0.01 },
-        { size: 70, color: '#F2A679', density: 0.01 },
-        { size: 88, color: '#E8D650', density: 0.01 },
-        { size: 106, color: '#473145', density: 0.01 },
-        { size: 124, color: '#F28705', density: 0.01 },
-        { size: 142, color: '#BF1304', density: 0.01 },
-        { size: 160, color: '#D9A404', density: 0.01 },
-        { size: 178, color: '#8C4E03', density: 0.01 },
-        { size: 196, color: '#50732D', density: 0.01 }
+        { size: 10, color: '#5B748E', density: 0.1 },
+        { size: 15, color: '#FF4B19', density: 0.15 },
+        { size: 22, color: '#D95970', density: 0.22 },
+        { size: 32, color: '#F2A679', density: 0.32 },
+        { size: 45, color: '#E8D650', density: 0.45 },
+        { size: 60, color: '#473145', density: 0.60 },
+        { size: 78, color: '#F28705', density: 0.78 },
+        { size: 100, color: '#BF1304', density: 1.0 },
+        { size: 125, color: '#D9A404', density: 1.25 },
+        { size: 150, color: '#8C4E03', density: 1.50 },
+        { size: 180, color: '#50732D', density: 1.80 }
     ];
 
     let score = 0;
+    let upcomingBalls = [];
 
     function updateScoreDisplay() {
         const scoreDisplay = document.getElementById('score-display');
@@ -57,17 +96,75 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    function createUpcomingBall() {
+        const randomLevel = Math.floor(Math.random() * 4) + 1;
+        upcomingBalls.push(randomLevel);
+        if (upcomingBalls.length > 3) {
+            upcomingBalls.shift();
+        }
+        updateUpcomingBallsDisplay();
+    }
+
+    function updateUpcomingBallsDisplay() {
+        const nextBallElements = document.querySelectorAll('.next-ball');
+        nextBallElements.forEach((el, index) => {
+            if (upcomingBalls[upcomingBalls.length - 1 - index] !== undefined) {
+                const level = upcomingBalls[upcomingBalls.length - 1 - index];
+                el.style.backgroundColor = levels[level - 1].color;
+            } else {
+                el.style.backgroundColor = '#ccc';
+            }
+        });
+    }
+
+    function getNextBallLevel() {
+        const nextLevel = upcomingBalls.shift();
+        createUpcomingBall();
+        return nextLevel;
+    }
+
+    function updateBorders(width, height) {
+        World.remove(world, 'border');
+        World.add(world, [
+            Bodies.rectangle(width / 2, height, width, 50, { isStatic: true, render: { fillStyle: 'grey' } }), // Нижняя граница
+            Bodies.rectangle(0, height - 345, 50, height - 35, { isStatic: true, render: { fillStyle: 'grey' } }), // Левая граница
+            Bodies.rectangle(width, height - 345, 50, height - 35, { isStatic: true, render: { fillStyle: 'grey' } }) // Правая граница
+        ]);
+    }
+
+    function setDynamicCanvasSize() {
+        const containerWidth = gameContainer.clientWidth;
+        const containerHeight = gameContainer.clientHeight;
+
+        render.options.width = containerWidth;
+        render.options.height = containerHeight;
+        render.canvas.width = containerWidth;
+        render.canvas.height = containerHeight;
+
+        setupBackgroundCanvas(); // Обновляем размеры фона
+        updateBorders(containerWidth, containerHeight);
+    }
+
+    window.addEventListener('resize', setDynamicCanvasSize);
+    setDynamicCanvasSize(); // Устанавливаем размеры при загрузке
+
     let controlCircle = null;
 
     let currentLineColor = '#000';
 
     function createControlCircle(x, y) {
-        const randomLevel = Math.floor(Math.random() * 4) + 1;
+        const randomLevel = getNextBallLevel();
         const radius = levels[randomLevel - 1].size;
-        controlCircle = createCircle(randomLevel, x, y - radius, true); // Спавним центр шарика выше на его радиус
+
+        // Ограничение координат спавна по оси x
+        const minX = radius + 25;
+        const maxX = render.options.width - radius - 25;
+        x = Math.max(minX, Math.min(x, maxX));
+
+        controlCircle = createCircle(randomLevel, x, y - radius, true);
         Body.setStatic(controlCircle, true);
         World.add(world, controlCircle);
-        Body.setPosition(controlCircle, { x, y: y - radius }); // Позиционируем центр на высоте
+        Body.setPosition(controlCircle, { x, y: y - radius });
 
         currentLineColor = levels[randomLevel - 1].color;
     }
@@ -78,14 +175,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function getCanvasCoordinates(event) {
         const rect = render.canvas.getBoundingClientRect();
-        const x = event.clientX - rect.left;
-        const y = event.clientY - rect.top;
+        const x = (event.clientX - rect.left) * (render.canvas.width / rect.width);
+        const y = (event.clientY - rect.top) * (render.canvas.height / rect.height);
         return { x, y };
     }
 
     function initializeControlCircle() {
         const spawnX = render.options.width / 2;
-        const spawnY = 50; // Y-координата, где нижняя точка шарика будет касаться этого значения
+        const spawnY = 50;
         createControlCircle(spawnX, spawnY);
 
         if (!isTouchDevice()) {
@@ -102,8 +199,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
         if (controlCircle && controlCircle.isStatic) {
             const radius = controlCircle.circleRadius;
-            const clampedX = Math.min(Math.max(x, radius + 25), render.options.width - radius - 25);
-            Body.setPosition(controlCircle, { x: clampedX, y: 50 - radius }); // Обновляем позицию с учетом радиуса
+
+            // Ограничение координат по оси x
+            const clampedX = Math.max(radius + 25, Math.min(x, render.options.width - radius - 25));
+            Body.setPosition(controlCircle, { x: clampedX, y: 50 - radius });
         }
     }
 
@@ -123,7 +222,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         setTimeout(() => {
-            const spawnY = 50; // Y-координата для нижней точки шарика
+            const spawnY = 50;
             createControlCircle(currentCursorX, spawnY);
         }, 500);
     }
@@ -132,9 +231,11 @@ document.addEventListener('DOMContentLoaded', function() {
         event.preventDefault();
         const touch = event.touches[0];
         const { x } = getCanvasCoordinates(touch);
+
+        // Ограничение координат по оси x
+        const clampedX = Math.max(25, Math.min(x, render.options.width - 25));
         if (controlCircle && controlCircle.isStatic) {
             const radius = controlCircle.circleRadius;
-            const clampedX = Math.min(Math.max(x, radius + 25), render.options.width - radius - 25);
             Body.setPosition(controlCircle, { x: clampedX, y: 50 - radius });
         }
     });
@@ -143,9 +244,11 @@ document.addEventListener('DOMContentLoaded', function() {
         event.preventDefault();
         const touch = event.touches[0];
         const { x } = getCanvasCoordinates(touch);
+
+        // Ограничение координат по оси x
+        const clampedX = Math.max(25, Math.min(x, render.options.width - 25));
         if (controlCircle && controlCircle.isStatic) {
             const radius = controlCircle.circleRadius;
-            const clampedX = Math.min(Math.max(x, radius + 25), render.options.width - radius - 25);
             Body.setPosition(controlCircle, { x: clampedX, y: 50 - radius });
         }
     });
@@ -153,6 +256,9 @@ document.addEventListener('DOMContentLoaded', function() {
     render.canvas.addEventListener('touchend', function(event) {
         const touch = event.changedTouches[0];
         const { x } = getCanvasCoordinates(touch);
+
+        // Ограничение координат по оси x
+        const clampedX = Math.max(25, Math.min(x, render.options.width - 25));
         const currentTime = new Date().getTime();
         if (currentTime - lastSpawnTime < spawnInterval) {
             return;
@@ -161,14 +267,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
         if (controlCircle && controlCircle.isStatic) {
             const radius = controlCircle.circleRadius;
-            const clampedX = Math.min(Math.max(x, radius + 25), render.options.width - radius - 25);
             Body.setPosition(controlCircle, { x: clampedX, y: 50 - radius });
 
             controlCircle.collisionFilter.mask = 0xFFFF;
             Body.setStatic(controlCircle, false);
 
             setTimeout(() => {
-                const spawnY = 50; // Y-координата для нижней точки шарика
+                const spawnY = 50;
                 createControlCircle(render.options.width / 2, spawnY);
             }, 500);
         }
@@ -223,14 +328,14 @@ document.addEventListener('DOMContentLoaded', function() {
     let losingFruits = [];
 
     Events.on(render, 'afterRender', function() {
-        const ctx = render.context; // Ensure ctx is defined here
+        const ctx = render.context;
 
         if (controlCircle && controlCircle.isStatic) {
             ctx.fillStyle = currentLineColor;
 
             const bodies = Matter.Composite.allBodies(world);
             const rayStart = { x: controlCircle.position.x, y: controlCircle.position.y + controlCircle.circleRadius };
-            const rayEnd = { x: controlCircle.position.x, y: render.options.height };
+            const rayEnd = { x: controlCircle.position.x, y: render.options.height - 20 };
 
             const collisions = Query.ray(bodies, rayStart, rayEnd);
 
@@ -286,45 +391,41 @@ document.addEventListener('DOMContentLoaded', function() {
             animateLine();
         }
 
-        const losingLineY = render.options.height - 660; // Position of the losing line
         ctx.strokeStyle = 'red';
         ctx.lineWidth = 2;
         ctx.setLineDash([5, 15]);
         ctx.beginPath();
-        ctx.moveTo(0, losingLineY);
-        ctx.lineTo(render.options.width, losingLineY);
+        ctx.moveTo(0, render.options.height - 660);
+        ctx.lineTo(render.options.width, render.options.height - 660);
         ctx.stroke();
         ctx.setLineDash([]);
 
         const bodies = Matter.Composite.allBodies(world);
         bodies.forEach(body => {
             const radius = body.circleRadius;
-            const isTouchingLine = body.position.y + radius >= losingLineY && body.position.y - radius <= losingLineY;
+            const isTouchingLine = body.position.y + radius >= render.options.height - 660 && body.position.y - radius <= render.options.height - 660;
             if (!body.isStatic && isTouchingLine) {
                 const fruitInContact = losingFruits.find(fruit => fruit.body === body);
                 if (fruitInContact) {
-                    fruitInContact.time += 1 / 60; // Increment by 1 frame (assuming 60 FPS)
-                    if (fruitInContact.time > 3) { // More than 3 seconds
+                    fruitInContact.time += 1 / 60;
+                    if (fruitInContact.time > 3) {
                         alert('Game Over!');
                         Engine.clear(engine);
                         Render.stop(render);
                         window.location.reload();
                     } else if (fruitInContact.time > 1) {
-                        // Draw pulsating dashed circle around the fruit
                         ctx.beginPath();
                         ctx.arc(fruitInContact.body.position.x, fruitInContact.body.position.y, radius + (Math.sin(Date.now() / 200) + 1) * 5, 0, Math.PI * 2);
                         ctx.strokeStyle = fruitInContact.body.render.fillStyle;
-                        ctx.setLineDash([5, 3]); // Dashed line
+                        ctx.setLineDash([5, 3]);
                         ctx.lineWidth = 2;
                         ctx.stroke();
-                        ctx.setLineDash([]); // Reset to solid line
+                        ctx.setLineDash([]);
                     }
                 } else {
-                    // Record the start time of contact
                     losingFruits.push({ body, time: 0 });
                 }
             } else {
-                // If the fruit is below the line, reset its contact time
                 const fruitInContact = losingFruits.find(fruit => fruit.body === body);
                 if (fruitInContact) {
                     fruitInContact.time = 0;
@@ -332,10 +433,9 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
 
-        // Remove fruits that are no longer in contact with the losing line
         losingFruits = losingFruits.filter(fruit => {
             const radius = fruit.body.circleRadius;
-            const isContacting = fruit.body.position.y + radius >= losingLineY && fruit.body.position.y - radius <= losingLineY;
+            const isContacting = fruit.body.position.y + radius >= render.options.height - 660 && fruit.body.position.y - radius <= render.options.height - 660;
             return isContacting;
         });
 
@@ -344,14 +444,11 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    World.add(world, [
-        Bodies.rectangle(400, 720, 800, 50, { isStatic: true, render: { fillStyle: 'grey' } }),
-        Bodies.rectangle(0, 360, 50, 720, { isStatic: true, render: { fillStyle: 'grey' } }),
-        Bodies.rectangle(800, 360, 50, 720, { isStatic: true, render: { fillStyle: 'grey' } })
-    ]);
-
     Engine.run(engine);
     Render.run(render);
 
+    createUpcomingBall();
+    createUpcomingBall();
+    createUpcomingBall();
     initializeControlCircle();
 });

@@ -7,7 +7,15 @@
     <script src="https://cdn.jsdelivr.net/npm/matter-js@0.17.1/build/matter.min.js"></script>
 </head>
 <body>
-    <div id="game-container"></div>
+    <div id="game-container">
+        <canvas id="background-canvas"></canvas>
+        <canvas id="game-canvas"></canvas>
+    </div>
+    <div id="next-balls-container">
+        <div class="next-ball"></div>
+        <div class="next-ball"></div>
+        <div class="next-ball"></div>
+    </div>
     <div id="score-display">Score: 0</div>
     <script src="./Krugorost-script.js"></script>
 </body>
