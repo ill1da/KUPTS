@@ -2,7 +2,7 @@ const container = document.getElementById('sequins-container');
 const sequinSize = 60; // Размер пайетки
 const overlapRatio = 0.55; // Коэффициент наложения
 const screenHeight = window.innerHeight;
-const rowCount = Math.ceil(screenHeight / (sequinSize * overlapRatio)) + 2; // Добавляем дополнительный ряд сверху и снизу
+const rowCount = Math.ceil(screenHeight / (sequinSize * overlapRatio)) + 2; // Добавляем дополнительные ряды
 const colCount = Math.ceil(window.innerWidth / sequinSize) + 1; // Количество колонок
 const sequins = [];
 const flipRadius = 60; 
@@ -45,8 +45,10 @@ function createSequins() {
             const yOffset = i * sequinSize * overlapRatio - sequinSize * overlapRatio;
             sequin.style.left = `${xOffset}px`;
             sequin.style.top = `${yOffset}px`;
-            // Устанавливаем z-index: верхние ряды имеют больший z-index
-            sequin.style.zIndex = (rowCount - i) * 2;
+
+            // Устанавливаем начальный z-index для неперевернутых пайеток
+            sequin.style.zIndex = 2000 + (rowCount - i);
+
             sequin.dataset.index = i * colCount + j;
             sequin.dataset.row = i; // Сохраняем индекс ряда
             container.appendChild(sequin);
@@ -65,18 +67,23 @@ function flipSequins(x, y, isUpward) {
 
         if (distance < flipRadius) {
             const index = sequin.dataset.index;
-            const row = parseInt(sequin.dataset.row);
+            const i = parseInt(sequin.dataset.row); // Получаем индекс ряда
+
             if (isUpward && !sequin.classList.contains('flipped')) {
                 sequin.classList.add('flipped');
+
+                // Корректируем z-index для перевернутых пайеток
+                sequin.style.zIndex = 1000 + i;
+
                 const darkColor = shadeColor(colors[index], -40); // Затемняем цвет на 40%
                 sequin.style.backgroundImage = `linear-gradient(to bottom, ${darkColor}, ${colors[index]})`;
-                // Изменяем z-index: нижние ряды имеют больший z-index
-                sequin.style.zIndex = (row * 2) + 1; // Используем нечетные значения
             } else if (!isUpward && sequin.classList.contains('flipped')) {
                 sequin.classList.remove('flipped');
+
+                // Возвращаем z-index для неперевернутых пайеток
+                sequin.style.zIndex = 2000 + (rowCount - i);
+
                 sequin.style.backgroundImage = 'linear-gradient(to bottom, #222, #444)';
-                // Возвращаем z-index: верхние ряды имеют больший z-index
-                sequin.style.zIndex = (rowCount - row) * 2; // Используем четные значения
             }
         }
     });
