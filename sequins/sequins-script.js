@@ -19,7 +19,7 @@ let cropper = null; // Переменная для Cropper.js
 
 // Параметры пайеток
 const sequinSize = 60;
-const overlapRatio = 0.50;
+const overlapRatio = 0.55;
 const screenHeight = window.innerHeight;
 const screenWidth = window.innerWidth;
 const rowCount = Math.ceil(screenHeight / (sequinSize * overlapRatio)) + 2;
@@ -29,7 +29,7 @@ const flipRadius = 60;
 let colors = [];
 let lastPosition = { x: 0, y: 0 };
 
-const verticalThreshold = 5; // Порог для вертикального движения
+const verticalThreshold = 1; // Порог для вертикального движения
 
 // Генерация случайных светлых цветов
 function getRandomLightColor() {
@@ -331,7 +331,7 @@ imageUploader.addEventListener('change', () => {
 
 // Открытие модального окна кадрирования
 function openImageCropperModal() {
-    imageCropperModal.style.display = 'block';
+    imageCropperModal.style.display = 'flex';
     cropper = new Cropper(cropperImage, {
         aspectRatio: screenWidth / screenHeight,
         viewMode: 1,
