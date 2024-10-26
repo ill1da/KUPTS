@@ -1,14 +1,56 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Пайетки</title>
+    <!-- Подключаем стили Cropper.js -->
+    <link rel="stylesheet" href="https://unpkg.com/cropperjs/dist/cropper.min.css">
     <link rel="stylesheet" href="./sequins-style.css">
 </head>
 <body>
     <div id="sequins-container"></div>
 
+    <!-- Ссылка на "illida.space" -->
+    <a href="https://illida.space" id="home-link">illida.space</a>
+
+    <!-- Иконка настроек -->
+    <div id="settings-icon">&#9881;</div>
+
+    <!-- Панель настроек -->
+    <div id="settings-panel">
+        <h2>Настройки</h2>
+        <label>
+            Цвет внешней стороны:
+            <input type="color" id="outer-color-picker">
+        </label>
+        <label>
+            Цвет внутренней стороны:
+            <input type="color" id="inner-color-picker">
+        </label>
+        <label>
+            Загрузить изображение:
+            <input type="file" id="image-uploader" accept="image/*">
+        </label>
+        <button id="close-settings">Закрыть</button>
+    </div>
+
+    <!-- Окно кадрирования изображения -->
+    <div id="image-cropper-modal" class="modal">
+        <div class="modal-content">
+            <h2>Кадрирование изображения</h2>
+            <img id="cropper-image" src="" alt="Загруженное изображение">
+            <!-- Группа кнопок для выбора режима -->
+            <div class="button-group">
+                <button id="apply-cropped-image-original">Оригинал</button>
+                <button id="apply-cropped-image-adaptive">Адаптив</button>
+                <button id="cancel-cropping">Отмена</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Подключаем скрипты -->
+    <script src="https://unpkg.com/cropperjs"></script>
     <script src="./sequins-script.js"></script>
 </body>
 </html>
