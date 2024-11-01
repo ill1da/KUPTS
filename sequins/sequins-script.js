@@ -17,11 +17,20 @@ const cancelCroppingButton = document.getElementById('cancel-cropping');
 
 let cropper = null; // Переменная для Cropper.js
 
+// Параметры экрана
+let screenHeight = window.innerHeight;
+let screenWidth = window.innerWidth;
+
+function updateScreenDimensions() {
+    screenHeight = window.innerHeight;
+    screenWidth = window.innerWidth;
+}
+
+window.addEventListener('resize', updateScreenDimensions);
+
 // Параметры пайеток
 const sequinSize = 60;
 const overlapRatio = 0.55;
-const screenHeight = window.innerHeight;
-const screenWidth = window.innerWidth;
 const rowCount = Math.ceil(screenHeight / (sequinSize * overlapRatio)) + 2;
 const colCount = Math.ceil(screenWidth / sequinSize) + 1;
 const sequins = [];
@@ -300,15 +309,19 @@ outerColorPicker.addEventListener('input', () => {
 
 // Изменение цвета внутренней стороны пайеток по настройкам
 innerColorPicker.addEventListener('input', () => {
-    sequins.forEach(sequin => {
-        const color = innerColorPicker.value;
-        const darkColor = shadeColor(color, -40);
+    const color = innerColorPicker.value;
+    const darkColor = shadeColor(color, -40);
 
+    sequins.forEach(sequin => {
         sequin.style.setProperty('--sequin-color', color);
         sequin.style.setProperty('--sequin-dark-color', darkColor);
         sequin.style.removeProperty('--sequin-image'); // Убираем изображение, если было
         sequin.style.removeProperty('--sequin-bg-position');
+        sequin.classList.remove('transparent-inner'); // Убираем класс прозрачности, если был
     });
+
+    // Убираем фон страницы, если был установлен
+    document.body.style.backgroundImage = '';
 });
 
 // Обработчик загрузки изображения
@@ -317,6 +330,9 @@ imageUploader.addEventListener('change', () => {
     if (file) {
         const reader = new FileReader();
         reader.onload = function(event) {
+            cropperImage.onload = function() {
+                openImageCropperModal();
+            };
             cropperImage.src = event.target.result;
         };
         reader.readAsDataURL(file);
@@ -328,54 +344,22 @@ imageUploader.addEventListener('change', () => {
     }
 });
 
-// Перенесите обработчик onload вне функции openImageCropperModal
-cropperImage.onload = function() {
-    openImageCropperModal();
-};
-
-
 // Открытие модального окна кадрирования
 function openImageCropperModal() {
     imageCropperModal.classList.add('show');
     document.body.classList.add('modal-open');
 
-    // Устанавливаем обработчик загрузки изображения
-    cropperImage.onload = function() {
-        // Получаем реальные размеры изображения
-        const imgNaturalWidth = cropperImage.naturalWidth;
-        const imgNaturalHeight = cropperImage.naturalHeight;
-
-        // Рассчитываем максимальные размеры для Cropper.js
-        const maxModalWidth = window.innerWidth - 40; // 20px padding с каждой стороны
-        const maxModalHeight = window.innerHeight - 120; // 60px сверху и снизу на заголовок и кнопки
-
-        // Рассчитываем коэффициент масштабирования
-        const widthRatio = maxModalWidth / imgNaturalWidth;
-        const heightRatio = maxModalHeight / imgNaturalHeight;
-        const ratio = Math.min(widthRatio, heightRatio, 1);
-
-        // Устанавливаем размеры изображения
-        cropperImage.style.width = imgNaturalWidth * ratio + 'px';
-        cropperImage.style.height = imgNaturalHeight * ratio + 'px';
-
-        // Инициализируем Cropper.js
-        if (cropper) {
-            cropper.destroy();
-        }
-        cropper = new Cropper(cropperImage, {
-            aspectRatio: screenWidth / screenHeight,
-            viewMode: 1,
-            autoCropArea: 1,
-            responsive: true,
-            background: false,
-            movable: false,
-            zoomable: false,
-            scalable: false,
-            rotatable: false,
-            cropBoxResizable: false,
-            dragMode: 'none',
-        });
-    };
+    // Инициализируем Cropper.js после отображения модального окна
+    if (cropper) {
+        cropper.destroy();
+    }
+    cropper = new Cropper(cropperImage, {
+        aspectRatio: screenWidth / screenHeight,
+        viewMode: 1,
+        autoCropArea: 1,
+        responsive: true,
+        background: false,
+    });
 }
 
 // Закрытие модального окна кадрирования
@@ -391,45 +375,63 @@ function closeImageCropperModal() {
     cropperImage.style.height = '';
 }
 
-
 // Применение кадрированного изображения в режиме "Оригинал"
 applyCroppedImageOriginalButton.addEventListener('click', () => {
-    const canvas = cropper.getCroppedCanvas({
-        width: screenWidth,
-        height: screenHeight
-    });
-    const img = new Image();
-    img.onload = function() {
-        applyOriginalImage(img);
-        closeImageCropperModal();
-
-        // Скрываем панель настроек
-        settingsPanel.classList.remove('open');
-    };
-    img.src = canvas.toDataURL();
+    if (cropper) {
+        const canvas = cropper.getCroppedCanvas({
+            width: screenWidth,
+            height: screenHeight
+        });
+        const img = new Image();
+        img.onload = function() {
+            applyOriginalImage(img);
+            closeImageCropperModal();
+        };
+        img.src = canvas.toDataURL();
+    } else {
+        alert('Кадрирование изображения не инициализировано.');
+    }
 });
 
 // Применение кадрированного изображения в режиме "Адаптив"
 applyCroppedImageAdaptiveButton.addEventListener('click', () => {
-    const canvas = cropper.getCroppedCanvas({
-        width: screenWidth,
-        height: screenHeight
-    });
-    const img = new Image();
-    img.onload = function() {
-        applyAdaptiveImage(img);
-        closeImageCropperModal();
-
-        // Скрываем панель настроек
-        settingsPanel.classList.remove('open');
-    };
-    img.src = canvas.toDataURL();
+    if (cropper) {
+        const canvas = cropper.getCroppedCanvas({
+            width: screenWidth,
+            height: screenHeight
+        });
+        const img = new Image();
+        img.onload = function() {
+            applyAdaptiveImage(img);
+            closeImageCropperModal();
+        };
+        img.src = canvas.toDataURL();
+    } else {
+        alert('Кадрирование изображения не инициализировано.');
+    }
 });
 
 // Отмена кадрирования
 cancelCroppingButton.addEventListener('click', () => {
     closeImageCropperModal();
 });
+
+// Применение изображения в режиме "Оригинал"
+function applyOriginalImage(img) {
+    // Устанавливаем изображение фоном страницы
+    document.body.style.backgroundImage = `url(${img.src})`;
+    document.body.style.backgroundSize = 'cover';
+    document.body.style.backgroundPosition = 'center';
+
+    // Делаем внутреннюю сторону пайеток прозрачной, но сохраняем контур
+    sequins.forEach(sequin => {
+        sequin.style.setProperty('--sequin-color', 'rgba(255, 255, 255, 0)');
+        sequin.style.setProperty('--sequin-dark-color', 'rgba(255, 255, 255, 0)');
+        sequin.style.removeProperty('--sequin-image');
+        sequin.style.removeProperty('--sequin-bg-position');
+        sequin.classList.add('transparent-inner'); // Добавляем класс для сохранения контура
+    });
+}
 
 // Применение изображения в режиме "Адаптив"
 function applyAdaptiveImage(img) {
@@ -468,23 +470,6 @@ function applyAdaptiveImage(img) {
 
     // Убираем фон страницы
     document.body.style.backgroundImage = '';
-}
-
-// Применение изображения в режиме "Оригинал"
-function applyOriginalImage(img) {
-    // Устанавливаем изображение фоном страницы
-    document.body.style.backgroundImage = `url(${img.src})`;
-    document.body.style.backgroundSize = 'cover';
-    document.body.style.backgroundPosition = 'center';
-
-    // Делаем внутреннюю сторону пайеток прозрачной, но сохраняем контур
-    sequins.forEach(sequin => {
-        sequin.style.setProperty('--sequin-color', 'rgba(255, 255, 255, 0)');
-        sequin.style.setProperty('--sequin-dark-color', 'rgba(255, 255, 255, 0)');
-        sequin.style.removeProperty('--sequin-image');
-        sequin.style.removeProperty('--sequin-bg-position');
-        sequin.classList.add('transparent-inner'); // Добавляем класс для сохранения контура
-    });
 }
 
 // Инициализация пайеток
