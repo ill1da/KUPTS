@@ -184,15 +184,23 @@ body.modal-open {
     position: absolute;
     transform-origin: center center;
     transform-style: preserve-3d;
-    transition: transform 0.5s, background-image 0.5s, background-position 0.5s;
+    transition: transform 0.5s, background-image 0s, background-position 0s;
     will-change: transform, background-image, background-position;
 }
 
 .sequin.flipped {
     transform: rotateX(180deg);
+}
+
+.sequin.flipped.color-changed {
     background-image: var(--sequin-image, linear-gradient(to bottom, var(--sequin-dark-color), var(--sequin-color)));
     background-size: cover;
     background-position: var(--sequin-bg-position, center);
+}
+
+.sequin.color-changed:not(.flipped) {
+    /* Если нужно изменить цвет при перевороте назад */
+    background-image: linear-gradient(to bottom, var(--sequin-back-dark-color), var(--sequin-back-color));
 }
 
 /* Контур пайетки */

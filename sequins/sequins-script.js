@@ -189,9 +189,21 @@ function flipSequins(x, y, isUpward) {
 
                 if (isUpward && !sequin.classList.contains('flipped')) {
                     sequin.classList.add('flipped');
+
+                    // Добавляем задержку для изменения цвета
+                    setTimeout(() => {
+                        sequin.classList.add('color-changed');
+                    }, 150);
+
                     sequin.parentElement.style.zIndex = 1000 + i;
                 } else if (!isUpward && sequin.classList.contains('flipped')) {
                     sequin.classList.remove('flipped');
+
+                    // Добавляем задержку для изменения цвета
+                    setTimeout(() => {
+                        sequin.classList.remove('color-changed');
+                    }, 150);
+
                     sequin.parentElement.style.zIndex = 2000 + (rowCount - i);
                 }
             }
@@ -200,6 +212,7 @@ function flipSequins(x, y, isUpward) {
 
     lastPosition = { x, y };
 }
+
 
 // Функция для получения позиции касания или мыши
 function getTouchOrMousePosition(event) {
