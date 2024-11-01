@@ -193,7 +193,7 @@ function flipSequins(x, y, isUpward) {
                     // Добавляем задержку для изменения цвета
                     setTimeout(() => {
                         sequin.classList.add('color-changed');
-                    }, 150);
+                    }, 100);
 
                     sequin.parentElement.style.zIndex = 1000 + i;
                 } else if (!isUpward && sequin.classList.contains('flipped')) {
@@ -202,7 +202,7 @@ function flipSequins(x, y, isUpward) {
                     // Добавляем задержку для изменения цвета
                     setTimeout(() => {
                         sequin.classList.remove('color-changed');
-                    }, 150);
+                    }, 100);
 
                     sequin.parentElement.style.zIndex = 2000 + (rowCount - i);
                 }
