@@ -349,7 +349,10 @@ function openImageCropperModal() {
     imageCropperModal.classList.add('show');
     document.body.classList.add('modal-open');
 
-    // Инициализируем Cropper.js после отображения модального окна
+    // Обновляем размеры экрана
+    updateScreenDimensions();
+
+    // Инициализируем Cropper.js после отображения модального окна и загрузки изображения
     if (cropper) {
         cropper.destroy();
     }
@@ -359,6 +362,11 @@ function openImageCropperModal() {
         autoCropArea: 1,
         responsive: true,
         background: false,
+        movable: true,
+        zoomable: true,
+        scalable: false,
+        rotatable: false,
+        cropBoxResizable: true,
     });
 }
 
@@ -380,7 +388,7 @@ applyCroppedImageOriginalButton.addEventListener('click', () => {
     if (cropper) {
         const canvas = cropper.getCroppedCanvas({
             width: screenWidth,
-            height: screenHeight
+            height: screenHeight,
         });
         const img = new Image();
         img.onload = function() {
@@ -396,10 +404,7 @@ applyCroppedImageOriginalButton.addEventListener('click', () => {
 // Применение кадрированного изображения в режиме "Адаптив"
 applyCroppedImageAdaptiveButton.addEventListener('click', () => {
     if (cropper) {
-        const canvas = cropper.getCroppedCanvas({
-            width: screenWidth,
-            height: screenHeight
-        });
+        const canvas = cropper.getCroppedCanvas();
         const img = new Image();
         img.onload = function() {
             applyAdaptiveImage(img);
