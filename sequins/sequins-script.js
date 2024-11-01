@@ -318,7 +318,6 @@ imageUploader.addEventListener('change', () => {
         const reader = new FileReader();
         reader.onload = function(event) {
             cropperImage.src = event.target.result;
-            openImageCropperModal();
         };
         reader.readAsDataURL(file);
         // Сбрасываем значение input для повторного выбора того же файла
@@ -329,24 +328,69 @@ imageUploader.addEventListener('change', () => {
     }
 });
 
+// Перенесите обработчик onload вне функции openImageCropperModal
+cropperImage.onload = function() {
+    openImageCropperModal();
+};
+
+
 // Открытие модального окна кадрирования
 function openImageCropperModal() {
-    imageCropperModal.style.display = 'flex';
-    cropper = new Cropper(cropperImage, {
-        aspectRatio: screenWidth / screenHeight,
-        viewMode: 1,
-        autoCropArea: 1,
-        responsive: true,
-        background: false
-    });
+    imageCropperModal.classList.add('show');
+    document.body.classList.add('modal-open');
+
+    // Устанавливаем обработчик загрузки изображения
+    cropperImage.onload = function() {
+        // Получаем реальные размеры изображения
+        const imgNaturalWidth = cropperImage.naturalWidth;
+        const imgNaturalHeight = cropperImage.naturalHeight;
+
+        // Рассчитываем максимальные размеры для Cropper.js
+        const maxModalWidth = window.innerWidth - 40; // 20px padding с каждой стороны
+        const maxModalHeight = window.innerHeight - 120; // 60px сверху и снизу на заголовок и кнопки
+
+        // Рассчитываем коэффициент масштабирования
+        const widthRatio = maxModalWidth / imgNaturalWidth;
+        const heightRatio = maxModalHeight / imgNaturalHeight;
+        const ratio = Math.min(widthRatio, heightRatio, 1);
+
+        // Устанавливаем размеры изображения
+        cropperImage.style.width = imgNaturalWidth * ratio + 'px';
+        cropperImage.style.height = imgNaturalHeight * ratio + 'px';
+
+        // Инициализируем Cropper.js
+        if (cropper) {
+            cropper.destroy();
+        }
+        cropper = new Cropper(cropperImage, {
+            aspectRatio: screenWidth / screenHeight,
+            viewMode: 1,
+            autoCropArea: 1,
+            responsive: true,
+            background: false,
+            movable: false,
+            zoomable: false,
+            scalable: false,
+            rotatable: false,
+            cropBoxResizable: false,
+            dragMode: 'none',
+        });
+    };
 }
 
 // Закрытие модального окна кадрирования
 function closeImageCropperModal() {
-    imageCropperModal.style.display = 'none';
-    cropper.destroy();
-    cropper = null;
+    imageCropperModal.classList.remove('show');
+    document.body.classList.remove('modal-open');
+    if (cropper) {
+        cropper.destroy();
+        cropper = null;
+    }
+    // Сбрасываем размеры изображения
+    cropperImage.style.width = '';
+    cropperImage.style.height = '';
 }
+
 
 // Применение кадрированного изображения в режиме "Оригинал"
 applyCroppedImageOriginalButton.addEventListener('click', () => {
