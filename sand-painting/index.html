@@ -1,35 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Сенддроу</title>
-    <link rel="stylesheet" type="text/css" href="./sand-painting-style.css">
+    <title>Рисование на песке</title>
+    <link rel="stylesheet" href="sand-painting-style.css">
 </head>
 <body>
-    <input type="range" class="interface-element" id="line-width-slider" min="1" max="50" value="15" step="1">
-    <span id="line-width-value" class="interface-element">15</span>
-    <div class="bottom-menu interface-element">
-        <button class="button-bottom active" id="brush">Кисть</button>
-        <button class="button-bottom" id="eraser">Ластик</button>
-        <!-- <button class="button-bottom" id="wave">Волна</button> -->
-        <button class="button-bottom" id="bucket">Ведро</button>
-        <button class="button-bottom" id="cancel">Отмена</button>
-    </div>
-
-    <!-- Добавляем модальное окно -->
-    <div id="confirm-modal" style="display: none;">
-        <div class="modal-content">
-            <p>Точно хотите все стереть?</p>
-            <button id="confirm-yes">Да</button>
-            <button id="confirm-no">Нет</button>
-        </div>
-    </div>
-
-    <div id="particles-js"></div>
-    <canvas id="canvas"></canvas>
-    <div id="cursor-circle"></div>
-    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
-    <script src="./sand-painting-script.js"></script>
+    <button id="reset-button">Сбросить</button>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <!-- Добавляем библиотеку для шума Перлина -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/perlin-noise/0.1.1/perlin.min.js"></script>
+    <script src="sand-painting-script.js"></script>
 </body>
 </html>

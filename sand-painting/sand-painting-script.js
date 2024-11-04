@@ -1,383 +1,341 @@
-const canvas = document.getElementById('canvas');
-const context = canvas.getContext('2d');
-let lineWidthSlider = document.getElementById('line-width-slider');
-let lineWidthValue = document.getElementById('line-width-value');
-let painting = false;
-let erasing = false;
-let bucketMode = false;
-let lastX = 0;
-let lastY = 0;
-let actions = []; // Массив для хранения действий
-let touchCoordinates = {};
+let scene, camera, renderer, plane;
+let raycaster = new THREE.Raycaster();
+let mouse = new THREE.Vector2();
+let isUserInteracting = false;
 
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+let previousMousePosition = { x: 0, y: 0 };
+let previousPoint = null;
+let previousTimestamp = null;
+let currentRadius = 50; // Начальный радиус
+let targetRadius = 50; // Целевой радиус
 
-context.lineWidth = 15;
-context.lineCap = 'round';
-context.strokeStyle = '#825937';
+let isResetting = false; // Флаг для анимации волны
+let waterMesh; // Меш воды
+let clock;
+let waterAnimationProgress = 0; // Прогресс анимации воды
 
-lineWidthSlider.addEventListener('input', () => {
-    context.lineWidth = lineWidthSlider.value;
-    lineWidthValue.textContent = lineWidthSlider.value;
-});
+init();
+animate();
 
-function makeInterfaceElementsTransparent() {
-    const interfaceElements = document.querySelectorAll('.interface-element');
-    interfaceElements.forEach(element => {
-        element.style.transition = 'opacity 0.16s ease-in-out'; // Добавляем плавный переход
-        element.style.opacity = 0.2; // Устанавливаем желаемую прозрачность (от 0 - полностью прозрачный до 1 - непрозрачный)
-        element.style.pointerEvents = 'none';
+function init() {
+    // Создание сцены
+    scene = new THREE.Scene();
+    scene.background = new THREE.Color(0xF0E0C0); // Светлый песочный фон
+
+    // Настройка камеры
+    camera = new THREE.OrthographicCamera(
+        window.innerWidth / -2, window.innerWidth / 2,
+        window.innerHeight / 2, window.innerHeight / -2,
+        -500, 1000
+    );
+    camera.position.set(0, 0, 500);
+    camera.lookAt(0, 0, 0);
+
+    // Инициализация рендерера
+    renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.shadowMap.enabled = true; // Включаем поддержку теней
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap; // Высокое качество теней
+    document.body.appendChild(renderer.domElement);
+
+    // Добавление света
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.2); // Уменьшаем окружающий свет
+    scene.add(ambientLight);
+
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 1.0);
+    directionalLight.position.set(100, 200, 300);
+    directionalLight.castShadow = true; // Источник света будет отбрасывать тени
+
+    // Настройка параметров теней
+    directionalLight.shadow.mapSize.width = 1024; // Умеренное разрешение теней
+    directionalLight.shadow.mapSize.height = 1024;
+    directionalLight.shadow.camera.near = 0.5;
+    directionalLight.shadow.camera.far = 1500;
+    directionalLight.shadow.camera.left = -500;
+    directionalLight.shadow.camera.right = 500;
+    directionalLight.shadow.camera.top = 500;
+    directionalLight.shadow.camera.bottom = -500;
+
+    scene.add(directionalLight);
+
+    // Создание плоскости (песчаная поверхность)
+    const geometry = new THREE.PlaneGeometry(window.innerWidth, window.innerHeight, 128, 128);
+
+    // Используем материал, реагирующий на свет и тени
+    const material = new THREE.MeshStandardMaterial({
+        color: 0xE0C080, // Цвет песка
+        roughness: 0.8,  // Шероховатость для улучшения теней
+        metalness: 0.0,  // Неметаллический материал
     });
+
+    plane = new THREE.Mesh(geometry, material);
+    plane.receiveShadow = true; // Плоскость будет принимать тени
+    plane.castShadow = false;   // Плоскость не отбрасывает тени
+    scene.add(plane);
+
+    // Обработчики событий
+    window.addEventListener('resize', onWindowResize, false);
+    renderer.domElement.addEventListener('pointerdown', onPointerDown, false);
+    renderer.domElement.addEventListener('pointermove', onPointerMove, false);
+    renderer.domElement.addEventListener('pointerup', onPointerUp, false);
+
+    // Кнопка сброса
+    document.getElementById('reset-button').addEventListener('click', startWaterReset);
+
+    // Инициализация часов
+    clock = new THREE.Clock();
 }
 
-function restoreInterfaceElementsOpacity() {
-    const interfaceElements = document.querySelectorAll('.interface-element');
-    interfaceElements.forEach(element => {
-        element.style.transition = 'opacity 0.16s ease-in-out'; // Добавляем плавный переход
-        element.style.opacity = 1; // Восстанавливаем полную непрозрачность
-        element.style.pointerEvents = 'auto';
-    });
+function onWindowResize() {
+    camera.left = window.innerWidth / -2;
+    camera.right = window.innerWidth / 2;
+    camera.top = window.innerHeight / 2;
+    camera.bottom = window.innerHeight / -2;
+    camera.updateProjectionMatrix();
+
+    renderer.setSize(window.innerWidth, window.innerHeight);
+
+    // Обновляем размер плоскости
+    plane.geometry.dispose();
+    plane.geometry = new THREE.PlaneGeometry(window.innerWidth, window.innerHeight, 128, 128);
 }
 
-// Обработчик события для кнопки "Кисть"
-const brushButton = document.getElementById('brush');
-brushButton.addEventListener('click', () => {
-    erasing = false;
-    bucketMode = false;
-    setButtonActive(brushButton);
-    setButtonInactive(eraserButton);
-    setButtonInactive(document.getElementById('bucket'));
-    context.globalCompositeOperation = 'source-over'; // Возвращаем режим кисти
-    cursorCircle.style.borderStyle = 'solid'; // Тонкий круг становится сплошным
-    cursorCircle.style.borderColor = '#17191D'; // И черным
-});
+function onPointerDown(event) {
+    if (isResetting) return; // Не позволяем рисовать во время сброса
 
-// Обработчик события для кнопки "Ластик"
-const eraserButton = document.getElementById('eraser');
-eraserButton.addEventListener('click', () => {
-    erasing = true;
-    bucketMode = false;
-    setButtonActive(eraserButton);
-    setButtonInactive(document.getElementById('brush'));
-    setButtonInactive(document.getElementById('bucket'));
-    context.globalCompositeOperation = 'destination-out'; // Устанавливаем режим ластика
-    cursorCircle.style.borderStyle = 'dashed'; // Тонкий круг становится пунктирным
-    cursorCircle.style.borderColor = '#17191D'; // И черным
-});
-
-// Обработчик события для кнопки "Ведро"
-const bucketButton = document.getElementById('bucket');
-bucketButton.addEventListener('click', () => {
-    // Отображаем модальное окно
-    const confirmModal = document.getElementById('confirm-modal');
-    confirmModal.style.display = 'flex';
-
-    document.getElementById('confirm-yes').addEventListener('click', () => {
-        // Если пользователь нажал "Да", очищаем канву и обнуляем массив действий
-        context.clearRect(0, 0, canvas.width, canvas.height);
-        actions = [];
-        confirmModal.style.display = 'none'; // Закрываем модальное окно
-    });
-
-    document.getElementById('confirm-no').addEventListener('click', () => {
-        // Если пользователь нажал "Нет", закрываем модальное окно
-        confirmModal.style.display = 'none';
-    });
-    restoreInterfaceElementsOpacity(); // Восстанавливаем непрозрачность элементов интерфейса
-});
-
-// Обработчик события для кнопки "Отмена"
-const cancelButton = document.getElementById('cancel');
-cancelButton.addEventListener('click', () => {
-    if (actions.length > 0) {
-        // Если есть действия, отменяем последнее и перерисовываем канву
-        actions.pop();
-        context.clearRect(0, 0, canvas.width, canvas.height);
-        actions.forEach(action => context.putImageData(action, 0, 0));
-    }
-    restoreInterfaceElementsOpacity(); // Восстанавливаем непрозрачность элементов интерфейса
-});
-
-function startPosition(e) {
-    makeInterfaceElementsTransparent();
-
-    if (bucketMode) {
-        const confirmModal = document.getElementById('confirm-modal');
-        confirmModal.style.display = 'block';
+    isUserInteracting = true;
+    previousTimestamp = performance.now();
+    previousMousePosition.x = event.clientX;
+    previousMousePosition.y = event.clientY;
+    updateMousePosition(event);
+    const intersectPoint = getIntersectPoint();
+    if (intersectPoint) {
+        previousPoint = intersectPoint;
     } else {
-        painting = true;
-
-        if (e.touches) {
-            // Если это событие мультитача, то для каждого touch хранить свои координаты
-            for (let i = 0; i < e.touches.length; i++) {
-                const touch = e.touches[i];
-                touchCoordinates[touch.identifier] = {
-                    lastX: touch.clientX,
-                    lastY: touch.clientY,
-                };
-            }
-        } else {
-            [lastX, lastY] = [e.clientX, e.clientY];
-        }
-
-        draw(e);
+        previousPoint = null;
     }
 }
 
-function endPosition() {
-    restoreInterfaceElementsOpacity();
-    painting = false;
-    context.beginPath();
-    actions.push(context.getImageData(0, 0, canvas.width, canvas.height));
-    touchCoordinates = {}; // Очищаем координаты для мультитача
+function onPointerMove(event) {
+    if (isUserInteracting && !isResetting) {
+        updateMousePosition(event);
+        const currentTimestamp = performance.now();
+        const deltaTime = currentTimestamp - previousTimestamp;
+
+        const deltaX = event.clientX - previousMousePosition.x;
+        const deltaY = event.clientY - previousMousePosition.y;
+        const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+
+        const speed = distance / deltaTime; // Скорость курсора (пиксели/мс)
+
+        // Обновляем целевой радиус на основе скорости
+        const minRadius = 10;
+        const maxRadius = 50;
+        const maxSpeed = 1.0; // Максимальная скорость для интерполяции
+
+        const speedRatio = Math.min(speed / maxSpeed, 1);
+        targetRadius = maxRadius - (maxRadius - minRadius) * speedRatio;
+
+        // Плавное изменение текущего радиуса к целевому радиусу
+        currentRadius += (targetRadius - currentRadius) * 0.2;
+
+        const currentPoint = getIntersectPoint();
+
+        if (currentPoint && previousPoint) {
+            const moveDistance = currentPoint.distanceTo(previousPoint);
+
+            // Динамическое количество шагов, зависящее от расстояния
+            const radius = currentRadius;
+            const height = 15;
+
+            const steps = Math.ceil(moveDistance / (radius / 2));
+
+            // Ограничение количества шагов для предотвращения зависаний
+            const maxSteps = 50;
+            const actualSteps = Math.min(steps, maxSteps);
+
+            deformPlaneBetweenPoints(previousPoint, currentPoint, radius, height, actualSteps);
+
+            previousPoint.copy(currentPoint);
+        }
+
+        previousMousePosition.x = event.clientX;
+        previousMousePosition.y = event.clientY;
+        previousTimestamp = currentTimestamp;
+    }
 }
 
-let spraying = false;
-let sprayStartTime;
+function onPointerUp() {
+    isUserInteracting = false;
+    previousPoint = null; // Сбрасываем previousPoint
+}
 
-function draw(e) {
-    if (!painting) return;
+function updateMousePosition(event) {
+    const rect = renderer.domElement.getBoundingClientRect();
+    mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+    mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+}
 
-    context.beginPath();
+function getIntersectPoint() {
+    raycaster.setFromCamera(mouse, camera);
+    const intersects = raycaster.intersectObject(plane);
+    if (intersects.length > 0) {
+        return intersects[0].point.clone();
+    }
+    return null;
+}
 
-    if (erasing) {
-        // Ластик (сплошная линия)
-        if (e.touches && e.touches.length > 0) {
-            for (let i = 0; i < e.touches.length; i++) {
-                const touch = e.touches[i];
-                const touchCoord = touchCoordinates[touch.identifier];
+function deformPlaneBetweenPoints(point1, point2, radius, height, steps) {
+    const geometry = plane.geometry;
+    const position = geometry.attributes.position;
+    const pos = position.array;
 
-                context.moveTo(touchCoord.lastX, touchCoord.lastY);
-                context.lineTo(touch.clientX, touch.clientY);
-                context.stroke();
+    const dir = new THREE.Vector3().subVectors(point2, point1);
+    const dirLength = dir.length();
 
-                touchCoordinates[touch.identifier] = {
-                    lastX: touch.clientX,
-                    lastY: touch.clientY,
-                };
+    if (dirLength === 0) {
+        return; // Если точки совпадают, деформация не нужна
+    }
+
+    dir.normalize();
+
+    for (let step = 0; step <= steps; step++) {
+        const t = step / steps;
+        const currentPoint = new THREE.Vector3().lerpVectors(point1, point2, t);
+
+        for (let i = 0; i < pos.length; i += 3) {
+            const x = pos[i];
+            const y = pos[i + 1];
+
+            const dx = x - currentPoint.x;
+            const dy = y - currentPoint.y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+
+            if (distance < radius) {
+                const influence = (radius - distance) / radius;
+                const deformation = influence * height;
+
+                // Накопление деформации для выделения ложбинок
+                pos[i + 2] = Math.min(pos[i + 2], -deformation);
             }
-        } else {
-            context.moveTo(lastX, lastY);
-            context.lineTo(e.clientX, e.clientY);
-            context.stroke();
-            [lastX, lastY] = [e.clientX, e.clientY];
         }
+    }
+
+    position.needsUpdate = true;
+    geometry.computeVertexNormals();
+}
+
+function startWaterReset() {
+    if (isResetting) return;
+    isResetting = true;
+    waterAnimationProgress = 0;
+
+    createWaterMesh();
+}
+
+function createWaterMesh() {
+    const radius = 50; // Начальный радиус
+    const segments = 64; // Количество сегментов для геометрии круга
+
+    // Создаем геометрию круга для слизи
+    const waterGeometry = new THREE.CircleGeometry(radius, segments);
+
+    // Создаем материал MeshPhysicalMaterial для эффекта слизи
+    const waterMaterial = new THREE.MeshPhysicalMaterial({
+        color: new THREE.Color(0x00f),
+        metalness: 0.0,
+        roughness: 0.5,
+        transmission: 0.9, // Для прозрачности
+        thickness: 5.0,    // Толщина материала для эффекта преломления
+        opacity: 0.8,
+        transparent: true,
+        side: THREE.DoubleSide,
+        clearcoat: 1.0,
+        clearcoatRoughness: 0.1,
+    });
+
+    waterMesh = new THREE.Mesh(waterGeometry, waterMaterial);
+    waterMesh.position.set(window.innerWidth / 2 + radius, 0, 10); // Начинаем справа за экраном
+    waterMesh.scale.set(1, 1, 1);
+    scene.add(waterMesh);
+}
+
+function animateWaterReset(deltaTime) {
+    if (!isResetting) return;
+
+    const duration = 3.0; // Общая продолжительность анимации слизи
+    waterAnimationProgress += deltaTime / duration;
+
+    if (waterAnimationProgress >= 1) {
+        // Анимация завершена
+        isResetting = false;
+        scene.remove(waterMesh);
+        waterMesh.geometry.dispose();
+        waterMesh.material.dispose();
+        waterMesh = null;
+        waterAnimationProgress = 0;
+        return;
+    }
+
+    // Анимируем слизь
+    if (waterAnimationProgress < 0.5) {
+        // Первая фаза: слизь выливается на экран
+        const progress = waterAnimationProgress / 0.5;
+        const scale = THREE.MathUtils.lerp(1, 15, progress); // Настройте конечный масштаб по необходимости
+        waterMesh.scale.set(scale, scale, 1);
+        const posX = THREE.MathUtils.lerp(window.innerWidth / 2 + 50, 0, progress); // Двигаемся справа к центру
+        waterMesh.position.x = posX;
+
+        // Добавляем небольшие деформации для органичности
+        const deformation = Math.sin(waterAnimationProgress * Math.PI * 4) * 0.1;
+        waterMesh.scale.y += deformation;
     } else {
-        // Кисть (эффект плавного заполнения линии)
-        const sprayDensity = context.lineWidth / 3;
-        const sprayRadius = context.lineWidth / 2;
-        const sprayDuration = 160; // 1 секунда
+        // Вторая фаза: слизь стекает вниз
+        const progress = (waterAnimationProgress - 0.5) / 0.5;
+        waterMesh.position.y = THREE.MathUtils.lerp(0, -window.innerHeight / 2 - waterMesh.geometry.parameters.radius * waterMesh.scale.y, progress);
+    }
 
-        if (e.touches && e.touches.length > 0) {
-            for (let i = 0; i < e.touches.length; i++) {
-                const touch = e.touches[i];
+    // Сбрасываем песок под слизью
+    resetSandUnderWater();
+}
 
-                if (painting) {
-                    const sprayStartTime = Date.now();
+function resetSandUnderWater() {
+    if (!waterMesh) return;
 
-                    function spray() {
-                        if (!painting) return; // Проверка, активно ли рисование
+    const geometry = plane.geometry;
+    const position = geometry.attributes.position;
+    const pos = position.array;
 
-                        const elapsedTime = Date.now() - sprayStartTime;
-                        const progress = Math.min(elapsedTime / sprayDuration, 1);
+    const waterPosition = waterMesh.position;
+    const radius = waterMesh.geometry.parameters.radius * waterMesh.scale.x;
 
-                        if (progress < 1) {
-                            for (let j = 0; j < sprayDensity; j++) {
-                                const sandColor = getRandomSandColor();
-                                const angle = Math.random() * 2 * Math.PI;
-                                const distance = Math.random() * sprayRadius;
+    for (let i = 0; i < pos.length; i += 3) {
+        const x = pos[i];
+        const y = pos[i + 1];
 
-                                const offsetX = distance * Math.cos(angle);
-                                const offsetY = distance * Math.sin(angle);
+        const dx = x - waterPosition.x;
+        const dy = y - waterPosition.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
 
-                                context.fillStyle = sandColor;
-                                context.beginPath();
-                                context.arc(touch.clientX + offsetX, touch.clientY + offsetY, 1, 0, 2 * Math.PI);
-                                context.fill();
-                            }
-
-                            requestAnimationFrame(spray);
-                        }
-                    }
-
-                    spray();
-                }
-            }
-        } else {
-            if (painting) {
-                const sprayStartTime = Date.now();
-
-                function spray() {
-                    if (!painting) return; // Проверка, активно ли рисование
-
-                    const elapsedTime = Date.now() - sprayStartTime;
-                    const progress = Math.min(elapsedTime / sprayDuration, 1);
-
-                    if (progress < 1) {
-                        for (let i = 0; i < sprayDensity; i++) {
-                            const sandColor = getRandomSandColor();
-                            const angle = Math.random() * 2 * Math.PI;
-                            const distance = Math.random() * sprayRadius;
-
-                            const offsetX = distance * Math.cos(angle);
-                            const offsetY = distance * Math.sin(angle);
-
-                            context.fillStyle = sandColor;
-                            context.beginPath();
-                            context.arc(e.clientX + offsetX, e.clientY + offsetY, 1, 0, 2 * Math.PI);
-                            context.fill();
-                        }
-
-                        requestAnimationFrame(spray);
-                    }
-                }
-
-                spray();
+        if (distance <= radius) {
+            // Точка под слизью
+            pos[i + 2] += (0 - pos[i + 2]) * 0.2;
+            if (Math.abs(pos[i + 2]) < 0.01) {
+                pos[i + 2] = 0;
             }
         }
     }
+
+    position.needsUpdate = true;
+    geometry.computeVertexNormals();
 }
 
-function getRandomSandColor() {
-    const baseColor = "#8C5531"; // Базовый цвет песка
+function animate() {
+    requestAnimationFrame(animate);
 
-    // Уменьшенный диапазон отклонений для более мягких оттенков
-    const deviation = 20;
-    const deltaR = Math.floor(Math.random() * deviation) - deviation / 2;
-    const deltaG = Math.floor(Math.random() * deviation) - deviation / 2;
-    const deltaB = Math.floor(Math.random() * deviation) - deviation / 2;
+    const deltaTime = clock.getDelta();
 
-    // Применение отклонений к базовому цвету
-    const r = Math.max(0, Math.min(255, parseInt(baseColor.slice(1, 3), 16) + deltaR));
-    const g = Math.max(0, Math.min(255, parseInt(baseColor.slice(3, 5), 16) + deltaG));
-    const b = Math.max(0, Math.min(255, parseInt(baseColor.slice(5, 7), 16) + deltaB));
+    animateWaterReset(deltaTime);
 
-    // Формирование нового цвета
-    const sandColor = `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`;
-
-    return sandColor;
+    renderer.render(scene, camera);
 }
-
-
-function getRandomInt(min, max) {
-    return Math.floor(Math.random() * (max - min + 1) + min);
-}
-
-const cursorCircle = document.getElementById('cursor-circle');
-
-function updateCursorCircleSize() {
-    const cursorSize = context.lineWidth;
-    cursorCircle.style.width = `${cursorSize}px`;
-    cursorCircle.style.height = `${cursorSize}px`;
-}
-
-function updateCursorCirclePosition(x, y) {
-    cursorCircle.style.left = `${x}px`;
-    cursorCircle.style.top = `${y}px`;
-}
-
-// Добавлен код для отслеживания перемещения курсора на всей странице
-document.addEventListener('mousemove', (e) => {
-    updateCursorCirclePosition(e.clientX, e.clientY);
-}, { passive: false });
-
-// Обновление размера и позиции круга при изменении размера кисти
-lineWidthSlider.addEventListener('input', () => {
-    context.lineWidth = lineWidthSlider.value;
-    lineWidthValue.textContent = lineWidthSlider.value;
-    updateCursorCircleSize();
-});
-
-canvas.addEventListener('mousemove', (e) => {
-    updateCursorCirclePosition(e.clientX, e.clientY);
-});
-
-canvas.addEventListener('touchmove', (e) => {
-    const touch = e.touches[0];
-    updateCursorCirclePosition(touch.clientX, touch.clientY);
-});
-
-// При старте устанавливаем начальный размер круга
-updateCursorCircleSize();
-
-canvas.addEventListener('mousedown', startPosition);
-canvas.addEventListener('mouseup', endPosition);
-canvas.addEventListener('mousemove', draw);
-
-// Новый код для управления видимостью тонкого круга на телефонах
-let isTouchDevice = ('ontouchstart' in window || navigator.maxTouchPoints > 0 || navigator.msMaxTouchPoints > 0);
-
-if (isTouchDevice) {
-    cursorCircle.style.display = 'none'; // Скрываем круг по умолчанию на телефонах
-
-    canvas.addEventListener('touchstart', (e) => {
-        e.preventDefault();
-        startPosition(e.touches[0]);
-        cursorCircle.style.display = 'block';
-        updateCursorCirclePosition(e.touches[0].clientX, e.touches[0].clientY);
-        makeInterfaceElementsTransparent();
-    });
-
-    canvas.addEventListener('touchend', () => {
-        endPosition();
-        cursorCircle.style.display = 'none';
-        restoreInterfaceElementsOpacity();
-    });
-}
-
-canvas.addEventListener('touchmove', (e) => {
-    e.preventDefault();
-    draw(e.touches[0]);
-    updateCursorCirclePosition(e.touches[0].clientX, e.touches[0].clientY);
-});
-
-// Функция для установки активной кнопки
-function setButtonActive(button) {
-    button.classList.add('active');
-}
-
-// Функция для снятия активности с кнопки
-function setButtonInactive(button) {
-    button.classList.remove('active');
-}
-
-// Настройка эффекта песчаных частиц
-particlesJS('particles-js', {
-    "particles": {
-        "number": {
-            "value": window.innerWidth*100,
-            "density": {
-                "enable": false,
-            }
-        },
-        "color": {
-            "value": ["#DC9E70", "#E2A77F", "#D59972", "#B57E52"]
-        },
-        "shape": {
-            "type": "circle"
-        },
-        "opacity": {
-            "value": 0.7,
-            "random": true
-        },
-        "size": {
-            "value": 3,
-            "random": true
-        },
-        "line_linked": {
-            "enable": false
-        },
-        "move": {
-            "enable": false,
-        }
-    },
-    "interactivity": {
-        "events": {
-            "onhover": {
-                "enable": false,
-                "mode": "repulse"
-            }
-        }
-    }
-});
