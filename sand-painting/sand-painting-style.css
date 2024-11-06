@@ -1,13 +1,96 @@
 body {
     margin: 0;
+    padding: 0;
     overflow: hidden;
+    user-select: none;
 }
 
-#reset-button {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    padding: 10px;
-    font-size: 16px;
+/* Боковая панель */
+#sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 60px;
+    height: 100%;
+    background-color: #f0f0f0;
+    padding-top: 20px;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     z-index: 10;
+}
+
+/* Стили для кнопок в боковой панели */
+.mode-button,
+#reset-button {
+    width: 50px;
+    height: 50px;
+    margin-bottom: 10px;
+    font-size: 12px;
+    background-color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s;
+}
+
+.mode-button.selected {
+    background-color: #d0f0c0;
+}
+
+.mode-button:hover,
+#reset-button:hover {
+    background-color: #e8e8e8;
+}
+
+/* Контейнер для ползунка */
+#radius-slider-container {
+    display: none;
+    position: absolute;
+    width: max-content;
+    background-color: #ffffff;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    z-index: 11;
+}
+
+/* Ползунок */
+#radius-slider {
+    width: 100%;
+}
+
+/* Круг вокруг курсора */
+#cursor-circle {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 10;
+    transition: border 0.2s ease;
+}
+
+#sun-control {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    border: 2px solid #ffd700;
+    display: none; /* По умолчанию скрыт */
+    transform: translate(-50%, -50%); /* Центрирование большого круга */
+}
+
+#sun-handle {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: #ffd700;
+    cursor: grab;
+    top: 0; /* Начальная позиция сверху большого круга */
+    left: 50%;
+    transform: translate(-50%, -10px); /* Центрирование маленького круга */
 }

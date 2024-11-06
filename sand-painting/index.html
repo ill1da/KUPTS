@@ -6,10 +6,22 @@
     <link rel="stylesheet" href="sand-painting-style.css">
 </head>
 <body>
-    <button id="reset-button">Сбросить</button>
+    <div id="sidebar">
+        <button id="brush-button" class="mode-button selected">Кисть</button>
+        <button id="eraser-button" class="mode-button">Ластик</button>
+        <button id="reset-button">Ведро</button>
+        <button id="sun-button" class="mode-button">Солнце</button>
+    
+        <div id="radius-slider-container">
+            <label for="radius-slider">Размер радиуса</label>
+            <input type="range" id="radius-slider" min="10" max="51" value="51">
+            <input type="checkbox" id="common-size-checkbox" checked>
+            <label for="common-size-checkbox">Общий размер</label>
+        </div>
+    </div>
+    <div id="cursor-circle"></div>
+     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <!-- Добавляем библиотеку для шума Перлина -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/perlin-noise/0.1.1/perlin.min.js"></script>
     <script src="sand-painting-script.js"></script>
 </body>
 </html>
