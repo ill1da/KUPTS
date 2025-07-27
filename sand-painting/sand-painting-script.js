@@ -186,13 +186,8 @@ function setMode(isEraser) {
 
 function updateCurrentRadius() {
     currentRadius = isEraserMode ? eraserRadius : brushRadius;
-    updateCursorCircle(currentRadius);
-}
-
-function updateCursorCircle(radius) {
-    const cursorCircle = document.getElementById("cursor-circle");
-    cursorCircle.style.width = `${radius * 2}px`;
-    cursorCircle.style.height = `${radius * 2}px`;
+    // update circle using the current mouse coordinates
+    updateCursorCircle(mouse.x, mouse.y, currentRadius);
 }
 
 function showConfirmationDialog() {
