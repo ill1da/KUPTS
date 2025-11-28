@@ -133,9 +133,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function botMove() {
         if (gameOver) return;
-    
+
         let targetCell;
-    
+
         if (difficulty === 3) {
             // Attempt winning move or block player's winning move
             targetCell = findBestMove('O') || findBestMove('X');
@@ -143,29 +143,29 @@ document.addEventListener('DOMContentLoaded', () => {
             // Block player's winning move
             targetCell = findBestMove('X');
         }
-    
+
         if (!targetCell) {
-            const availableCells = currentLargeCell === null 
+            const availableBoards = currentLargeCell === null 
                 ? cells.filter(cell => !cell.parentElement.classList.contains('won') && !cell.textContent)
                 : cells.filter(cell => parseInt(cell.dataset.superIndex) === currentLargeCell && !cell.textContent);
-    
-            if (availableCells.length > 0) {
-                targetCell = availableCells[Math.floor(Math.random() * availableCells.length)];
+
+            if (availableBoards.length > 0) {
+                targetCell = availableBoards[Math.floor(Math.random() * availableBoards.length)];
             }
         }
-    
+
         if (targetCell) {
             targetCell.textContent = 'O';
             targetCell.style.pointerEvents = 'none';
-    
+
             const innerIndex = parseInt(targetCell.dataset.index);
             const outerIndex = parseInt(targetCell.dataset.superIndex);
-    
+
             if (checkWin('O', outerIndex)) {
                 const largeCell = document.querySelector(`.super-cell[data-index='${outerIndex}']`);
                 largeCell.classList.add('won');
                 largeCell.dataset.winner = 'O';
-    
+
                 if (checkSuperWin('O')) {
                     gameOver = true;
                     updateScore('O');
@@ -173,22 +173,22 @@ document.addEventListener('DOMContentLoaded', () => {
                     return;
                 }
             }
-    
+
             if (isBoardFull(outerIndex)) {
                 currentLargeCell = null;
             } else {
                 currentLargeCell = innerIndex;
             }
-    
+
             updateLargeCellClasses();
             switchTurn();
             unlockCells();
         }
-    }    
+    }
 
     function findBestMove(player) {
         const potentialMoves = [];
-    
+
         for (let superIndex = 0; superIndex < 9; superIndex++) {
             if (!document.querySelector(`.super-cell[data-index='${superIndex}']`).classList.contains('won')) {
                 for (let index = 0; index < 9; index++) {
@@ -203,7 +203,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
         }
-    
+
         if (potentialMoves.length > 0) {
             const validMoves = potentialMoves.filter(move => 
                 currentLargeCell === null || currentLargeCell === move.superIndex || isLargeCellWon(currentLargeCell)
@@ -212,9 +212,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 return validMoves[Math.floor(Math.random() * validMoves.length)].cell;
             }
         }
-    
+
         return null;
-    }    
+    }
 
     function isLargeCellWon(index) {
         const largeCell = document.querySelector(`.super-cell[data-index='${index}']`);
