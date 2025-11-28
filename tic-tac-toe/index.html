@@ -1,61 +1,90 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Крестики-нолики</title>
+    <title>Крестики-Нолики</title>
     <link rel="stylesheet" href="./Tic-Tac-Toe-style.css">
 </head>
 <body>
-    <div id="modal-menu" class="modal">
+<div class="container">
+    <header>
+        <a class="bar" href="../index.html">ill1da.space</a>
+    </header>
+
+    <main>
+        <div class="main-playing-field">
+            <div class="scoreboard">
+                <div>Игрок X: <span id="scoreX">0</span></div>
+                <div id="playerO">Игрок O: <span id="scoreO">0</span></div>
+            </div>
+            <div class="main-field" id="mainField"></div>
+        </div>
+    </main>
+
+    <div id="modal" class="modal">
         <div class="modal-content">
-            <h1>Выберите режим игры</h1>
-            <div id="modes">
-                <label class="mode-button">
-                    <input type="radio" name="mode" value="classic" checked>
-                    Классический
-                </label>
-                <label class="mode-button">
-                    <input type="radio" name="mode" value="updated">
-                    Обновленный
-                </label>
-                <label class="mode-button">
-                    <input type="radio" name="mode" value="super">
-                    Супер
-                </label>
-                <label class="mode-button">
-                    <input type="radio" name="mode" value="four-in-a-row">
-                    4 в ряд
-                </label>
-                <div id="mode-info">
-                    <h2 id="mode-title">Классический</h2>
-                    <p id="mode-rules">Два игрока по очереди ставят на свободные клетки поля 3x3 знаки...</p>
-                </div>
-            </div>
-            <div id="difficulty">
-                <label for="difficulty-slider">Сложность бота:</label>
-                <input type="range" id="difficulty-slider" min="1" max="3" value="1">
-            </div>
+            <h2>Выберите режим игры</h2>
+            <button id="classicMode">Классический режим</button>
+            <button id="updatedMode">Обновленный режим</button>
+            <button id="superMode">Супер крестики-нолики</button>
             
-            <button id="play-bot">Играть против бота</button>
-            <button id="play-human">Играть против игрока</button>
+            <div id="classicOptions" style="display:none;">
+                <h3>Классический режим</h3>
+                <label for="gridSizeClassic">Размер поля:</label>
+                <select id="gridSizeClassic">
+                    <option value="3">3x3</option>
+                    <option value="4">4x4</option>
+                    <option value="5">5x5</option>
+                    <option value="6">6x6</option>
+                    <option value="7">7x7</option>
+                    <option value="8">8x8</option>
+                    <option value="9">9x9</option>
+                    <option value="10">10x10</option>
+                </select>
+                <label for="winLengthClassic">Количество для победы:</label>
+                <input type="number" id="winLengthClassic" min="3" max="10" value="3">
+                <label for="difficultyClassic">Выберите сложность:</label>
+                <input type="range" id="difficultyClassic" name="difficultyClassic" min="1" max="3" step="1" list="tickmarksClassic">
+                <datalist id="tickmarksClassic">
+                    <option value="1" label="Легкий"></option>
+                    <option value="2" label="Средний"></option>
+                    <option value="3" label="Сложный"></option>
+                </datalist>
+                <button id="startBotGameClassic">Против бота</button>
+                <button id="startPlayerGameClassic">Против игрока</button>
+            </div>
+
+            <div id="updatedOptions" style="display:none;">
+                <h3>Обновленный режим</h3>
+                <label for="difficultyUpdated">Выберите сложность:</label>
+                <input type="range" id="difficultyUpdated" name="difficultyUpdated" min="1" max="3" step="1" list="tickmarksUpdated">
+                <datalist id="tickmarksUpdated">
+                    <option value="1" label="Легкий"></option>
+                    <option value="2" label="Средний"></option>
+                    <option value="3" label="Сложный"></option>
+                </datalist>
+                <button id="startBotGameUpdated">Против бота</button>
+                <button id="startPlayerGameUpdated">Против игрока</button>
+            </div>
+
+            <div id="superOptions" style="display:none;">
+                <h3>Супер крестики-нолики</h3>
+                <label for="difficultySuper">Выберите сложность:</label>
+                <input type="range" id="difficultySuper" name="difficultySuper" min="1" max="3" step="1" list="tickmarksSuper">
+                <datalist id="tickmarksSuper">
+                    <option value="1" label="Легкий"></option>
+                    <option value="2" label="Средний"></option>
+                    <option value="3" label="Сложный"></option>
+                </datalist>
+                <button id="startBotGameSuper">Против бота</button>
+                <button id="startPlayerGameSuper">Против игрока</button>
+            </div>
         </div>
     </div>
-    <div id="game-board" class="hidden">
-        <div class="cell" data-index="0,0"></div>
-        <div class="cell" data-index="0,1"></div>
-        <div class="cell" data-index="0,2"></div>
-        <div class="cell" data-index="1,0"></div>
-        <div class="cell" data-index="1,1"></div>
-        <div class="cell" data-index="1,2"></div>
-        <div class="cell" data-index="2,0"></div>
-        <div class="cell" data-index="2,1"></div>
-        <div class="cell" data-index="2,2"></div>
-    </div>
-    <button id="back-button" class="hidden">Назад</button>
-    <div id="status" class="hidden"></div>
-
-    <script src="Tic-Tac-Toe-MAIN.js"></script>
-    <script src="Tic-Tac-Toe-classic.js"></script>
+</div>
+<script src="./Tic-Tac-Toe-classic.js"></script>
+<script src="./Tic-Tac-Toe-updated.js" defer></script>
+<script src="./Tic-Tac-Toe-super.js" defer></script>
 </body>
 </html>
